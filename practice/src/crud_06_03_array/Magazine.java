@@ -1,4 +1,4 @@
-package crud_with_singleton;
+package crud_06_03_array;
 
 public class Magazine extends Book {
 	private int year;

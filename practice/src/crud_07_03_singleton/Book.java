@@ -1,4 +1,4 @@
-package crud_with_objectArray;
+package crud_07_03_singleton;
 
 public class Book {
 	private String isbn;

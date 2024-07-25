@@ -1,4 +1,4 @@
-package crud_with_singleton;
+package crud_08_03_arrayList;
 
 public interface IBookManager {
 	

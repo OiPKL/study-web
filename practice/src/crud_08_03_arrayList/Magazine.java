@@ -1,4 +1,4 @@
-package crud_with_objectArray;
+package crud_08_03_arrayList;
 
 public class Magazine extends Book {
 	private int year;
