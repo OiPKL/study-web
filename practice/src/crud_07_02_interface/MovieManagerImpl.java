@@ -7,7 +7,7 @@ public class MovieManagerImpl implements IMovieManager {
 	
 	private Movie[] movieList = new Movie[MAX_SIZE];
 	
-	private static MovieManagerImpl instance = new MovieManagerImpl();
+	private static IMovieManager instance = new MovieManagerImpl();
 	
 	private MovieManagerImpl() {
 		
