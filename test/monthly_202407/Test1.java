@@ -43,7 +43,7 @@ public class Test1 {
 		pair4[1] = intArr2[7];
 		
 		///
-		int max2 = 
+//		int max2 = 
 		
 	}
 }
