@@ -23,8 +23,8 @@ public class Solution {
 			
 			// 2*N개 숫자 입력
 			for (int j = 1; j < 2*N; j+=2) {
-				note[j] = sc.nextInt();
-				note[j+1] = sc.nextInt();
+				int new1 = sc.nextInt();
+				int new2 = sc.nextInt();
 				
 				// 배열크기 3 : 3개 비교
 				if (j == 1) {
