@@ -18,7 +18,6 @@ public class Solution {
 		
 		// 테스트케이스
 		for (int i = 0; i < T; i++) {
-			int cnt = 1;
 			long mid = 0;
 			long sum = 0;
 			
@@ -26,8 +25,8 @@ public class Solution {
 			for (int j = 1; j < 2*N; j+=2) {
 				note[j] = sc.nextInt();
 				note[j+1] = sc.nextInt();
-				cnt += 2;
 				
+				// 배열크기 3 : 3개 비교
 				if (j == 1) {
 					for (int k = 2; k > 0; k--) {
 						for (int l = 0; l < k; l++) {
@@ -40,13 +39,14 @@ public class Solution {
 					}
 				}
 				
+				// 배열크기 5~ : 중앙-1, 중앙, 중앙+1, 추가1, 추가2 비교
 				if (j != 1) {
-					int[] note = new int[5];
-					tmp[0] = note[0];
-					tmp[1] = note[1];
-					tmp[4] = note[2];
-					tmp[2] = note[j];
-					tmp[3] = note[j+1];
+					int[] tmpNote = new int[5];
+					tmpNote[0] = note[0];
+					tmpNote[1] = note[1];
+					tmpNote[4] = note[2];
+					tmpNote[2] = note[j];
+					tmpNote[3] = note[j+1];
 					
 					for (int k = 2; k > 0; k--) {
 						for (int l = 0; l < k; l++) {
@@ -59,21 +59,8 @@ public class Solution {
 					}
 				}
 				
-				
-				
-				// 버블정렬
-				for (int k = cnt - 1; k > 0; k--) {
-					for (int l = 0; l < k; l++) {
-						if (note[l] > note[l+1]) {
-							int tmp = note[l+1];
-							note[l+1] = note[l];
-							note[l] = tmp;
-						}
-					}
-				}
-				
 				// 중간값 ~ 합 ~ 나머지
-				mid = note[cnt/2];
+				mid = note[2];
 				sum += mid;
 				if (sum >= 20171109) sum %= 20171109;
 				
