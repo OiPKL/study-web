@@ -10,5 +10,6 @@
 	<classpathentry kind="src" path="src_240724"/>
 	<classpathentry kind="src" path="src_240725"/>
 	<classpathentry kind="src" path="src_240726"/>
+	<classpathentry kind="src" path="src_coding_test"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
