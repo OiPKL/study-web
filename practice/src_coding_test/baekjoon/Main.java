@@ -3,31 +3,21 @@ package baekjoon;
 import java.util.Scanner;
 
 public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
 
-	public static void main(String[] args) {
+        int[] arr = new int[N];
+        arr[0] = N;
+        for (int i = 1; i < N; i++) {
+            arr[i] = i;
+        }
 
-		Scanner sc = new Scanner(System.in);
-
-		int T = sc.nextInt();
-		int[][] intArr = new int[T][10];
-		
-		for (int i = 0; i < T; i++) {
-			for (int j = 0; j < 10; j++) {
-				intArr[i][j] = sc.nextInt();
-			}
-		}
-		
-		
-		for (int i = 0; i < T; i++) {
-			
-			int max = intArr[i][0];
-			
-			for (int j = 0; j < 10; j++)
-				max = intArr[i][j] > max ? intArr[i][j] : max;
-				
-			System.out.printf("#%d " + max, i+1);
-			System.out.println();
-		}
-		
-	}
+        for (int i = 0; i < N; i++) {
+            System.out.print(arr[i]);
+            if (i < N - 1) {
+                System.out.print(" ");
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package swea_240729.d3_1206_view;
+package swea_240729.d3_1206_View;
 
 import java.util.Scanner;
 
