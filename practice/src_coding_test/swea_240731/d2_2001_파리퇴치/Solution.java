@@ -15,10 +15,8 @@ public class Solution {
 			int N = sc.nextInt();
 			int M = sc.nextInt();
 			int[][] pari = new int[N][N];
-			// 최대히트 초기화
 			int max = 0;
 			
-			// 전체 영역 설정
 			for (int r = 0; r < N; r++) {
 				for (int c = 0; c < N; c++) {
 					pari[r][c] = sc.nextInt();
@@ -28,19 +26,16 @@ public class Solution {
 			// 파리채가 영역을 벗어나지 않도록 N-M+1
 			for (int r = 0; r < N-M+1; r++) {
 				for (int c = 0; c < N-M+1; c++) {
-					// 파리채 & 히트 초기화
 					int[][] choi = new int[M][M];
-					int hit = 0;
+					int kill = 0;
 					
-					// 영역 전개 & 히트!!
 					for (int rr = 0; rr < M; rr++) {
 						for (int cc = 0; cc < M; cc++) {
 							choi[rr][cc] = pari[r+rr][c+cc];
-							hit += choi[rr][cc];
+							kill += choi[rr][cc];
 						}
 					}
-					// 최대히트 확인
-					max = Math.max(max, hit);
+					max = Math.max(max, kill);
 					
 				}
 			}
