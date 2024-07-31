@@ -1,4 +1,4 @@
-package baekjoon;
+package baekjoon_failed.G4_23970_알고리즘수업버블정렬3;
 
 import java.util.Scanner;
 
