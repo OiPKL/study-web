@@ -32,16 +32,16 @@ public class Solution {
 			int cNow = end;
 			
 			while (rNow > 0) {
-				// 좌측 탐색 후 좌로 전진
+				// 좌 탐색 후 좌 전진
 				if (cNow > 0 && sadari[rNow][cNow - 1] == 1) {
 					while (cNow > 0 && sadari[rNow][cNow - 1] == 1)
 						cNow--;
-				// 우측 탐색 후 우로 전진
+				// 우 탐색 후 우 전진
 				} else if (cNow < 99 && sadari[rNow][cNow + 1] == 1) {
 					while (cNow < 99 && sadari[rNow][cNow + 1] == 1)
 						cNow++;
 				} 
-				// 위로 전진
+				// 상 전진
 				rNow--;
 			}
 			
