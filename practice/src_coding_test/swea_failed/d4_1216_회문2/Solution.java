@@ -1,4 +1,4 @@
-package swea;
+package swea_failed.d4_1216_회문2;
 
 import java.util.Scanner;
 
