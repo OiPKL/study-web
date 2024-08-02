@@ -14,5 +14,7 @@
 	<classpathentry kind="src" path="src_240730"/>
 	<classpathentry kind="src" path="src_240731"/>
 	<classpathentry kind="src" path="src_240801"/>
+	<classpathentry kind="src" path="src_240802"/>
+	<classpathentry kind="lib" path="lib/gson-2.10.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
