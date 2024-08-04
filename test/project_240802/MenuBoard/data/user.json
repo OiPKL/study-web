@@ -1,0 +1,46 @@
+[
+  {
+    "userNo": 1,
+    "email": "aaaa@aaaa",
+    "nickName": "asdf",
+    "passWord": "asdf",
+    "isLogin": false
+  },
+  {
+    "userNo": 2,
+    "email": "bbbb@bbbb",
+    "nickName": "qwer",
+    "passWord": "qwer",
+    "isLogin": false
+  },
+  {
+    "userNo": 3,
+    "email": "1r@r",
+    "nickName": "2",
+    "passWord": "3",
+    "isLogin": false
+  },
+  {
+    "userNo": 4,
+    "email": "skybory1013@gmail.com",
+    "nickName": "skybory",
+    "passWord": "1234",
+    "isLogin": false
+  },
+  {
+    "userNo": 5,
+    "userName": "김태연",
+    "email": "xodus4194@naver.com",
+    "nickName": "skybory1013",
+    "passWord": "1234",
+    "isLogin": false
+  },
+  {
+    "userNo": 6,
+    "userName": "김태연",
+    "email": "ssafy1013@ssafy.com",
+    "nickName": "ILuvSSAFY",
+    "passWord": "1234",
+    "isLogin": false
+  }
+]
