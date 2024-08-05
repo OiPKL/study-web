@@ -6,18 +6,17 @@ import java.util.Stack;
 public class Solution {
 
     public static int checkBracket(Stack<Character> stack, char bracket) {
+    	// 여는 괄호 ~ 스택 추가
         if (bracket == '(' || bracket == '{' || bracket == '[' || bracket == '<') {
             stack.push(bracket);
             return 1;
-        }
+        // 만약 빈 스택에 닫는 괄호? -> 0 반환
+        } else if (stack.isEmpty()) return 0;
         
-        if (stack.isEmpty()) return 0;
-        
+        // 닫는 괄호 ~ 스택 팝과 짝 확인
         char top = stack.pop();
-        if ((bracket == ')' && top != '(') ||
-            (bracket == '}' && top != '{') ||
-            (bracket == ']' && top != '[') ||
-            (bracket == '>' && top != '<')) {
+        if ((bracket == ')' && top != '(') || (bracket == '}' && top != '{') ||
+            (bracket == ']' && top != '[') || (bracket == '>' && top != '<')) {
             return 0;
         }
         
@@ -40,81 +39,11 @@ public class Solution {
                 if (isValid == 0) break;
             }
 
+            // 종료 후에도 스택이 비어있지 않으면 -> 0 반환
             if (!stack.isEmpty()) isValid = 0;
 
             System.out.println("#" + t + " " + isValid);
         }
-        
-        sc.close();
     }
+    
 }
-
-//public class Solution {
-//
-//	public static int checkBracket(Stack<Character> stack, char bracket) {
-//		
-//		switch (bracket) {
-//			case '(': 	stack.push(bracket);
-//													return 1;
-//			case ')': 	if (stack.pop() == '(') {	return 1;
-//						} else 						return 0;
-//			case '{': 	stack.push(bracket);
-//													return 1;
-//			case '}': 	if (stack.pop() == '{') {	return 1;
-//						} else 						return 0;
-//			case '[': 	stack.push(bracket);
-//													return 1;
-//			case ']': 	if (stack.pop() == '[') {	return 1;
-//						} else 						return 0;
-//			case '<': 	stack.push(bracket);
-//													return 1;
-//			case '>': 	if (stack.pop() == '<') {	return 1;
-//						} else 						return 0;
-//			default : 								return 1;
-//		}
-//		
-//	}
-//	
-//	public static void main(String[] args) {
-//		
-//		Scanner sc = new Scanner(System.in);
-//		Stack<Character> stack = new Stack<>();
-//		
-//		for (int t = 1; t <= 10; t++) {
-//			
-//			int isValid = 1;
-//			int N = sc.nextInt();
-//			sc.nextLine();
-//			String str = sc.nextLine();
-//			char[] charArr = str.toCharArray();
-//			
-////			for (char arr : charArr)
-////				System.out.print(arr + " ");
-//
-//			int n = 0;
-//			while (isValid == 1) {
-//				if (stack.size() == 0 && charArr[n] == ')') {
-//					isValid = 0;
-//					break;
-//				}
-//				else if (stack.size() == 0 && charArr[n] == '}') {
-//					isValid = 0;
-//					break;
-//				}
-//				else if (stack.size() == 0 && charArr[n] == ']') {
-//					isValid = 0;
-//					break;
-//				}
-//				else if (stack.size() == 0 && charArr[n] == '>') {
-//					isValid = 0;
-//					break;
-//				}
-//				isValid = checkBracket(stack, charArr[n++]);
-//			}
-//			if (stack.size() > 0) isValid = 0;
-//			System.out.println("#" + t + " " + isValid);
-//
-//		}
-//			
-//	}
-//}
