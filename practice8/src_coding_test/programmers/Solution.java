@@ -1,27 +1,43 @@
 package programmers;
 
-class Solution {
-    public int solution(int[][] lines) {
-    	
-    	int min = lines[0][0];
-    	int max = lines[0][0];
-    	
-    	for (int i = 0; i < 3; i++) {
-    		min = Math.min(min, lines[i][0]);
-    		max = Math.max(max, lines[i][1]);
-    	}
-    		
-    	int[] cnt = new int[max-min+1];
-    	
-    	// 카운트 배열
-        for (int i = 0; i < 3; i++)
-            for (int j = lines[i][0]; j < lines[i][1]; j++)
-                cnt[j - min]++;
-        
-        int result = 0;
-        for (int i = 0; i < cnt.length; i++)
-        	if (cnt[i] > 1) result++;			// 2이상 = 겹치는부분
-    			
-        return result;
-    }
+import java.util.*;
+
+public class Solution {
+
+	public static void main(String[] args) {
+		int[] arr1 = {1, 1, 3, 3, 0, 1, 1};
+		int[] arr2 = {4, 4, 4, 3, 3};
+		
+		int[] arr11 = solution(arr1);
+		int[] arr22 = solution(arr2);
+		
+		for (int num : arr11)
+			System.out.print(num + " ");
+		System.out.println();
+		for (int num : arr22)
+			System.out.print(num + " ");
+		System.out.println();
+		
+	}
+	
+	static int[] solution(int[] arr) {
+		
+		Stack<Integer> stack = new Stack<>();
+		
+		for (int i = 0; i < arr.length - 1; i++) {
+			if (stack.isEmpty())
+				stack.add(arr[i]);
+			else if (arr[i] != stack.peek())
+				stack.add(arr[i]);
+			else continue;
+		}
+		
+		int[] Arr = new int[stack.size()];
+		
+		for (int i = Arr.length - 1; i >= 0; i--)
+			if (!(stack.isEmpty())) Arr[i] = stack.pop();
+		
+		return Arr;
+		
+	}
 }
