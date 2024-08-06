@@ -5,46 +5,40 @@ import java.util.Stack;
 
 public class Solution {
 	public static void main(String[] args) {
-		
+	
 		Scanner sc = new Scanner(System.in);
 		
 		int T = sc.nextInt();
-		
-		for (int t = 1; t <= T; t++) {
-			
-			int N = sc.nextInt();
-			sc.nextLine();
-			
-			char[][] charFarm = new char[N][N];
-			for (int n = 0; n < N; n++) {
-				charFarm[n] = sc.nextLine().toCharArray();
-			}
-			
-			int[][] farm = new int[N][N];
-			for (int r = 0; r < N; r++) {
-				for (int c = 0; c < N; c++) {
-					farm[r][c] = (int)charFarm[r][c] - '0';
-				}
-			}
-			
-//			for (int r = 0; r < N; r++) {
-//				for (int c = 0; c < N; c++) {
-//					System.out.print(charFarm[r][c] + " ");
-//				}
-//				System.out.println();
-//			}
-			
-			int bbang = 0;
-			for (int r = 0; r < N; r++) {
-				for (int c = 0; c < N; c++) {
-					if (c <= r + (N-1)/2 && c >= r - (N-1)/2 &&
-						c >= -r + (N-1)/2 && c <= -r + 3*(N-1)/2) {
-						bbang += farm[r][c];
-					}
-				}
-			}
 
-			System.out.println("#" + t + " " + bbang);
+		for (int t = 0; t < T; t++) {
+			
+			Stack<Character> stack = new Stack<>();
+			
+			char[] makdae = sc.nextLine().toCharArray();
+			int[] marker = new int[makdae.length];	// >> 레이저 제외
+			
+			// 막대기의 시작과 끝 1로 표시 -> 레이저는 --00--
+			for (int i = 0; i < makdae.length; i++) {
+				
+				if (makdae[i] == '(') {
+					if (makdae[i+1] == ')')
+						continue;
+					else
+						marker[i] = 1;
+				} else {
+					if (makdae[i-1] == '(')
+						continue;
+					else
+						marker[i] = 1;
+				}
+				
+			}
+			
+			for (int num : marker)
+				System.out.print(num + " ");
+			System.out.println();
+		
 		}
+		
 	}
 }
