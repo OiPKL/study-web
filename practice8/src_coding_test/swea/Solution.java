@@ -1,43 +1,42 @@
 package swea;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Solution {
 	public static void main(String[] args) {
 	
 		Scanner sc = new Scanner(System.in);
 		
-		int T = sc.nextInt();
+		for (int t = 1; t <= 10; t++) {
 
-		for (int t = 0; t < T; t++) {
+			int T = sc.nextInt();
 			
-			Stack<Character> stack = new Stack<>();
+			Queue<Integer> amho = new LinkedList<>();
 			
-			char[] makdae = sc.nextLine().toCharArray();
-			int[] marker = new int[makdae.length];	// >> 레이저 제외
-			
-			// 막대기의 시작과 끝 1로 표시 -> 레이저는 --00--
-			for (int i = 0; i < makdae.length; i++) {
-				
-				if (makdae[i] == '(') {
-					if (makdae[i+1] == ')')
-						continue;
-					else
-						marker[i] = 1;
-				} else {
-					if (makdae[i-1] == '(')
-						continue;
-					else
-						marker[i] = 1;
-				}
-				
+			for (int num = 0; num < 8; num++) {
+				amho.offer(sc.nextInt());
 			}
 			
-			for (int num : marker)
+			outer:
+			while (true) {
+				int num;
+				for (int i = 1; i <= 5; i++) {
+					num = amho.poll();
+					num -= i;
+					if (num > 0) amho.offer(num);
+					else {
+						amho.offer(0);
+						break outer;
+					}
+				}
+			}
+			
+			System.out.print("#" + t + " ");
+			for (int num : amho)
 				System.out.print(num + " ");
 			System.out.println();
-		
 		}
 		
 	}
