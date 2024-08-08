@@ -1,58 +1,38 @@
 package baekjoon;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-        
-        int[] arrN = new int[N];
-        for (int n = 0; n < N; n++)
-        	arrN[n] = n + 1;
-        								// 백트래킹의 의미를 깨달았습니다 ㅠㅠ
-        int memo = 0;					// (5,3)에서 1을 출력하고 (4,2)로 재귀하면
-        int remains = M;				// 다시 1로 돌아와서 2를 출력하고 (3,2)로 재귀가 가능하도록
-        
-        pickN(arrN, memo, remains);
-        
-    }
-    
-    static List<Integer> arrToShow = new ArrayList<>();
-
-    static void show(List<Integer> arrToShow) {
-    	for (int i = 0; i < arrToShow.size(); i++)
-    		System.out.print(arrToShow.get(i) + " ");
-    	System.out.println();
-    }
-    
-    static void pickN(int[] arrN, int memo, int remains) {
+    	Scanner sc = new Scanner(System.in);
     	
-    	if (remains == 1) {
-    		if (memo == arrN.length - 1) {		// 마지막 출력 후 종료
-    			arrToShow.add(memo+1);
-    			show(arrToShow);
-    			return;
-    		} else {							// 같은 memo 에서 출력-이전단계-출력-이전단계-...
-    			for (int i = memo + 1; i <= arrN.length; i++) {
-    				arrToShow.add(i);
-    				show(arrToShow);
-    				arrToShow.remove(arrToShow.size() - 1);
-    			}
-    			pickN(arrN, ++memo, ++remains);
-    		}
+    	int N = sc.nextInt();
+    	int[][] chess = new int[N][N];
+    	
+    	// 체스판 좌표 : 0 -> 퀸의 위치 : 1
+    	// - 퀸은 1이 아닌 0에만 위치할 수 있음
+    	// - 퀸이 놓이면 가로+세로+대각선 좌표를 전부 1로 변경 & cnt++
+    	// - 행 단위로 남은 0 중 퀸의 위치를 선정
+
+    	System.out.println(setQueen(chess, 0, 0));
+    		
+    }
+    
+    static int cnt = 0;
+    
+    static int setQueen(int[][] chess, int r, int c) {
+    	// 동[0] 남[1] 남동[2] 남서[3]
+    	int[] dr = {0, 1, 1, 1};
+    	int[] dc = {1, 0, 1, -1};
+    	
+    	if (r == chess.length) {
+    		cnt++;					// 마지막 행의 남은 퀸의 위치는 하나
+    		int result = cnt;
+    		return result;
     	} else {
-    		if (memo == arrN.length - 1) {		// 더 이상 뽑을게 없을때 -> 이전 memo로
-    			pickN(arrN, --memo, ++remains);
-    		} else {							// 다음 memo로
-    			arrToShow.add(memo);
-    			pickN(arrN, ++memo, --remains);
-    		}
+
     	}
+    
     }
     
 }

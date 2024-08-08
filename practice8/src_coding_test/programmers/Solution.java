@@ -2,17 +2,29 @@ package programmers;
 
 class Main {
 	public static void main(String[] args) {
+		
 	}
 }
 
 class Solution {
-    public int solution(int[][] dots) {	// dots[4][2]
+    public int solution(String[] babbling) {
     	
-    	// 1-2 3-4
-    	if((dots[2][1]-dots[0][1])/)
+    	int count = 0;
+    	String[] babbles = {"aya", "ye", "woo", "ma"};
     	
-    	// 1-3 2-4
-    	// 1-4 2-3
+    	outer:
+    	for (int i = 0; i < babbling.length; i++) {
+
+    		for (int j = 0; j < babbles.length; j++)	// aya ye woo ma 반복 탐색
+    			babbling[i] = babbling[i].replace(babbles[j], " ");
+    		
+    		char[] babblesArr = babbling[i].toCharArray();
+    		
+    		for (char c : babblesArr)
+    			if (c != ' ') continue outer;
+    		count++;
     	
+    	}
+    	return count;
     }
 }
