@@ -11,7 +11,6 @@ public class Main {
     	// 체스판: false / 퀸: true
     	
     	setQueen(chess, 0, 0);
-
     	System.out.println(cnt);
     		
     }
@@ -29,28 +28,32 @@ public class Main {
     	
     	for (int i = rQueen; i < N; i++) {
     		rQueen++;
+    		cQueen = setNextQueen(chess, rQueen);
     		setQueen(chess, rQueen, cQueen);
+    		rQueen--;
     	}
     	
     }
     
-    static void setNextQueen(boolean[][] chess, int rNowQueen, int cNextQueen) {
+    static boolean isSafe(boolean[][] chess, int rCheck, int cCheck) {
 
     	int N = chess.length;
     	
-		for (int c = 0; c < N; c++) {
-			// 가로
-			if (chess[rNowQueen][c] == false)
-			// 세로
-			for (int r = 0; r < N; r++) {
-				if (chess[r][c] == false)
-			}
-			
-			if (chess[r][c] == false)
-			// 대각선1
-			if ((rNowQueen + c) == (r))
-			// 대각선2
+		for (int r = 0; r < N; r++) {
+			if (chess[r][cCheck]) return false;
 		}
+		// 대각선1 (\ : r+c 일치 확인) -> 행에 대각선 위치의 (r, cCheck)가 존재한다면 ~
+		for (int r = 0; r < N; r++) {
+			int cCheck = (rNext + c) - r;
+			if (cCheck >= 0 && cCheck < N && chess[r][cCheck] == true) continue outer;
+		}
+		// 대각선2 (/ : r-c 일치 확인) -> 행에 대각선 위치의 (r, cCheck)가 존재한다면 ~
+		for (int r = 0; r < N; r++) {
+			int cCheck = (c - rNext) + r;
+			if (cCheck >= 0 && cCheck < N && chess[r][cCheck] == true) continue outer;
+		}
+		int cNext = c;
+		return cNext;
     	
     }
     
