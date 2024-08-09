@@ -7,78 +7,26 @@ public class Solution {
         Scanner sc = new Scanner(System.in);
         
         int T = sc.nextInt();
+        sc.nextLine();
         
-        testCase:
         for (int tc = 1; tc <= T; tc++) {
         	
-        	int[][] sudoku = new int[9][9];
-        	for (int r = 0; r < 9; r++) {
-        		for (int c = 0; c < 9; c++) {
-        			sudoku[r][c] = sc.nextInt();
-        		}
+        	char[] tmpArr = sc.nextLine().toCharArray();
+        	int N = tmpArr.length;
+        	int[] memory = new int[N];
+        	for (int n = 0; n < N; n++)
+        		memory[n] = (int)(tmpArr[n] - '0');
+        	int cnt = 1;
+        	
+        	// 뒤에서부터 0 - 1 - 0 바뀌는 순간 카운트
+        	// 맨 앞이 0이면 카운트--
+        	for (int n = N - 1; n > 0; n--) {
+        		if (memory[n] != memory[n-1]) cnt++;
         	}
-        		
-    		// 가로
-    		for (int r = 0; r < 9; r++) {
-    			if (isRight(sudoku[r]) == false) {
-    				System.out.println("#" + tc + " " + 0);
-    				continue testCase;
-    			}
-    		}
-    		
-    		// 세로
-			for (int c = 0; c < 9; c++) {
-    			int[] number9 = new int[9];
-    			for (int r = 0; r < 9; r++) {
-    				number9[r] = sudoku[r][c];
-    			}
-    			if (isRight(number9) == false) {
-    				System.out.println("#" + tc + " " + 0);
-    				continue testCase;
-    			}
-    		}
-    		
-        	// 3x3
-			for (int r = 0; r < 9; r += 3) {
-			    for (int c = 0; c < 9; c += 3) {
-			        int[] number9 = new int[9];
-			        number9[0] = sudoku[r][c];
-			        number9[1] = sudoku[r][c+1];
-			        number9[2] = sudoku[r][c+2];
-			        number9[3] = sudoku[r+1][c];
-			        number9[4] = sudoku[r+1][c+1];
-			        number9[5] = sudoku[r+1][c+2];
-			        number9[6] = sudoku[r+2][c];
-			        number9[7] = sudoku[r+2][c+1];
-			        number9[8] = sudoku[r+2][c+2];
-			        
-			        if (isRight(number9) == false) {
-			            System.out.println("#" + tc + " " + 0);
-	    				continue testCase;
-			        }
-			    }
-			}
-        		
-            System.out.println("#" + tc + " " + 1);
+        	if (memory[0] == 0) cnt--;
+        	
+        	System.out.println("#" + tc + " " + cnt);
         }
-        
-    }
-    
-    static boolean isRight(int[] number9) {
-    	int[] count = new int[10];
-    	
-    	for (int i = 0; i < 9; i++) {
-    		// 숫자 범위 체크
-    		if (number9[i] < 1 || number9[i] > 9)
-    			return false;
-    		// 중복 숫자 체크
-    		if (count[number9[i]] != 0)
-    			return false;
-    		else
-    			count[number9[i]]++;
-    	}
-    	// 모두 통과
-    	return true;
     }
     
 }

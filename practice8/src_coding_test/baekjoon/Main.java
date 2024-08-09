@@ -7,32 +7,66 @@ public class Main {
     	Scanner sc = new Scanner(System.in);
     	
     	int N = sc.nextInt();
-    	int[][] chess = new int[N][N];
-    	
-    	// 체스판 좌표 : 0 -> 퀸의 위치 : 1
-    	// - 퀸은 1이 아닌 0에만 위치할 수 있음
-    	// - 퀸이 놓이면 가로+세로+대각선 좌표를 전부 1로 변경 & cnt++
-    	// - 행 단위로 남은 0 중 퀸의 위치를 선정
+    	boolean[][] chess = new boolean[N][N];
 
-    	System.out.println(setQueen(chess, 0, 0));
+    	System.out.println(cnt);
     		
     }
     
-    static int cnt = 0;
-    
-    static int setQueen(int[][] chess, int r, int c) {
-    	// 동[0] 남[1] 남동[2] 남서[3]
-    	int[] dr = {0, 1, 1, 1};
-    	int[] dc = {1, 0, 1, -1};
-    	
-    	if (r == chess.length) {
-    		cnt++;					// 마지막 행의 남은 퀸의 위치는 하나
-    		int result = cnt;
-    		return result;
-    	} else {
-
-    	}
-    
-    }
+    static void setQueen()
     
 }
+    
+//    static int cnt = 0;
+//    
+//    static boolean[][] setQueenZone(boolean[][] chess, int rQueen, int cQueen) {
+//    	
+//    	int N = chess.length;
+//    	
+//		chess[rQueen] = new boolean[N];	// 동서
+//    	for (int r = 0; r < N; r++)
+//    		chess[r][cQueen] = false;	// 남북
+//    	int r = rQueen;
+//    	int c = cQueen;
+//    	while (r < N && c < N)
+//    		chess[r++][c++] = false;	// 남동
+//    	r = rQueen;
+//    	c = cQueen;
+//    	while (r < N && c >= 0)
+//    		chess[r++][c--] = false;	// 남서
+//    	r = rQueen;
+//    	c = cQueen;
+//    	while (r >= 0 && c < N)
+//    		chess[r--][c++] = false;	// 북동
+//    	r = rQueen;
+//    	c = cQueen;
+//    	while (r >= 0 && c >= 0)
+//    		chess[r--][c--] = false;	// 북서
+//    	
+//    	return chess;
+//    	
+//    }
+//    
+//    static void setQueen(boolean[][] oldChess, boolean[][] newChess, int rQueen, int cQueen) {
+//    	
+//    	int N = oldChess.length;
+//    	
+//    	if (rQueen == N) {
+//    		cnt++;
+//    		return;
+//    	}
+//    	
+//    	for (int r = rQueen; r < N; r++) {
+//    		newChess = setQueenZone(oldChess, rQueen, cQueen);
+//    		int tmpQueen = cQueen;
+//    		for (int c = 0; c < N; c++) {
+//    			if (newChess[rQueen++][c] == true)
+//    				cQueen = c;				// 다음 cQueen 탐색
+//    			if (cQueen == tmpQueen)	{	// 조건 만족하는 cQueen 존재 x
+//    				newChess = oldChess;
+//    				setQueen(oldChess, newChess, rQueen, cQueen);
+//    			}
+//    		}
+//    	}
+//    	
+//    }
