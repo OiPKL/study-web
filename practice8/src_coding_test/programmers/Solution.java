@@ -1,36 +1,36 @@
 package programmers;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 class Solution {
     public static int solution(int[] priorities, int location) {
     	
     	Queue <Integer> processQueue = new LinkedList<>();
+    	List <Integer> completedQueue = new ArrayList<>();
     	
-    	int num = 1;
     	for (int i = 0; i < priorities.length; i++) {
     		// 처음배열순서, 우선순위, 처음배열순서, 우선순위,,,
-    		processQueue.offer(num++);
+    		processQueue.offer(i);
     		processQueue.offer(priorities[i]);
     	}
     	
+    	outer:
     	while (!(processQueue.isEmpty())) {
-    		int tmp = 0;
+    		int tmpIndex = processQueue.poll();
+    		int tmpPriority = processQueue.poll();
+    		for (int i = 0; i < processQueue.size(); i += 2) {
+    			if (tmpPriority < ((LinkedList<Integer>) processQueue).get(i + 1)) {
+    				processQueue.offer(tmpIndex);
+    				processQueue.offer(tmpPriority);
+    				continue outer;
+				}
+	    	}
+    		completedQueue.add(tmpIndex);
     	}
-
-    	while (!(processQueue.isEmpty())) {
-    		for (int i = 1; i < processQueue.size(); i++) {
-    			if (processQueue.peek()[1] < ((LinkedList<Integer[]>) processQueue).get(i)[1]) {
-    				processQueue.offer(processQueue.poll());
-    			} else {
-    				completedQueue.offer(processQueue.poll());
-    			}
-    		}
-    	}
-    	
-    	return ((LinkedList<Integer[]>) completedQueue).get(location)[0];
-    	
+    	return completedQueue.indexOf(location) + 1;
     }
 }
 
