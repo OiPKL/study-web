@@ -6,16 +6,17 @@ import java.util.Queue;
 class Solution {
     public static int solution(int[] priorities, int location) {
     	
-    	Queue <Integer[]> processQueue = new LinkedList<>();
-    	Queue <Integer[]> completedQueue = new LinkedList<>();
+    	Queue <Integer> processQueue = new LinkedList<>();
     	
     	int num = 1;
     	for (int i = 0; i < priorities.length; i++) {
-    		// process = { 처음배열순서 = 반환할값, 우선순위 }
-    		Integer[] process = new Integer[2];
-    		process[0] = num++;
-    		process[1] = priorities[i];
-    		processQueue.offer(process);
+    		// 처음배열순서, 우선순위, 처음배열순서, 우선순위,,,
+    		processQueue.offer(num++);
+    		processQueue.offer(priorities[i]);
+    	}
+    	
+    	while (!(processQueue.isEmpty())) {
+    		int tmp = 0;
     	}
 
     	while (!(processQueue.isEmpty())) {
