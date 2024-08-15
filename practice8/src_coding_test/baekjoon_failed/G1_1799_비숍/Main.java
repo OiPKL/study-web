@@ -44,33 +44,33 @@ public class Main {
 	static void setBishop(int[][] chess, int rBishop, int cBishop) {
 		int N = chess.length;
 		
-		// rBishop 행에서의 Bishop 탐색
-		for (int c = cBishop; c < N; c++) {
-			if (chess[rBishop][c] == 1 && isSafe(chess, rBishop, c)) {
-				chess[rBishop][c] = 2;				// 비숍놓기
-				cnt++;
-				setBishop(chess, rBishop, c + 1);	// 다음비숍
-				chess[rBishop][c] = 1;				// 비숍제거
-				cnt--;
-			}
-		}
-		
-		// rBishop+1 이후 행에서의 Bishop 탐색
-		for (int r = rBishop + 1; r < N; r++) {
-			for (int c = 0; c < N; c++) {
-				if (chess[r][c] == 1 && isSafe(chess, r, c)) {
-					chess[r][c] = 2;				// 비숍놓기
-					cnt++;
-					if (r == N - 1 && c == N -1) {
+		for (int r = rBishop; r < N; r++) {
+			// rBishop 행에서의 Bishop 탐색
+			if (r == rBishop) {
+				for (int c = cBishop; c < N; c++) {
+					if (chess[r][c] == 1 && isSafe(chess, r, c)) {
+						chess[r][c] = 2;				// 비숍놓기
+						cnt++;
 						max = Math.max(max, cnt);
+						setBishop(chess, r, c + 1);		// 다음비숍
+						chess[r][c] = 1;				// 비숍제거
+						cnt--;
 					}
-					setBishop(chess, r, c + 1);		// 다음비숍
-					chess[r][c] = 1;				// 비숍제거
-					cnt--;
+				}
+			// rBishop+1 이후 행에서의 Bishop 탐색
+			} else {
+				for (int c = 0; c < N; c++) {
+					if (chess[r][c] == 1 && isSafe(chess, r, c)) {
+						chess[r][c] = 2;				// 비숍놓기
+						cnt++;
+						max = Math.max(max, cnt);
+						setBishop(chess, r, c + 1);		// 다음비숍
+						chess[r][c] = 1;				// 비숍제거
+						cnt--;
+					}
 				}
 			}
 		}
-		
 	}
 	
 	static boolean isSafe(int[][] chess, int rBishop, int cBishop) {
