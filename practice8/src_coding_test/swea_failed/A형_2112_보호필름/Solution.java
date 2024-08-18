@@ -1,4 +1,4 @@
-package swea;
+package swea_failed.A형_2112_보호필름;
 
 import java.util.Scanner;
 
@@ -28,3 +28,8 @@ public class Solution {
 	}
 	
 }
+
+/*
+ * 1. if - while 문으로 연속되는 A/B 많은 곳 찾기?
+ * 2. 위 아래로 최소 투입횟수 탐색..
+ */
