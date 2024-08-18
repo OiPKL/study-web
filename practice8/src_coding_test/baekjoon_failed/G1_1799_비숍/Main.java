@@ -43,6 +43,8 @@ public class Main {
 	 * - [rBishop][cBishop] 으로 원복 ~ 다음 for문으로 탐색 시작
 	 */
 	
+	// 추가 : 흑-백 서로 공격 X
+	
 	static void setBishop(int[][] chess, int rBishop, int cBishop) {
 		int N = chess.length;
 		
@@ -79,50 +81,3 @@ public class Main {
 		}
 	}
 }
-	
-//	static void setBishop(int[][] chess, int rBishop, int cBishop) {
-//		int N = chess.length;
-//		
-//		for (int r = rBishop; r < N; r++) {
-//			// rBishop 행에서의 Bishop 탐색
-//			if (r == rBishop) {
-//				for (int c = cBishop; c < N; c++) {
-//					if (chess[r][c] == 1 && isSafe(chess, r, c)) {
-//						chess[r][c] = 2;				// 비숍놓기
-//						cnt++;
-//						max = Math.max(max, cnt);
-//						setBishop(chess, r, c + 1);		// 다음비숍
-//						chess[r][c] = 1;				// 비숍제거
-//						cnt--;
-//					}
-//				}
-//			// rBishop+1 이후 행에서의 Bishop 탐색
-//			} else {
-//				for (int c = 0; c < N; c++) {
-//					if (chess[r][c] == 1 && isSafe(chess, r, c)) {
-//						chess[r][c] = 2;				// 비숍놓기
-//						cnt++;
-//						max = Math.max(max, cnt);
-//						setBishop(chess, r, c + 1);		// 다음비숍
-//						chess[r][c] = 1;				// 비숍제거
-//						cnt--;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	
-//	static boolean isSafe(int[][] chess, int rBishop, int cBishop) {
-//		int N = chess.length;
-//		
-//		for (int r = 0; r < N; r++) {
-//			// rBishop + cBishop = r + cDaegak1
-//			int cDaegak1 = (rBishop + cBishop) - r;
-//			if (cDaegak1 >= 0 && cDaegak1 < N && chess[r][cDaegak1] == 2) return false;
-//			// rBisop - cBishop = r - cDaegak2
-//			int cDaegak2 = r - (rBishop - cBishop);
-//			if (cDaegak2 >= 0 && cDaegak2 < N && chess[r][cDaegak2] == 2) return false;
-//		}
-//		return true;
-//	}
-//}
