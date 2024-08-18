@@ -1,4 +1,4 @@
-package swea;
+package swea_failed.d4_3234_준환이의양팔저울;
 
 import java.util.ArrayList;
 import java.util.List;
