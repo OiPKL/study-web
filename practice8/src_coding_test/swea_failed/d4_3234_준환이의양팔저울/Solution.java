@@ -32,59 +32,52 @@ public class Solution {
 		}
 	}
 	
-	static int cnt = 0;
 	static int sum = 0;
 	static int sum1 = 0;
 	static int sum2 = 0;
+	static int cnt = 0;
 	
 	static void setChu(int[] chu, List<Integer> chu1, List<Integer> chu2, int start) {
 		
 		if (sum1 < sum2) return;
 		if (sum == sum1 + sum2) {
 			
-			// TEST
-			System.out.println();
+			cnt++;
+			
+			// TEST ------------------------------------------------
+			System.out.println("cnt: " + cnt);
 			for (int num : chu1)
 				System.out.print(num + " ");
 			System.out.println();
 			for (int num : chu2)
 				System.out.print(num + " ");
 			System.out.println();
+			System.out.println("**********************************");
+			// TEST ------------------------------------------------
 			
-			cnt++;
 			return;
 		}
 		
 		int N = chu.length;
-		setChu:
-		for (int n = 0; n < N; n++) {
+		for (int n = start % N; n < start % N + N; n++) {
 			
-			int num = chu[start];
-			for (int m = 0; m < chu1.size(); m++) {
-				if (num == chu1.get(m)) continue setChu;
-			}
-			chu1.add(num);
-			sum1 += num;
-			for (int m = 0; m < chu2.size(); m++) {
-				if (num == chu2.get(m)) {
-					chu2.remove(m);
-					sum2 -= num;
-				}
-			}
+			int num = chu[n];
 			
-			setChu(chu, chu1, chu2, (start+1)%N);		// chu 반복구간
-			
-			for (int m = 0; m < chu2.size(); m++) {
-				if (num == chu2.get(m)) continue setChu;
-			}
-			chu2.add(num);
-			sum2 += num;
 			for (int m = 0; m < chu1.size(); m++) {
 				if (num == chu1.get(m)) {
 					chu1.remove(m);
 					sum1 -= num;
 				}
 			}
+			chu2.add(num);
+			sum2 += num;
+
+			setChu(chu, chu1, chu2, start+1);
+			
+			chu2.remove(chu2.size() - 1);
+			sum2 -= num;
+			chu1.add(num);
+			sum1 += num;
 			
 		}
 		
