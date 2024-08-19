@@ -39,7 +39,6 @@ public class Solution {
 	
 	static void setChu(int[] chu, List<Integer> chu1, List<Integer> chu2, int start) {
 		
-		if (sum1 < sum2) return;
 		if (sum == sum1 + sum2) {
 			
 			cnt++;
@@ -59,25 +58,41 @@ public class Solution {
 		}
 		
 		int N = chu.length;
-		for (int n = start % N; n < start % N + N; n++) {
+		for (int n = 0; n < N; n++) {
 			
-			int num = chu[n];
+			int num = chu[(n+start)%N];
+			boolean isAlready = false;
+			for (int m = 0; m < chu2.size(); m++) {
+				if (num == chu2.get(m)) isAlready = true;
+			}
 			
-			for (int m = 0; m < chu1.size(); m++) {
-				if (num == chu1.get(m)) {
-					chu1.remove(m);
-					sum1 -= num;
+			if (!isAlready) {
+				chu2.add(num);
+				sum2 += num;
+				
+				if (sum1 < sum2) {
+					chu2.remove(chu2.size() - 1);
+					sum2 -= num;
+					chu1.add(num);
+					sum1 += num;
 				}
 			}
-			chu2.add(num);
-			sum2 += num;
-
+			
 			setChu(chu, chu1, chu2, start+1);
 			
-			chu2.remove(chu2.size() - 1);
-			sum2 -= num;
-			chu1.add(num);
-			sum1 += num;
+			int numIdx = 0;
+			isAlready = false;
+			for (int m = 0; m < chu1.size(); m++) {
+				if (num == chu1.get(m)) {
+					isAlready = true;
+					numIdx = m;
+				}
+			}
+			
+			if (!isAlready) {
+				chu1.remove(numIdx);
+				sum1 -= num;
+			}
 			
 		}
 		
