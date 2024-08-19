@@ -1,10 +1,10 @@
-package A2;
+package baekjoon_failed.G1_17472_다리만들기2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
- public class Solution {
+ public class Main {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
