@@ -1,81 +1,126 @@
 package swea;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Solution {
 	public static void main(String[] args) {
 		
-		Scanner sc = new Scanner (System.in);
+		Scanner sc = new Scanner(System.in);
 		
 		int TC = sc.nextInt();
 		for (int tc = 1; tc <= TC; tc++) {
 			
-			int N = sc.nextInt();
-			int[][] SNJ = new int[N][N];
-			for (int n = 0; n < N; n++)
-				for (int m = 0; m < N; m++)
-					SNJ[n][m] = sc.nextInt();
-
-		int great = 9999;
-		combinations = new ArrayList<>();
-		combination(N, 0, new ArrayList<>());
-		
-		// (N combination N/2) 만큼 반복
-		for (int s = 0; s < combinations.size(); s++) {
-			
-			int[] combi = combinations.get(s);
-			boolean[] food = new boolean[N];
-			for (int n = 0; n < N/2; n++)
-				food[combi[n]] = true;
-			
-			List<Integer> food1 = new ArrayList<>();
-			List<Integer> food2 = new ArrayList<>();
-			
-			for (int n = 0; n < N; n++) {
-				if (food[n]) food1.add(n);
-				else		 food2.add(n);
-			}
-			
-			int sum1 = 0;
-			int sum2 = 0;
-			int compare = 0;
-			
-			for (int i = 0; i < N/2; i++) {
-				for (int j = i+1; j < N/2; j++) {
-					sum1 += (SNJ[food1.get(i)][food1.get(j)] + SNJ[food1.get(j)][food1.get(i)]);
-					sum2 += (SNJ[food2.get(i)][food2.get(j)] + SNJ[food2.get(j)][food2.get(i)]);
+			int D = sc.nextInt();
+			int W = sc.nextInt();
+			int K = sc.nextInt();
+			int[][] makOrgn = new int[D][W];
+			int[][] makCopy = new int[D][W];
+			for (int d = 0; d < D; d++) {		// A=0 B=1
+				for (int w = 0; w < W; w++) {
+					int yak = sc.nextInt();
+					makOrgn[d][w] = yak;
+					makCopy[d][w] = yak;
 				}
 			}
-			
-			compare = Math.abs(sum1 - sum2);
-			great = Math.min(great, compare);
-			
-		}
 		
-		System.out.println("#" + tc + " " + great);
+		minCnt = 9999;
+		complete = false;
+		// insertMak(int[][] makOrgn, int[][] makCopy, int[] makCopyD, int dStrt, int dTgt, int dCnt, int K)
+		insertMak(makOrgn, makCopy, new int[D], 0, 0, 0, K);
+		
+		System.out.println("#" + tc + " " + minCnt);
 		}
 	}
 	
-	static List<int[]> combinations;
+	static int minCnt;
+	static boolean complete;
 	
-	static void combination(int N, int start, List<Integer> food) {
-	    if(food.size() == N/2) {
-    	int[] foods = new int[food.size()];
-    	for (int f = 0; f < food.size(); f++)
-    		foods[f] = food.get(f);
-    	
-		combinations.add(foods);
+	static int[] insertA(int[] makCopyD) {
+		int W = makCopyD.length;
+		for (int w = 0; w < W; w++)
+			makCopyD[w] = 0;
 		
-        return;
-	    }
-	    
-	    for (int i = start; i < N; i++) {
-	    	food.add(i);
-	    	combination(N, i + 1, food);
-	    	food.remove(food.size() - 1);
-	    }
+		return makCopyD;
+	}
+	
+	static int[] insertB(int[] makCopyD) {
+		int W = makCopyD.length;
+		for (int w = 0; w < W; w++)
+			makCopyD[w] = 1;
+
+		return makCopyD;
+	}
+	
+	static int[] rollBack(int[][] makOrgn, int[] makCopyD, int d) {
+		int W = makCopyD.length;
+		for (int w = 0; w < W; w++)
+			makCopyD[w] = makOrgn[d][w];
+		
+		return makCopyD;
+	}
+	
+	static boolean test(int[][] makCopy, int K) {
+		int D = makCopy.length;
+		int W = makCopy[0].length;
+		for (int w = 0; w < W; w++) {			// w 칼럼 별로..
+			int cnt = 1;						// 측정위치 -> cnt 1
+			int max = 0;
+			int yak = makCopy[0][w];			// 측정위치 시작 = 맨 위
+			for (int d = 1; d < D; d++) {
+				if (makCopy[d][w] == yak) {
+					cnt++;						// 연속된 약 -> cnt++
+					max = Math.max(max, cnt);	// 최대 연속 측정
+				} else {
+					cnt = 1;					// 불연속 -> cnt 1 초기화
+					yak = makCopy[d][w];		// 측정위치 시작 재설정
+				}
+			}
+			if (max < K) return false;			// 기준 미달 시 false 반환
+		}
+		return true;							// 모두 통과 시 true 반환
+	}
+	
+	static void insertMak(int[][] makOrgn, int[][] makCopy, int[] makCopyD, int dStrt, int dTgt, int dCnt, int K) {
+		if (complete) return;
+		if (dTgt == 0) {
+			if (test(makCopy, K)) {
+				minCnt = Math.min(minCnt, dCnt);
+				complete = true;
+			} else {
+				insertMak(makOrgn, makCopy, makCopyD, 0, 1, 0, K);
+			}
+		}
+		if (dCnt == dTgt) {
+			if (test(makCopy, K)) {
+				minCnt = Math.min(minCnt, dCnt);
+				complete = true;
+			}
+			return;
+		}
+		
+		int D = makCopy.length;
+		for (int ds = dStrt; ds < D; ds++) {
+			insertMak(makOrgn, makCopy, insertA(makCopy[ds]), ds + 1, dTgt + 1, dCnt + 1, K);
+			System.out.println("[1] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| ds: " + ds);
+			testest(makCopy);
+			insertMak(makOrgn, makCopy, insertB(makCopy[ds]), ds + 1, dTgt + 1, dCnt + 1, K);
+			System.out.println("[2] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| ds: " + ds);
+			testest(makCopy);
+			insertMak(makOrgn, makCopy, rollBack(makOrgn, makCopy[ds], ds), ds + 1, dTgt + 1, dCnt + 1, K);
+			System.out.println("[3] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| ds: " + ds);
+			testest(makCopy);
+		}
+		
+	}
+	
+	static void testest(int[][] makCopy) {
+		for (int d = 0; d < makCopy.length; d++) {
+			for (int w = 0; w < makCopy[0].length; w++) {
+				System.out.print(makCopy[d][w] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 	
 }
