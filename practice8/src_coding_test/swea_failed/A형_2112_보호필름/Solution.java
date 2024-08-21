@@ -81,33 +81,6 @@ public class Solution {
 		return true;							// 모두 통과 시 true 반환
 	}
 	
-	static void insertMak(int[][] makOrgn, int[][] makCopy, int dStrt, int dTgt, int dCnt, int K) {
-		if (complete) return;			// 조건을 만족시키면 더 진행시키지 않기 위해... (dCnt == dTgt 조건 대신..)
-		if (dCnt == 0) {
-			if (test(makCopy, K)) {		// 아래 for문 = dTgt 1 ~ D-1
-				minCnt = dCnt;			// 최초 1번만 실행 -> 첫 기저조건에서 컷
-				complete = true;
-			}
-		}
-		if (dCnt == dTgt) {
-			if (test(makCopy, K)) {
-				minCnt = dCnt;			// 최초 1번만 실행 -> 첫 기저조건에서 컷
-				complete = true;
-			}
-			return;
-		}
-		
-		int D = makCopy.length;			// dStrt = 0, dTgt = 1, dCnt = 0
-		for (int ds = dStrt; ds < D; ds++) {
-			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
-			insertA(makCopy[ds]);
-			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
-			insertB(makCopy[ds]);
-			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
-			rollBack(makOrgn, makCopy[ds], ds);
-		}
-	}
-	
 //	static void insertMak(int[][] makOrgn, int[][] makCopy, int dStrt, int dTgt, int dCnt, int K) {
 //		if (complete) return;			// 조건을 만족시키면 더 진행시키지 않기 위해... (dCnt == dTgt 조건 대신..)
 //		if (dCnt == 0) {
@@ -121,30 +94,57 @@ public class Solution {
 //				minCnt = dCnt;			// 최초 1번만 실행 -> 첫 기저조건에서 컷
 //				complete = true;
 //			}
-//			System.out.println("*********************************************");
 //			return;
 //		}
 //		
-//		int D = makCopy.length;
-//		System.out.println("[0] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "|============================");
-//		for (int dt = dTgt; dt < D; dt++) {	// dStrt = 0, dTgt = 1, dCnt = 0
-//			for (int ds = dStrt; ds < D; ds++) {
-//				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
-//				insertA(makCopy[ds]);
-//				System.out.println("[1] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
-//																												testest(makCopy);
-//				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
-//				insertB(makCopy[ds]);
-//				System.out.println("[2] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
-//																												testest(makCopy);
-//				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
-//				rollBack(makOrgn, makCopy[ds], ds);
-//				System.out.println("[3] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
-//																												testest(makCopy);
-//																												System.out.println();
-//			}
+//		int D = makCopy.length;			// dStrt = 0, dTgt = 1, dCnt = 0
+//		for (int ds = dStrt; ds < D; ds++) {
+//			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
+//			insertA(makCopy[ds]);
+//			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
+//			insertB(makCopy[ds]);
+//			insertMak(makOrgn, makCopy, ds + 1, dTgt + 1, dCnt + 1, K);
+//			rollBack(makOrgn, makCopy[ds], ds);
 //		}
 //	}
+	
+	static void insertMak(int[][] makOrgn, int[][] makCopy, int dStrt, int dTgt, int dCnt, int K) {
+		if (complete) return;			// 조건을 만족시키면 더 진행시키지 않기 위해... (dCnt == dTgt 조건 대신..)
+		if (dCnt == 0) {
+			if (test(makCopy, K)) {		// 아래 for문 = dTgt 1 ~ D-1
+				minCnt = dCnt;			// 최초 1번만 실행 -> 첫 기저조건에서 컷
+				complete = true;
+			}
+		}
+		if (dCnt == dTgt) {
+			if (test(makCopy, K)) {
+				minCnt = dCnt;			// 최초 1번만 실행 -> 첫 기저조건에서 컷
+				complete = true;
+			}
+			System.out.println("*********************************************");
+			return;
+		}
+		
+		int D = makCopy.length;
+		System.out.println("[0] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "|============================");
+		for (int dt = dTgt; dt < D; dt++) {	// dStrt = 0, dTgt = 1, dCnt = 0
+			for (int ds = dStrt; ds < D; ds++) {
+				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
+				insertA(makCopy[ds]);
+				System.out.println("[1] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
+																												testest(makCopy);
+				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
+				insertB(makCopy[ds]);
+				System.out.println("[2] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
+																												testest(makCopy);
+				insertMak(makOrgn, makCopy, ds + 1, dt, dCnt + 1, K);
+				rollBack(makOrgn, makCopy[ds], ds);
+				System.out.println("[3] dStrt: " + dStrt + "| dTgt: " + dTgt + "| dCnt: " + dCnt + "| dt: " + dt + "| ds: " + ds);
+																												testest(makCopy);
+																												System.out.println();
+			}
+		}
+	}
 	
 	static void testest(int[][] makCopy) {
 		for (int d = 0; d < makCopy.length; d++) {
