@@ -3,11 +3,12 @@ package swea;
 import java.util.Scanner;
 
 public class Solution {
-
-	static int[] price;
-	static int[] month;
-	static int minCost;
 	
+	static int[] dr1 = new int[] {0, 1, 0, -1};
+	static int[] dc1 = new int[] {1, 0, -1, 0};
+	static int[] dr2 = new int[] {1, 1, -1, -1};
+	static int[] dc2 = new int[] {-1, 1, 1, -1};
+
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
@@ -15,40 +16,42 @@ public class Solution {
 		int TC = sc.nextInt();
 		for (int tc = 1; tc <= TC; tc++) {
 			
-			price = new int[4];	// 1일 1달 3달 1년
-			month = new int[12];
+			int N = sc.nextInt();
+			int M = sc.nextInt();
+			int[][] pari = new int[N][N];
+			for (int r = 0; r < N; r++)
+				for (int c = 0; c < N; c++)
+					pari[r][c] = sc.nextInt();
 			
-			for (int p = 0; p < 4; p++)
-				price[p] = sc.nextInt();
-			for (int m = 0; m < 12; m++)
-				month[m] = sc.nextInt();
-
-			minCost = 1 * price[3];
-
-			btk(0, 0);
+			int maxCnt = 0;
+			for (int r = 0; r < N; r++) {
+				for (int c = 0; c < N; c++) {
+					int cnt = 0;
+					cnt += pari[r][c];
+					for (int d = 0; d < 4; d++) {
+						for (int m = 1; m < M; m++) {
+							int rCheck = r + m * dr1[d];
+							int cCheck = c + m * dc1[d];
+							if (0 <= rCheck && rCheck < N && 0 <= cCheck && cCheck < N)
+								cnt += pari[rCheck][cCheck];
+						}
+					}
+					maxCnt = Math.max(maxCnt, cnt);
+					cnt = 0;
+					cnt += pari[r][c];
+					for (int d = 0; d < 4; d++) {
+						for (int m = 1; m < M; m++) {
+							int rCheck = r + m * dr2[d];
+							int cCheck = c + m * dc2[d];
+							if (0 <= rCheck && rCheck < N && 0 <= cCheck && cCheck < N)
+								cnt += pari[rCheck][cCheck];
+						}
+					}
+					maxCnt = Math.max(maxCnt, cnt);
+				}
+			}
 			
-			System.out.println("#" + tc + " " + minCost);
-		}
-		
+			System.out.println("#" + tc + " " + maxCnt);
+		}	
 	}
-	
-	static void btk(int monthIdx, int cost) {
-		
-		if (monthIdx >= 12) {
-			minCost = Math.min(minCost, cost);
-			return;
-		}
-		
-		if (month[monthIdx] == 0) {
-			btk(monthIdx + 1, cost);
-			return;
-		}
-		// 1일권
-		btk(monthIdx + 1, cost + month[monthIdx] * price[0]);
-		// 1달권
-		btk(monthIdx + 1, cost + price[1]);
-		// 3달권
-		btk(monthIdx + 3, cost + price[2]);
-	}
-	
 }
