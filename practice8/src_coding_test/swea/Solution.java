@@ -2,56 +2,126 @@ package swea;
 
 import java.util.Scanner;
 
-public class Solution {
-	
-	static int[] dr1 = new int[] {0, 1, 0, -1};
-	static int[] dc1 = new int[] {1, 0, -1, 0};
-	static int[] dr2 = new int[] {1, 1, -1, -1};
-	static int[] dc2 = new int[] {-1, 1, 1, -1};
+class Node {
+    String data;
+    Node link;
+}
 
-	public static void main(String[] args) {
-		
-		Scanner sc = new Scanner(System.in);
-		
-		int TC = sc.nextInt();
-		for (int tc = 1; tc <= TC; tc++) {
-			
-			int N = sc.nextInt();
-			int M = sc.nextInt();
-			int[][] pari = new int[N][N];
-			for (int r = 0; r < N; r++)
-				for (int c = 0; c < N; c++)
-					pari[r][c] = sc.nextInt();
-			
-			int maxCnt = 0;
-			for (int r = 0; r < N; r++) {
-				for (int c = 0; c < N; c++) {
-					int cnt = 0;
-					cnt += pari[r][c];
-					for (int d = 0; d < 4; d++) {
-						for (int m = 1; m < M; m++) {
-							int rCheck = r + m * dr1[d];
-							int cCheck = c + m * dc1[d];
-							if (0 <= rCheck && rCheck < N && 0 <= cCheck && cCheck < N)
-								cnt += pari[rCheck][cCheck];
-						}
-					}
-					maxCnt = Math.max(maxCnt, cnt);
-					cnt = 0;
-					cnt += pari[r][c];
-					for (int d = 0; d < 4; d++) {
-						for (int m = 1; m < M; m++) {
-							int rCheck = r + m * dr2[d];
-							int cCheck = c + m * dc2[d];
-							if (0 <= rCheck && rCheck < N && 0 <= cCheck && cCheck < N)
-								cnt += pari[rCheck][cCheck];
-						}
-					}
-					maxCnt = Math.max(maxCnt, cnt);
-				}
-			}
-			
-			System.out.println("#" + tc + " " + maxCnt);
-		}	
-	}
+class LinkedList {
+    Node head;
+    int size;
+
+    LinkedList() {
+        head = new Node();
+    }
+
+    void insertData(int x, int y, Scanner scanner) {
+        if (x < 0 || x > size) {
+            return;
+        }
+
+        Node curr = head;
+        for (int k = 0; k < x; k++) {
+            curr = curr.link;
+        }
+
+        for (int i = 0; i < y; i++) {
+            size++;
+
+            Node newNode = new Node();
+            newNode.data = scanner.next();
+
+            newNode.link = curr.link;
+            curr.link = newNode;
+
+            curr = newNode;
+        }
+    }
+
+    void deleteData(int x, int y) {
+        if (x < 0 || x + y > size) {
+            return;
+        }
+
+        Node curr = head;
+        for (int k = 0; k < x; k++) {
+            curr = curr.link;
+        }
+
+        for (int k = 0; k < y; k++) {
+            size--;
+            curr.link = curr.link.link;
+        }
+    }
+
+    void addData(int y, Scanner scanner) {
+        Node curr = head;
+        for (int k = 0; k < size; k++) {
+            curr = curr.link;
+        }
+
+        for (int k = 0; k < y; k++) {
+            size++;
+
+            Node newNode = new Node();
+            newNode.data = scanner.next();
+
+            newNode.link = curr.link;
+            curr.link = newNode;
+
+            curr = newNode;
+        }
+    }
+
+    void printData() {
+        Node curr = head.link;
+
+        for (int i = 0; i < 10; i++) {
+            if (curr == null) break;
+            System.out.print(curr.data + " ");
+            curr = curr.link;
+        }
+        System.out.println();
+    }
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        for (int tc = 1; tc <= 10; tc++) {
+            int n = scanner.nextInt();
+            LinkedList amho = new LinkedList();
+
+            for (int i = 0; i < n; i++) {
+                amho.addData(1, scanner);
+            }
+
+            int m = scanner.nextInt();
+
+            for (int i = 0; i < m; i++) {
+                String command = scanner.next();
+
+                if (command.equals("I")) {
+                    int x = scanner.nextInt();
+                    int y = scanner.nextInt();
+                    amho.insertData(x, y, scanner);
+
+                } else if (command.equals("D")) {
+                    int x = scanner.nextInt();
+                    int y = scanner.nextInt();
+                    amho.deleteData(x, y);
+
+                } else if (command.equals("A")) {
+                    int y = scanner.nextInt();
+                    amho.addData(y, scanner);
+                }
+            }
+
+            System.out.print("#" + tc + " ");
+            amho.printData();
+        }
+
+    }
 }
