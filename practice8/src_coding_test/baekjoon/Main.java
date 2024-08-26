@@ -7,84 +7,67 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-	static int[] dn = new int[] {1, 0, -1, 0};	// 하 우 상 좌
-	static int[] dm = new int[] {0, 1, 0, -1};
-//	static int[] dn = new int[] {0, 1, 0, -1};	// 우 하 좌 상
-//	static int[] dm = new int[] {1, 0, -1, 0};
-
+	
+	static int N;
+	static int tmp;
+	static List<Queue<Integer>> orderList = new ArrayList<>();
+	
 	public static void main(String[] args) {
-		
 		Scanner sc = new Scanner(System.in);
 		
-		int N = sc.nextInt();
-		int M = sc.nextInt();
-		sc.nextLine();
+		N = sc.nextInt();
+		int[] nums = new int[N];
+		int[] ops = new int[4];
+		for (int n = 0; n < N; n++)
+			nums[n] = sc.nextInt();
+		for (int n = 0; n < 4; n++)
+			ops[n] = sc.nextInt();
 		
-		int[][] miro = new int[N][M];
-		boolean[][] visited = new boolean[N][M];
-//		Stack<int[]> stack = new Stack<>();
-        Queue<int[]> queue = new LinkedList<>();
+		long max = Integer.MIN_VALUE;
+		long min = Integer.MAX_VALUE;
 		
-		for (int n = 0; n < N; n++) {
-			String str = sc.nextLine();
-			char[] charArr = str.toCharArray();
-			for (int m = 0; m < M; m++) {
-				miro[n][m] = charArr[m] - '0';
-			}
+		makeOrderList(ops, new LinkedList<>());
+		
+		for (int i = 0; i < orderList.size(); i++) {
+			Queue<Integer> order = orderList.get(i);
+			
+			int idx = 0;
+			long ans = nums[idx];
+			int num = nums[++idx];
+			int op = orderList.get(i).poll();
+			
+			if (op == 0)
+				ans += num;
+			if (op == 1)
+				ans -= Math.abs(ans);
+			if (op == 2)
+				ans *= num;
+			if (op == 3)
+				ans /= num;
+			
+			max = Math.max(max, ans);
+			min = Math.min(min, ans);
 		}
 		
-		// (0,0) 시작 -> (N-1,M-1) 도착
-//		stack.push(new int[]{0, 0, 1});	// 좌표+cnt
-        queue.add(new int[] {0, 0, 1}); // 좌표+cnt
-		visited[0][0] = true;
-		
-		int minCnt = Integer.MAX_VALUE;
-		
-//		while(!stack.isEmpty()) {
-//			int[] now = stack.pop();
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-			int nNow = now[0];
-			int mNow = now[1];
-			int cnt = now[2];
-			
-			if (nNow == N - 1 && mNow == M - 1) {
-				minCnt = Math.min(minCnt, cnt);
-			}
-			
-			List<int[]> next = searchWay(miro, visited, now);
-			
-            for (int[] nxt : next) {
-                int nNext = nxt[0];
-                int mNext = nxt[1];
-                visited[nNext][mNext] = true;
-//                stack.push(new int[]{nNext, mNext, cnt + 1});
-                queue.add(new int[]{nNext, mNext, cnt + 1});
-            }
-		}
-		
-		System.out.println(minCnt);
+		System.out.println(max);
+		System.out.println(min);
 		
 	}
-	
-	static List<int[]> searchWay(int[][] miro, boolean[][] visited, int[] now) {
-		int N = miro.length;
-		int M = miro[0].length;
-		
-		List<int[]> next = new ArrayList<>();
-		for (int d = 0; d < 4; d++) {
-			int nNext = now[0] + dn[d];
-			int mNext = now[1] + dm[d];
-			
-			if (nNext < 0 || nNext == N) continue;
-			if (mNext < 0 || mNext == M) continue;
-			if (miro[nNext][mNext] == 0) continue;
-			if (visited[nNext][mNext]) continue;
-			
-			next.add(new int[] {nNext, mNext});
+
+	static void makeOrderList(int[] ops, Queue<Integer> order) {
+		if (order.size() == N - 1) {
+			orderList.add(order);
+			return;
 		}
 		
-		return next;
+		for (int i = 0; i < 4; i++) {
+			if (ops[i] > 0) {
+				tmp = ops[i]--;
+				order.offer(i);
+				tmp++;
+			}
+		}
+		
 	}
 	
 }
