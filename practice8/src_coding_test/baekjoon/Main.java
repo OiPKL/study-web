@@ -25,35 +25,27 @@ public class Main {
 		
 		makeOrderList(ops, new ArrayList<>());
 		
-		for (int i = 0; i < orderList.size(); i++) {
+		for (List<Integer> order : orderList) {
 			long ans = nums[0];
-			List<Integer> order = orderList.get(i);
-			
-			int idxN = 1;	// N개
-			int idxO = 0;	// N-1개
-			int num = nums[idxN++];
-			int op = order.get(idxO++);
-			
-			if (op == 0)
-				ans += num;
-			if (op == 1)
-				ans -= num;
-			if (op == 2)
-				ans *= num;
-			if (op == 3) {
-				if (ans > 0)
-					ans /= num;
-				else 
-					ans = - (Math.abs(ans) / num);
+			for (int i = 1; i < N; i++) {
+				int num = nums[i];
+				int op = order.get(i - 1);
+				
+				if (op == 0)		ans += num;
+				if (op == 1)		ans -= num;
+				if (op == 2)		ans *= num;
+				if (op == 3) {
+					if (ans > 0)	ans /= num;
+					else			ans = -(-ans)/num;
+				
+				}
 			}
-			
 			max = Math.max(max, ans);
 			min = Math.min(min, ans);
 		}
 		
 		System.out.println(max);
 		System.out.println(min);
-		
 	}
 
 	static void makeOrderList(int[] ops, List<Integer> order) {
