@@ -1,16 +1,13 @@
 package baekjoon;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
 	
 	static int N;
-	static int tmp;
-	static List<Queue<Integer>> orderList = new ArrayList<>();
+	static List<List<Integer>> orderList = new ArrayList<>();
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -23,27 +20,32 @@ public class Main {
 		for (int n = 0; n < 4; n++)
 			ops[n] = sc.nextInt();
 		
-		long max = Integer.MIN_VALUE;
-		long min = Integer.MAX_VALUE;
+		long max = Long.MIN_VALUE;
+		long min = Long.MAX_VALUE;
 		
-		makeOrderList(ops, new LinkedList<>());
+		makeOrderList(ops, new ArrayList<>());
 		
 		for (int i = 0; i < orderList.size(); i++) {
-			Queue<Integer> order = orderList.get(i);
+			long ans = nums[0];
+			List<Integer> order = orderList.get(i);
 			
-			int idx = 0;
-			long ans = nums[idx];
-			int num = nums[++idx];
-			int op = orderList.get(i).poll();
+			int idxN = 1;	// N개
+			int idxO = 0;	// N-1개
+			int num = nums[idxN++];
+			int op = order.get(idxO++);
 			
 			if (op == 0)
 				ans += num;
 			if (op == 1)
-				ans -= Math.abs(ans);
+				ans -= num;
 			if (op == 2)
 				ans *= num;
-			if (op == 3)
-				ans /= num;
+			if (op == 3) {
+				if (ans > 0)
+					ans /= num;
+				else 
+					ans = - (Math.abs(ans) / num);
+			}
 			
 			max = Math.max(max, ans);
 			min = Math.min(min, ans);
@@ -54,17 +56,20 @@ public class Main {
 		
 	}
 
-	static void makeOrderList(int[] ops, Queue<Integer> order) {
+	static void makeOrderList(int[] ops, List<Integer> order) {
+		
 		if (order.size() == N - 1) {
-			orderList.add(order);
+			orderList.add(new ArrayList<>(order));
 			return;
 		}
 		
 		for (int i = 0; i < 4; i++) {
 			if (ops[i] > 0) {
-				tmp = ops[i]--;
-				order.offer(i);
-				tmp++;
+				ops[i]--;
+				order.add(i);
+				makeOrderList(ops, order);
+				order.remove(order.size() - 1);
+				ops[i]++;
 			}
 		}
 		
