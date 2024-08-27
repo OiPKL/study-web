@@ -3,42 +3,45 @@ package swea;
 import java.util.Scanner;
 
 public class Solution {
+	
+	static int cnt;
+	static int N;
+	static int K;
+	static int[] arr;
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
 		int TC = sc.nextInt();
-		outer:
 		for (int tc = 1; tc <= TC; tc++) {
 			
-			int N = sc.nextInt();
-			int M = sc.nextInt();
+			N = sc.nextInt();
+			K = sc.nextInt();
 			
-			String reverseBinary = "";
-			while (M > 0) {
-				int tmp = M % 2;
-				M /= 2;
-				reverseBinary += (tmp + "");
-			}
-			
-			int bl = reverseBinary.length();
-			if (bl < N) {
-				for (int b = 0; b < N - bl; b++) {
-					reverseBinary += "0";
-				}
-			}
-			
-//			System.out.println(tc + ": " + reverseBinary);
-			char[] charArr = reverseBinary.toCharArray();
-			
+			arr = new int[N];
 			for (int n = 0; n < N; n++) {
-				if (charArr[n] == '0') {
-					System.out.println("#" + tc + " " + "OFF");
-					continue outer;
-				}
+				arr[n] = sc.nextInt();
 			}
 			
-			System.out.println("#" + tc + " " + "ON");
+			cnt = 0;
+			bubun(0, 0);
+			
+			System.out.println("#" + tc + " " + cnt);
 		}
 		
 	}
+	
+	static void bubun(int idx, int sum) {
+		if (sum >= K) {
+			if (sum == K) cnt++;
+			return;
+		}
+		
+		for (int n = idx; n < N; n++) {
+//			sum += arr[n];
+			bubun(n + 1, sum + arr[n]);
+//			sum -= arr[n];
+		}
+	}
+	
 }
