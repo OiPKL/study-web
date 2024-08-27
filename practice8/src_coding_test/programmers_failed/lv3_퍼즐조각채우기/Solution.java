@@ -24,25 +24,25 @@ class Solution {
     	List<int[]> blockInfo4 = new ArrayList<>();
     	List<int[]> boardFlag = new ArrayList<>();			// 보드좌표저장
     	List<int[]> blockInfo = new ArrayList<>();			// 블럭정보로드
-
-    	// 테이블 블럭 탐색
+    	
+       	// 테이블 블럭 탐색
     	for (int n = 0; n < N; n++) {
     		for (int m = 0; m < N; m++) {
     			if (table[n][m] == 1 && !tableVisited[n][m]) {
     				
+    				blockFlag.clear();
+    				blockInfo1.clear();
+    				blockInfo2.clear();
+    				blockInfo3.clear();
+    				blockInfo4.clear();
     				tableVisited[n][m] = true;
     				stack.push(new int[] {n, m});
-    				blockFlag.clear();
     				blockFlag.add(new int[] {n, m});
-    				blockInfo1.clear();
     				blockInfo1.add(new int[] {0});			// (임시) 사이즈 저장용
-    				blockInfo2.clear();
     				blockInfo2.add(new int[] {0});
-    				blockInfo3.clear();
     				blockInfo3.add(new int[] {0});
-    				blockInfo4.clear();
     				blockInfo4.add(new int[] {0});
-    																
+    				
     				while (!stack.isEmpty()) {
     					int[] now = stack.pop();
     					int nNow = now[0];
@@ -84,15 +84,15 @@ class Solution {
     			}
     		}
     	}
-    	
+    				
     	// 보드 빈칸 딱맞는 블럭 탐색
     	for (int n = 0; n < N; n++) {
     		for (int m = 0; m < N; m++) {
     			if (board[n][m] == 0 && !boardVisited[n][m]) {
     				
+    				boardFlag.clear();
     				boardVisited[n][m] = true;
     				stack.push(new int[] {n, m});
-    				boardFlag.clear();
     				boardFlag.add(new int[] {n, m});
     				
     				while (!stack.isEmpty()) {
