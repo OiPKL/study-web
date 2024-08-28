@@ -1,50 +1,44 @@
 package baekjoon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	
+	static int N;
+	static int M;
+	static int[] NN;
+	
 	public static void main(String[] args) {
-		/*
-		 * 1. X : 0 _ _
-		 * 2. X 0,1 <-> X' 1,0
-		 * 3. X += X'
-		 * ... K 번째 문자?
-		 * 
-		 *                    1            2         3            4          5         6
-		 * 1  2  3 4  56 78  9012 3456  78901234 56789012  3456789012345678 9012345678901234
-		 * 0  1  1.0  10.01  1001.0110  10010110.01101001  1001011001101001.0110100110010110
-		 * 
-		 * 비트연산자 풀이방법이 있나???
-		 * 
-		 * left 2^1 2^3 .. 유지 => false
-		 * left 2^2 2^4 .. 반전 => true
-		 * 
-		 */
 		
 		Scanner sc = new Scanner(System.in);
 		
-		long K = sc.nextLong();
-		long left = 576460752303423488l;	// 2^59
-		long right = 1152921504606846976l;	// 2^60
-		boolean leftCheck = false;
-		boolean reverse = false;
+		N = sc.nextInt();
+		M = sc.nextInt();
+		NN = new int[N];
 		
-		while (left > 1) {
-			if (left < K && K <= right) {
-				K = (right+1) - K;
-				if (leftCheck) reverse = !reverse;
-			}
-			left /= 2;
-			right /= 2;
-			leftCheck = !leftCheck;
+		for (int n = 0; n < N; n++)
+			NN[n] = sc.nextInt();
+		Arrays.sort(NN);
+		
+		btk(0, new ArrayList<>());
+	}
+	
+	static void btk(int start, List<Integer> pickN) {
+		if(pickN.size() == M) {
+			for (int num : pickN)
+				System.out.print(num + " ");
+			System.out.println();
+			
+			return;
 		}
 		
-		if (K == 1) {
-			if (reverse) System.out.println(1);
-			else	 	 System.out.println(0);
-		} else {
-			if (reverse) System.out.println(0);
-			else		 System.out.println(1);
+		for (int n = start; n < N; n++) {
+			pickN.add(NN[n]);
+			btk(n + 1, pickN);
+			pickN.remove(pickN.size() - 1);
 		}
 		
 	}
