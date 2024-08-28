@@ -17,15 +17,27 @@ public class Main {
 		int Q = sc.nextInt();	// Query 개수
 		int M = sc.nextInt();	// mod
 		
-		Stack[] stackList = new Stack[M];
+		Stack[] mods = new Stack[M];
+		Stack lastAdded = new Stack<>();
 		
+		int mod;
+		long num;
 		int idx = 0;
 		for (int q = 0; q < Q; q++) {
 			int cmd = sc.nextInt();
 			
 			if (cmd == 1) {
-				long num = sc.nextLong();
-				stackList[(int) num % M].add(idx++);
+				num = sc.nextLong();
+				mod = (int) num % M;
+				mods[mod].add(idx);
+				lastAdded.add(idx++);
+			} else if (cmd == 2) {
+				if (!lastAdded.isEmpty()) {
+					mod = (int) lastAdded.pop();
+					mods[mod].pop();
+				}
+			} else {
+				
 			}
 		}
 		
