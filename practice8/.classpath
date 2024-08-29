@@ -16,6 +16,5 @@
 	<classpathentry kind="src" path="src_240816"/>
 	<classpathentry kind="src" path="src_240827"/>
 	<classpathentry kind="src" path="src_240828"/>
-	<classpathentry kind="src" path="src_240829"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,7 +1,6 @@
 package baekjoon;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -10,8 +9,7 @@ import java.util.Scanner;
 public class Main {
 	static int N;
 	static int M;
-	static int[] NN;
-	static Queue<Boolean>[] overlapped;				// 기존 visited 상위호환
+	static Queue<Integer>[] NN;				// 기존 visited 상위호환
 
 	public static void main(String[] args) {
 		
@@ -19,24 +17,20 @@ public class Main {
 		
 		N = sc.nextInt();
 		M = sc.nextInt();
-		NN = new int[N];
-		overlapped = new Queue[10000];
+		NN = new Queue[10000];
 		for (int i = 0; i < 10000; i++)
-			overlapped[i] = new LinkedList<>();
+			NN[i] = new LinkedList<>();
 		
 		for (int n = 0; n < N; n++) {
 			int num = sc.nextInt();
-			NN[n] = num;
-			overlapped[num].add(overlapped[num].isEmpty() ? false : true);
+			NN[num].add(0);					// 의미없는 0임
 		}
 		
-		Arrays.sort(NN);
-		
-		btk(new ArrayList<>());
+		btk(0, new ArrayList<>());
 		
 	}
 	
-	static void btk(List<Integer> pickN) {
+	static void btk(int start, List<Integer> pickN) {
 		if (pickN.size() == M) {
 			for (int num : pickN)
 				System.out.print(num + " ");
@@ -45,26 +39,14 @@ public class Main {
 			return;
 		}
 		
-		for (int n = 0; n < N; n++) {
-			if (!overlapped[NN[n]].isEmpty()) {
-				
-				boolean tmp = overlapped[NN[n]].peek();
-				
-				if (tmp == false) {					// 중복원소 중 두개 이상 뽑을 경우에만
-					
-				} else {							// 첫번째 원소
-					overlapped[NN[n]].poll();
-					pickN.add(NN[n]);
-					btk(pickN);
-					pickN.remove(pickN.size() - 1);
-					overlapped[NN[n]].add(tmp);
-				}
+		for (int n = start; n < 10000; n++) {
+			if (!NN[n].isEmpty()) {
+//				NN[n].poll();
+				pickN.add(n);
+				btk(n, pickN);
+				pickN.remove(pickN.size() - 1);
+//				NN[n].add(0);
 			}
-			
-			
-			
-			
-			
 		}
 	}
 	
