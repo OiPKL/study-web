@@ -16,12 +16,26 @@ public class Practice {
 	// left: 구간의 시작
 	// right: 구간의 끝
 	static void mergeSort(int left, int right) {
-		if (left < right) {
-			int mid = (left + right) / 2;
-			mergeSort(left, mid);
-			mergeSort(mid + 1, right);
-			merge(left, mid, right);
+		// #1
+		if (left == right) {
+			return;
 		}
+		
+		int mid = (left + right) / 2;
+		// 앞쪽 절반
+		mergeSort(left, mid);
+		// 뒤쪽 절반
+		mergeSort(mid + 1, right);
+		// 병합
+		merge(left, mid, right);
+		
+		// #2
+//		if (left < right) {
+//			int mid = (left + right) / 2;
+//			mergeSort(left, mid);
+//			mergeSort(mid + 1, right);
+//			merge(left, mid, right);
+//		}
 		
 	}
 	
@@ -29,10 +43,12 @@ public class Practice {
 	// mid: 왼쪽 파트의 끝 -> mid+1: 오른쪽 파트의 시작
 	// right: 구간의 끝
 	static void merge(int left, int mid, int right) {
+		// 앞쪽 절반의 원소를 가리킬 포인터
 		int L = left;
+		// 뒤쪽 절반의 원소를 가리킬 포인터
 		int R = mid + 1;
-		
-		int idx = left;	// tmp 배열의 인덱스
+		// tmp 배열의 인덱스
+		int idx = left;
 		
 		while(L <= mid && R <= right) {
 			if (arr[L] <= arr[R]) {
