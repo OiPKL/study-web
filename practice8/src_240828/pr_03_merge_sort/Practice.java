@@ -16,6 +16,10 @@ public class Practice {
 	// left: 구간의 시작
 	// right: 구간의 끝
 	static void mergeSort(int left, int right) {
+		// TEST ************************************************
+		System.out.println(Arrays.toString(arr) + "\tBefore: " + left + " ~ " + right);
+		System.out.println();
+		// TEST ************************************************
 		// #1
 		if (left == right) {
 			return;
@@ -37,6 +41,11 @@ public class Practice {
 //			merge(left, mid, right);
 //		}
 		
+		// TEST ************************************************
+		System.out.println(Arrays.toString(arr) + "\t\t\tAfter: " + left + " ~ " + right);
+		System.out.println();
+		// TEST ************************************************
+
 	}
 	
 	// left: 구간의 시작
@@ -50,6 +59,8 @@ public class Practice {
 		// tmp 배열의 인덱스
 		int idx = left;
 		
+		// L이 가리키는 값과 R이 가리키는 값을 비교해서 작은 값을 tmp 배열에 복사
+		// 안정정렬 : 같은 값이 서로 다른 영역에 나오더라도 앞쪽 원소부터 배치하기 때문에 안정적임
 		while(L <= mid && R <= right) {
 			if (arr[L] <= arr[R]) {
 				tmp[idx++] = arr[L++];
@@ -57,12 +68,13 @@ public class Practice {
 				tmp[idx++] = arr[R++];
 			} 
 		}
-		// if 나머지 왼쪽 파트 존재
+		// 한쪽 포인터가 범위를 벗어난 경우
+		// L이 벗어나지 않은 경우 = if 나머지 왼쪽 파트 존재
 		if (L <= mid) {
 			for (int i = L; i <= mid; i++) {
 				tmp[idx++] = arr[i];
 			}
-		// if 나머지 오른쪽 파트 존재
+		// R이 벗어나지 않은 경우 = if 나머지 오른쪽 파트 존재
 		} else {
 			for (int i = R; i <= right; i++) {
 				tmp[idx++] = arr[i];
