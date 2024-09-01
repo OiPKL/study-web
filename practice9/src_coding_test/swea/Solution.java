@@ -1,44 +1,70 @@
 package swea;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Solution {
+	
+	static int[] kyuOrder;
+	static int[] iinCards;
+	static boolean[] visited;
+	static List<Integer> iinOrder;
+	static int kyuWin, iinWin;
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		
+
 		int TC = sc.nextInt();
 		for (int tc = 1; tc <= TC; tc++) {
 			
-			int N = sc.nextInt();
-			int[][] room = new int[N][N];
-			for (int n1 = 0; n1 < N; n1++) {
-				int box = sc.nextInt();
-				for (int n2 = 0; n2 < box; n2++) {
-					room[n1][n2] = 1;
-				}
-			}
-
-			Stack<Integer>[] rotatedRoom = new Stack[N];
-			for (int n2 = 0; n2 < N; n2++) {
-				rotatedRoom[n2] = new Stack<>();
+			kyuOrder = new int[9];
+			iinCards = new int[9];
+			visited = new boolean[9];
+			iinOrder = new ArrayList<>();
+			kyuWin = 0;
+			iinWin = 0;
+			boolean[] cardCheck = new boolean[19];
+			
+			for (int i = 0; i < 9; i++) {
+				int card = sc.nextInt();
+				kyuOrder[i] = card;
+				cardCheck[card] = true;
 			}
 			
-			int maxCnt = 0;
-			for (int n2 = 0; n2 < N; n2++) {
-				int cnt = 0;
-				for (int n1 = N - 1; n1 >= 0; n1--) {
-					if (room[n1][n2] == 1) {
-						maxCnt = Math.max(maxCnt, cnt);
-						cnt = 0;
-					} else {
-						
-					}
-				}
-			}
+			int iinIdx = 0;
+			for (int i = 1; i < 19; i++)
+				if (!cardCheck[i])
+					iinCards[iinIdx++] = i;
 			
+			btk(0, 0);
+			
+			System.out.println("#" + tc + " " + kyuWin + " " + iinWin);
 		}
 		
 	}
+	
+	static void btk(int kyuScore, int iinScore) {
+		if (iinOrder.size() == 9) {
+			if (kyuScore > iinScore) kyuWin++;
+			else					 iinWin++;
+			
+			return;
+		}
+		
+		for (int i = 0; i < 9; i++) {
+			if (!visited[i]) {
+				visited[i] = true;
+				iinOrder.add(iinCards[i]);
+				if (kyuOrder[iinOrder.size() - 1] > iinOrder.get(iinOrder.size() - 1))
+					btk(kyuScore + kyuOrder[iinOrder.size() - 1] + iinOrder.get(iinOrder.size() - 1), iinScore);
+				else
+					btk(kyuScore, iinScore + kyuOrder[iinOrder.size() - 1] + iinOrder.get(iinOrder.size() - 1));
+				iinOrder.remove(iinOrder.size() - 1);
+				visited[i] = false;
+			}
+		}
+	}
+	
 }
