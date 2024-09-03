@@ -1,119 +1,88 @@
 package baekjoon_failed.G1_17472_다리만들기2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
- public class Main {
+public class Main {
+	
+	static int[] dn = {-1, 0, 1, 0};
+	static int[] dm = {0, 1, 0, -1};
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		
-		int TC = sc.nextInt();
-		for (int tc = 1; tc <= TC; tc++) {
-			
-			int N = sc.nextInt();
-			int[][] bada = new int[N][N];
-			for (int r = 0; r < N; r++) {
-				for (int c = 0; c < N; c++) {
-					bada[r][c] = sc.nextInt();
-				}
-			}
-			
-			int bridge = 9999;
-			islandList = new ArrayList<>();
-			
-			findIsland(bada);
-			
-//			// TEST -----------------------------------------------------
-//			for (int i = 0; i < islandList.size(); i++) {
-//				System.out.print("island: ");
-//				for (int j = 0; j < 4; j++) {
-//					System.out.print(islandList.get(i)[j] + " ");
-//				}
-//				System.out.println();
-//			}
-//			// TEST -----------------------------------------------------
-			
-			outer:
-			for (int i = 0; i < islandList.size(); i++) {
-				int[] island = islandList.get(i);
-				
-				int min = 9999;
-				
-				
-				
-				if (min == 9999) {
-					bridge = -1;
-					break outer;
-				} else {
-					bridge += min;
-				}
-			}
 
-			System.out.println("#" + tc + " " + bridge);
-		}
+		int N = sc.nextInt();
+		int M = sc.nextInt();
 		
-	}
-	
-	static List<int[]> islandList = new ArrayList<>();
-	
-	static void findIsland(int[][] bada) {
-		// 가장 왼쪽 위 (r,c) 좌표, 가로사이즈, 세로사이즈 -> islandList 추가
-		int N = bada.length;
-		for (int r = 0; r < N; r++) {
-			inner:
-			for (int c = 0; c < N; c++) {
-				for (int i = 0; i < islandList.size(); i++) {
-					int R = islandList.get(i)[0];
-					int C = islandList.get(i)[1];
-					int Rlength = islandList.get(i)[2];
-					int Clength = islandList.get(i)[3];
+		int[][] bada = new int[N][M];
+		boolean[][] visited = new boolean[N][M];
+		for (int n = 0; n < N; n++)
+			for (int m = 0; m < M; m++)
+				bada[n][m] = sc.nextInt();
+		
+		// 섬 찾기
+		List<List<int[]>> islandList = new ArrayList<>();
+
+		for (int n = 0; n < N; n++) {
+			for (int m = 0; m < M; m++) {
+				if (!visited[n][m] && bada[n][m] == 1) {
+					List<int[]> island = new ArrayList<>();
+					Queue<int[]> bfs = new LinkedList<>();
 					
-					if (R <= r && r < R+Rlength && C <= c && c < C+Clength)
-						continue inner;
-				}
-				
-				if (bada[r][c] == 1) {
-					int cntR = 1;
-					int cntC = 1;
-					int tmpR = r;
-					int tmpC = c;
-					if (r+1 < N && bada[r+1][c] == 1)
-						while (true) {
-							r += 1;
-							if (r == N || bada[r][c] == 0) break;
-							cntR++;
-						}
-					r = tmpR;
-					if (c+1 < N && bada[r][c+1] == 1)
-						while (true) {
-							c += 1;
-							if (c == N || bada[r][c] == 0) break;
-							cntC++;
-						}
-					c = tmpC;
+					island.add(new int[] {n, m});
+					bfs.add(new int[] {n, m});
+					visited[n][m] = true;
 					
-					islandList.add(new int[] {r, c, cntR, cntC});
+					while (!bfs.isEmpty()) {
+						
+						int[] map = bfs.poll();
+						int nNow = map[0];
+						int mNow = map[1];
+						
+						for (int d = 0; d < 4; d++) {
+							int nNext = nNow + dn[d];
+							int mNext = mNow + dm[d];
+							
+							if (nNext < 0 || N <= nNext) continue;
+							if (mNext < 0 || M <= mNext) continue;
+							if (bada[nNext][mNext] == 0) continue;
+							if (visited[nNext][mNext]) continue;
+							
+							island.add(new int[] {nNext, mNext});
+							bfs.add(new int[] {nNext, mNext});
+							visited[nNext][mNext] = true;
+						}
+					}
+					islandList.add(new ArrayList<>(island));
 				}
-				
 			}
 		}
-	}
-	
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-	
-	static int isConnected(int[] bada, int[] island1) {
-		int R = island1[0];
-		int C = island1[1];
-		int tmpR1 = R;
-		int tmpC1 = C;
-		int Rlength = island1[2];
-		int Clength = island1[3];
 		
-		int min = 9999;
+		// *************************************************************************
+		for (List<int[]> island : islandList) {
+			for (int[] num : island)
+				System.out.println(num[0] + ", " + num[1]);
+			System.out.println();
+		}
+		// *************************************************************************
 		
-		return 9999;
+		// 다리 찾기
+		// 다리 길이 > 1 !!!!!!!!!
+		int islands = islandList.size();
+		List<Integer>[] adjList = new ArrayList[islands];
+		for (int i = 0; i < islands; i++)
+			adjList[i] = new ArrayList<>();
+		
+		for (List<int[]> island : islandList) {
+			
+			
+			
+		}
+		
+		
 	}
 }

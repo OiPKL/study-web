@@ -55,8 +55,8 @@ public class Main {
 			
 //			System.out.println(rNow + ", " + cNow);
 
-			// 모래 이동
 			int sand = map[rNow][cNow];
+			// 모래 이동
 			if (sand > 0) {
 				int sum = 0;
 				int rCheck;
