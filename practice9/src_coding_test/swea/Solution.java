@@ -1,6 +1,7 @@
 package swea;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class Solution {
 //				for (int eta : etas)
 //					System.out.print(eta + " ");
 //				System.out.println();
+//				System.out.println("----------------------");
 //			}
 //			// *****************************************************************************
 			
@@ -95,9 +97,11 @@ public class Solution {
 			}
 			
 //			// *****************************************************************************
+//			System.out.print("ETA1: ");
 //			for (int eta : ETA1)
 //				System.out.print(eta + " ");
 //			System.out.println();
+//			System.out.print("ETA2: ");
 //			for (int eta : ETA2)
 //				System.out.print(eta + " ");
 //			System.out.println();
@@ -107,70 +111,190 @@ public class Solution {
 			
 			return;
 		}
-		
-        pick[idx] = 1;
-        pickETA(pick, idx + 1);
-
-        pick[idx] = 2;
-        pickETA(pick, idx + 1);
+	
+			pickETA(pick, idx+1);
+//        pick[idx] = 1;
+//        pickETA(pick, idx + 1);
+//
+//        pick[idx] = 2;
+//        pickETA(pick, idx + 1);
 		
 	}
 	
 	static void getHappyTime() {
 		
 		int time = 0;
-		int stairPerson1 = 0;
-		int stairPerson2 = 0;
-		int personCnt = 0;
+		int stairFirst1 = 0;
+		int stairFirst2 = 0;
 		int stairCnt1 = 0;
 		int stairCnt2 = 0;
 		int happyCnt = 0;
 		
-		while (happyCnt <= ETA.size()) {
+//		// *****************************************************************************
+//		System.out.print("ETA1: ");
+//		for (int num : ETA1)
+//			System.out.print(num + " ");
+//		System.out.println();
+//		System.out.print("ETA2: ");
+//		for (int num : ETA2)
+//			System.out.print(num + " ");
+//		System.out.println();
+//		// *****************************************************************************
+		
+//		while (happyCnt <= ETA.size()) {
+		for (int t = 0; t < 10; t++) {
 			
 			time++;
 			
-			stairPerson1 = stair1.pollFirst();
-			happyCnt += stairPerson1;
-			stairCnt1 -= stairPerson1;
+			System.out.println("======================================");
+			System.out.println("시작");
+			System.out.println("time: " + time);
+			System.out.println("happyCnt: " + happyCnt);
+			System.out.print("stair1: ");
+			for (int num : stair1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("stair2: ");
+			for (int num : stair2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait1: ");
+			for (int num : wait1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait2: ");
+			for (int num : wait2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA1: ");
+			for (int num : ETA1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA2: ");
+			for (int num : ETA2)
+				System.out.print(num + " ");
+			System.out.println();
 			
-			stairPerson2 = stair2.pollFirst();
-			happyCnt += stairPerson2;
-			stairCnt2 -= stairPerson2;
-			
-			personCnt = 0;
+			stairFirst1 = 0;
 			if (!wait1.isEmpty()) {
-				while (!wait1.isEmpty() && stairCnt1 <= 3) {
-					stairPerson1 = wait1.pollFirst();
-					stairCnt1 += stairPerson1;
-					personCnt += stairPerson1;
+				while (!wait1.isEmpty()) {
+					if (stairCnt1 == 3) break;
+					wait1.pollFirst();
+					stairFirst1++;
+					stairCnt1++;
 				}
 			}
-			stair1.addLast(personCnt);
+			stair1.addLast(stairFirst1);
 			
-			personCnt = 0;
+			stairFirst2 = 0;
 			if (!wait2.isEmpty()) {
-				while (!wait2.isEmpty() && stairCnt2 <= 3) {
-					stairPerson2 = wait2.pollFirst();
-					stairCnt2 += stairPerson2;
-					personCnt += stairPerson2;
+				while (!wait2.isEmpty()) {
+					if (stairCnt2 == 3) break;
+					wait2.pollFirst();
+					stairFirst2++;
+					stairCnt2++;
 				}
 			}
-			stair2.addLast(personCnt);
+			stair2.addLast(stairFirst2);
 			
-			personCnt = 0;
+			System.out.println("stair addLast");
+			System.out.println("happyCnt: " + happyCnt);
+			System.out.print("stair1: ");
+			for (int num : stair1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("stair2: ");
+			for (int num : stair2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait1: ");
+			for (int num : wait1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait2: ");
+			for (int num : wait2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA1: ");
+			for (int num : ETA1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA2: ");
+			for (int num : ETA2)
+				System.out.print(num + " ");
+			System.out.println();
+			
+			stairFirst1 = stair1.pollFirst();
+			happyCnt += stairFirst1;
+			stairCnt1 -= stairFirst1;
+			
+			stairFirst2 = stair2.pollFirst();
+			happyCnt += stairFirst2;
+			stairCnt2 -= stairFirst2;
+			
+			System.out.println("stair pollFirst");
+			System.out.println("happyCnt: " + happyCnt);
+			System.out.print("stair1: ");
+			for (int num : stair1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("stair2: ");
+			for (int num : stair2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait1: ");
+			for (int num : wait1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait2: ");
+			for (int num : wait2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA1: ");
+			for (int num : ETA1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA2: ");
+			for (int num : ETA2)
+				System.out.print(num + " ");
+			System.out.println();
+			
 			for (int i = 0; i < ETA1.size(); i++) {
 				ETA1.set(i, ETA1.get(i) - 1);
-				if (ETA1.get(i) == -1) personCnt++;
+				if (ETA1.get(i) == 0) wait1.addLast(0);
 			}
-			wait1.addLast(personCnt);
 			
-			personCnt = 0;
 			for (int i = 0; i < ETA2.size(); i++) {
 				ETA2.set(i, ETA2.get(i) - 1);
-				if (ETA2.get(i) == -1) personCnt++;
+				if (ETA2.get(i) == 0) wait2.addLast(0);
 			}
-			wait2.addLast(personCnt);
+			
+			System.out.println("ETA - 1");
+			System.out.println("happyCnt: " + happyCnt);
+			System.out.print("stair1: ");
+			for (int num : stair1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("stair2: ");
+			for (int num : stair2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait1: ");
+			for (int num : wait1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("wait2: ");
+			for (int num : wait2)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA1: ");
+			for (int num : ETA1)
+				System.out.print(num + " ");
+			System.out.println();
+			System.out.print("ETA2: ");
+			for (int num : ETA2)
+				System.out.print(num + " ");
+			System.out.println();
 			
 		}
 
