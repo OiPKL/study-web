@@ -55,7 +55,7 @@ public class Solution {
         			// 반갈죽 Zone
         			if (rNext == 0 || rNext == N -1 || cNext == 0 || cNext == N - 1) {
         				bugList[k][2] = cnt / 2;
-        				if (way == 1) bugList[k][3] = 2;					// 상하좌우;;
+        				if 		(way == 1) bugList[k][3] = 2;				// 상하좌우;;
         				else if (way == 2) bugList[k][3] = 1;
         				else if (way == 3) bugList[k][3] = 4;
         				else if (way == 4) bugList[k][3] = 3;
