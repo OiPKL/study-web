@@ -55,51 +55,50 @@ public class Solution {
         			// 반갈죽 Zone
         			if (rNext == 0 || rNext == N -1 || cNext == 0 || cNext == N - 1) {
         				bugList[k][2] = cnt / 2;
-        				if 		(way == 1) bugList[k][3] = 2;				// 상하좌우;;
+        				
+        				if 		(way == 1) bugList[k][3] = 2;
         				else if (way == 2) bugList[k][3] = 1;
         				else if (way == 3) bugList[k][3] = 4;
         				else if (way == 4) bugList[k][3] = 3;
-        				
-        			// 세이프 Zone
-        			} else {
-        				bugList[k][0] = rNext;
-        				bugList[k][1] = cNext;
-        				contact[rNext][cNext].add(k);
+        			} 
+
+                    // 위치 업데이트
+        			bugList[k][0] = rNext;
+        			bugList[k][1] = cNext;
+        			contact[rNext][cNext].add(k);
+        			
+        			if (bugList[k][2] > 0)									// 사망
         				memo.add(new int[] {rNext, cNext});
-        			}
+    			}
         			
-        			for (int[] mem : memo) {
-        				int rCheck = mem[0];
-        				int cCheck = mem[1];
-        				
-        				// 합체!
-        				if (contact[rCheck][cCheck].size() > 1) {
-        					List<Integer> kList = new ArrayList<>();
-        					// 합체 미생물 목록
-        					while (!contact[rCheck][cCheck].isEmpty())
-        						kList.add(contact[rCheck][cCheck].pop());
-        					
-        					int kMax = 0;
-        					int kMaxIdx = 0;
-        					// 살아남는 미생물 찾기
-        					for (int kIdx : kList) {
-        						if (bugList[kIdx][2] > kMax) {
-        							kMax = bugList[kIdx][2];
-        							kMaxIdx = kIdx;
-        						}
-        					}
-        					// 미생물 합체
-        					inner:
-        					for (int kIdx : kList) {
-        						if (kIdx == kMaxIdx) continue inner;
-        						else {
-        							bugList[kMaxIdx][2] += bugList[kIdx][2];
-        							bugList[kIdx][2] = 0;					// 사망
-        						}
-        					}
-        				}
-        			}
-        			
+    			for (int[] mem : memo) {
+    				int rCheck = mem[0];
+    				int cCheck = mem[1];
+    				
+    				// 합체!
+    				if (contact[rCheck][cCheck].size() > 1) {
+    					List<Integer> kList = new ArrayList<>();
+    					// 합체 미생물 목록
+    					while (!contact[rCheck][cCheck].isEmpty())
+    						kList.add(contact[rCheck][cCheck].pop());
+    					
+    					int kMax = 0;
+    					int kMaxIdx = 0;
+    					// 살아남는 미생물 찾기
+    					for (int kIdx : kList) {
+    						if (bugList[kIdx][2] > kMax) {
+    							kMax = bugList[kIdx][2];
+    							kMaxIdx = kIdx;
+    						}
+    					}
+    					// 미생물 합체
+    					for (int kIdx : kList) {
+    						if (kIdx != kMaxIdx) {
+    							bugList[kMaxIdx][2] += bugList[kIdx][2];
+    							bugList[kIdx][2] = 0;						// 사망
+    						}
+    					}
+    				}
         		}
         		
         	}
