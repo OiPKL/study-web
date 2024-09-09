@@ -1,126 +1,164 @@
 package baekjoon;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Main {
+	
+	static int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
+	static int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
+	
+	static int N, M, K;
+	static List<int[]> fbList;								// 전체 파이어볼 (유령볼 포함)
+	
+	public static void main(String[] args) {
 
-    static int[] dn = {-1, 0, 1, 0}; // 상, 우, 하, 좌
-    static int[] dm = {0, 1, 0, -1};
-    static int N, M, maxSum;
-    static int[][] map;
-    static boolean[][] visited;
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        N = sc.nextInt();
-        M = sc.nextInt();
-        map = new int[N][M];
-        visited = new boolean[N][M];
-        for (int n = 0; n < N; n++)
-            for (int m = 0; m < M; m++)
-                map[n][m] = sc.nextInt();
-
-        maxSum = 0;
-        for (int nNow = 0; nNow < N; nNow++) {
-            for (int mNow = 0; mNow < M - 1; mNow++) { // 가로 2개를 먼저 고름
-                visited[nNow][mNow] = true;
-                visited[nNow][mNow + 1] = true; // 가로로 연속된 두 칸 선택
-
-                btk1(nNow, mNow, 2, map[nNow][mNow] + map[nNow][mNow + 1]); // 가로 두 개 선택 후 주변에서 2개 픽
-                btk2(nNow, mNow, 2, map[nNow][mNow] + map[nNow][mNow + 1], 1); // 가로 두 개 선택 후 주변에서 1개 픽, 그다음 2칸 떨어진 곳에서 1개 픽
-
-                visited[nNow][mNow] = false;
-                visited[nNow][mNow + 1] = false;
-            }
-        }
-
-        System.out.println(maxSum);
-    }
-
-    // btk1: 가로 2개를 둘러싼 블록에서 2개를 고르는 함수
-    static void btk1(int nNow, int mNow, int cnt, int sum) {
-        if (cnt == 4) { // 4개의 칸을 채웠을 때
-            maxSum = Math.max(maxSum, sum);
-            return;
-        }
-
-        // 가로로 연속된 두 블록을 둘러싸는 블록 중 모서리를 제외하고 선택
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 2; j++) {
-                int nNext = nNow + i;
-                int mNext = mNow + j;
-
-                // 모서리 블록 제외 조건 추가
-                // i와 j 값의 조합에 따라 모서리인지 체크
-                if ((i == -1 && j == -1) || (i == -1 && j == 2) || (i == 1 && j == -1) || (i == 1 && j == 2)) {
-                    continue; // 모서리의 네 곳은 무시
-                }
-
-                if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext) continue;
-                if (visited[nNext][mNext]) continue;
-
-                visited[nNext][mNext] = true;
-                btk1(nNow, mNow, cnt + 1, sum + map[nNext][mNext]); // 현재 위치 기준으로 주변에서 고르기
-                visited[nNext][mNext] = false;
-            }
-        }
-    }
-    
- // btk2: 가로 2개를 둘러싼 블록에서 1개 고르고, 그 블록에서 다시 1칸 떨어진 곳에서 1개를 고르는 함수
-    static void btk2(int nNow, int mNow, int cnt, int sum, int level) {
-        if (cnt == 4) { // 4개의 칸을 채웠을 때
-            maxSum = Math.max(maxSum, sum);
-            return;
-        }
-
-        // 1단계에서는 주변에서 1개 픽
-        if (level == 1) {
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 2; j++) {
-                    int nNext = nNow + i;
-                    int mNext = mNow + j;
-
-                    // 모서리 블록 제외 조건 추가
-                    if ((i == -1 && j == -1) || (i == -1 && j == 2) || (i == 1 && j == -1) || (i == 1 && j == 2)) {
-                        continue; // 모서리의 네 곳은 무시
-                    }
-
-                    if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext) continue;
-                    if (visited[nNext][mNext]) continue;
-
-                    visited[nNext][mNext] = true;
-                    btk2(nNext, mNext, cnt + 1, sum + map[nNext][mNext], 2); // 다음 단계로 이동
-                    visited[nNext][mNext] = false;
-                }
-            }
-        }
-        // 2단계에서는 현재 선택한 블록에서 상하좌우로 이동한 후 다시 꺾어서 선택하여 L 모양을 만든다
-        else if (level == 2) {
-            for (int d = 0; d < 4; d++) {
-                int nNext = nNow + dn[d];  // 한 칸 이동
-                int mNext = mNow + dm[d];
-                if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext) continue;
-                if (visited[nNext][mNext]) continue;
-
-                visited[nNext][mNext] = true;
-
-                // 2단계에서 선택한 블록을 기준으로 다시 꺾어서 이동
-                for (int k = 0; k < 4; k++) {
-                    if (k == (d + 2) % 4) continue; // 반대 방향은 제외
-                    int nnNext = nNext + dn[k];
-                    int mmNext = mNext + dm[k];
-                    if (nnNext < 0 || N <= nnNext || mmNext < 0 || M <= mmNext) continue;
-                    if (visited[nnNext][mmNext]) continue;
-
-                    visited[nnNext][mmNext] = true;
-                    btk2(nnNext, mmNext, cnt + 1, sum + map[nnNext][mmNext], 3); // L 모양 완성
-                    visited[nnNext][mmNext] = false;
-                }
-
-                visited[nNext][mNext] = false;
-            }
-        }
-    }
-}
+		Scanner sc = new Scanner(System.in);
+		
+		N = sc.nextInt();
+		M = sc.nextInt();
+		K = sc.nextInt();
+		fbList = new ArrayList<>();
+		
+		for (int m = 0; m < M; m++) {
+			int[] fb = new int[5];
+			fb[0] = sc.nextInt() - 1;	// rNow
+			fb[1] = sc.nextInt() - 1;	// cNow
+			fb[2] = sc.nextInt();		// 질량m
+			fb[3] = sc.nextInt();		// 속력s
+			fb[4] = sc.nextInt();		// 방향d
+			
+			fbList.add(fb);
+		}//input
+		
+		for (int k = 0; k < K; k++) {
+			
+			boolean[][] visited = new boolean[N][N];		// contact 중복조회 방지
+			List<int[]> contactList = new ArrayList<>();	// contact 인덱스 조회용
+			Stack<Integer>[][] contact = new Stack[N][N];	// fb 합체 판단용
+			for (int n1 = 0; n1 < N; n1++)
+				for (int n2 = 0; n2 < N; n2++)
+					contact[n1][n2] = new Stack<>();
+			
+			// 이동
+			for (int fbIdx = 0; fbIdx < fbList.size(); fbIdx++) {
+				int[] fb = fbList.get(fbIdx);
+				int rNow = fb[0];
+				int cNow = fb[1];
+				int m = fb[2];
+				int s = fb[3];
+				int d = fb[4];
+				
+				if (m == 0) continue;				// 유령볼(질량 0) 제외
+				
+				// 격자의 행과 열은 1번부터 N번까지 번호가 매겨져 있고,
+				// 1번 행은 N번과 연결되어 있고, 1번 열은 N번 열과 연결되어 있다.
+				// 이거 땜에 다시 푸는 중인데 한 번에 이해하신 분????
+				
+				int rNext = (rNow + dr[d] * s + 1000 * N) % N;	// N보다 s가 큰 경우(음수) 처리
+				int cNext = (cNow + dc[d] * s + 1000 * N) % N;
+				
+				contact[rNext][cNext].push(fbIdx);
+				contactList.add(new int[] {rNext, cNext});
+			}//이동
+			
+			//합체
+			outer:
+			for (int[] check : contactList) {
+				int rCheck = check[0];
+				int cCheck = check[1];
+				
+				if (visited[rCheck][cCheck]) continue outer;
+				visited[rCheck][cCheck] = true;
+				
+				List<Integer> fbCheckList = new ArrayList<>();	// 합체 조건 만족한 fb 리스트
+				
+				while (!contact[rCheck][cCheck].isEmpty()) {
+					int fbIdx = contact[rCheck][cCheck].pop();
+					int[] fb = fbList.get(fbIdx);
+					
+					if (fb[2] == 0) continue;		// 유령볼(질량 0) 제외
+					
+					fbCheckList.add(fbIdx);
+				}
+				
+				int fbCnt = fbCheckList.size();
+				if (fbCnt == 1) {					// 이동만
+					int fbIdx = fbCheckList.get(0);
+					int[] fb = fbList.get(fbIdx);
+					fb[0] = rCheck;
+					fb[1] = cCheck;
+					
+					fbList.set(fbIdx, fb);
+				}
+				
+				else if (fbCnt > 1) {
+					
+					int sumM = 0;					// 질량합
+					int sumS = 0;					// 속력합
+					boolean isAllOdd = true;
+					boolean isAllEven = true;
+					
+					for (int fbIdx : fbCheckList) {
+						int[] fb = fbList.get(fbIdx);
+						int m = fb[2];
+						int s = fb[3];
+						int d = fb[4];
+						
+						sumM += m;
+						sumS += s;
+						if (d % 2 == 0) isAllOdd = false;
+						if (d % 2 != 0) isAllEven = false;
+						
+						fb[2] = 0;					// 기존것들 소멸
+						
+						fbList.set(fbIdx, fb);
+					}
+					
+					if (sumM < 5) continue outer;	// 유령볼(질량 0) 제외
+					
+					// 이동은 합체 단계에서 하지 않음
+					
+					if (isAllOdd || isAllEven) {
+						
+						for (int newIdx = 0; newIdx < 4; newIdx++) {
+							int[] fb = new int[5];	// 업데이트된 새로운 fb x4 생성
+							fb[0] = rCheck;
+							fb[1] = cCheck;
+							fb[2] = sumM / 5;
+							fb[3] = sumS / fbCnt;
+							fb[4] = newIdx * 2;
+							
+							fbList.add(fb);
+						}
+						
+					} else {
+						
+						for (int newIdx = 0; newIdx < 4; newIdx++) {
+							int[] fb = new int[5];	// 업데이트된 새로운 fb x4 생성
+							fb[0] = rCheck;
+							fb[1] = cCheck;
+							fb[2] = sumM / 5;
+							fb[3] = sumS / fbCnt;
+							fb[4] = newIdx * 2 + 1;
+							
+							fbList.add(fb);
+						}
+						
+					}// 방향 0246 or 1357
+					
+				}// if fbCnt > 1
+			}//합체
+			
+		}//K번
+		
+		int answer = 0;
+		for (int[] fb : fbList)
+			answer += fb[2];
+		
+		System.out.println(answer);
+		
+	}//main
+}//Main
