@@ -9,7 +9,6 @@ import java.util.List;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		
-		// GPT 췐스 시작
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(reader.readLine().trim());
         String line = reader.readLine().trim();
@@ -46,31 +45,6 @@ public class Main {
         	} else if (cows[i] == K2)
         		K2List.add(i);
         }
-        
-        
-        
-        
-        for (int i = 0; i < N; i++) {
-        	int cow = Integer.parseInt(tokens[i]);
-        	cows[i] = cow;
-        	
-        	if (cow > K1) {
-        		K1 = cow;
-        		idx1 = i;
-        	}
-        }
-        
-        for (int i = 0; i < N; i++) {
-        	if (i == K1) continue;
-        	
-        	if (cows[i] >= K2) {
-        		K2 = cows[i];
-        		idx2 = i;
-        	}
-        }
-        // GPT 췐스 종료
-		
-        
 		
 		System.out.println();
 		
