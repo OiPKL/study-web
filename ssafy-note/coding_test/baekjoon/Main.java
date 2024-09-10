@@ -1,109 +1,78 @@
 package baekjoon;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-	
-	static int[] dr = {-1, 0, 1, 0};	// 상좌하우 : 이유 있음
-	static int[] dc = {0, -1, 0, 1};
-	
-	static int N, aliveTime;
-	static int[][] map;
-	static int[] shark;
-	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
-		Scanner sc = new Scanner(System.in);
+		// GPT 췐스 시작
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(reader.readLine().trim());
+        String line = reader.readLine().trim();
+        
+        String[] tokens = line.split(" ");
+        int[] cows = new int[N];
+        
+        int K1 = 0;	// 첫번째로 큰 수
+        int K2 = 0;	// 두번째로 큰 수
+        List<Integer> K1List = new ArrayList<>();
+        List<Integer> K2List = new ArrayList<>();
+        
+        for (int i = 0; i < N; i++) {
+        	int cow = Integer.parseInt(tokens[i]);
+        	cows[i] = i;
+        	
+        	if (cow > K1) {
+        		K1 = cow;
+        		K1List = new ArrayList<>();
+        		K1List.add(i);
+        	} else if (cow == K1)
+        		K1List.add(i);
+        }
+        
+        findK2:
+        for (int i = 0; i < N; i++) {
+        	for (int idx : K1List)
+        		if (idx == i) continue findK2;
+        	
+        	if (cows[i] > K2) {
+        		K2 = cows[i];
+        		K2List = new ArrayList<>();
+        		K2List.add(i);
+        	} else if (cows[i] == K2)
+        		K2List.add(i);
+        }
+        
+        
+        
+        
+        for (int i = 0; i < N; i++) {
+        	int cow = Integer.parseInt(tokens[i]);
+        	cows[i] = cow;
+        	
+        	if (cow > K1) {
+        		K1 = cow;
+        		idx1 = i;
+        	}
+        }
+        
+        for (int i = 0; i < N; i++) {
+        	if (i == K1) continue;
+        	
+        	if (cows[i] >= K2) {
+        		K2 = cows[i];
+        		idx2 = i;
+        	}
+        }
+        // GPT 췐스 종료
 		
-		N = sc.nextInt();
-		map = new int[N][N];
+        
 		
-		for (int r = 0; r < N; r++) {
-			for (int c = 0; c < N; c++) {
-				map[r][c] = sc.nextInt();
-				if (map[r][c] == 9)
-					shark = new int[] {r, c, 2, 0};
-			}
-		}//input
-		
-		aliveTime = 0;
-		
-		alive:
-		while (true) {
-			
-			int rNow = shark[0];
-			int cNow = shark[1];
-			int size = shark[2];
-			int exp = shark[3];
-			int rNext = -1;
-			int cNext = -1;
-			int time = 0;
-			
-			// 탐색
-			Queue<int[]> bfs = new LinkedList<>();
-			boolean[][] visited = new boolean[N][N];
-			
-			bfs.add(new int[] {rNow, cNow, time});
-			visited[rNow][cNow] = true;
-			
-			/*
-			 * 수정해야 할 것
-			 * 
-			 * 가장가까운 물고기 리스트로 반환 후 (minTime 비교)
-			 * 상좌하우 순으로 물고기 고르기
-			 * 
-			 * rNext == -1 && cNext == -1 -> break alive
-			 */
-			
-			search:
-			while (true) {
-				
-				if (bfs.isEmpty())
-					break alive;					// 엄마소환
-				
-				int[] now = bfs.poll();
-				rNow = now[0];
-				cNow = now[1];
-				time = now[2];
-				
-				for (int d = 0; d < 4; d++) {
-					
-					rNext = rNow + dr[d];
-					cNext = cNow + dc[d];
-					
-					if (rNext < 0 || N <= rNext) continue;
-					if (cNext < 0 || N <= cNext) continue;
-					if (visited[rNext][cNext]) continue;
-					if (map[rNext][cNext] > size) continue;
-					
-					if (map[rNext][cNext] == 0) {
-						bfs.add(new int[] {rNext, cNext, time + 1});
-						visited[rNext][cNext] = true;
-					} else {
-						time++;
-						break search;				// 탐색완료
-					}
-				}//d
-			}//bfs
-			
-			// 이동 & 냠냠
-			map[rNow][cNow] = 0;
-			map[rNext][cNext] = 9;
-			aliveTime += time;
-			
-			if (++exp == size) {
-				size++;
-				exp = 0;
-			} else
-				exp++;
-			
-			shark = new int[] {rNext, cNext, size, exp};
-			
-		}//alive
-		
-		System.out.println(aliveTime);
+		System.out.println();
 		
 	}//main
 }//Main
