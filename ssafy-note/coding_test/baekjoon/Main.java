@@ -96,10 +96,6 @@ public class Main {
 	
 	static int[] maxHfinder(int start, int end) {
 		
-		/*
-		 * Priority Queue => O (n log n) !!!!!!!!!
-		 */
-		
 		Deque<Integer> maxHList = new LinkedList<>();
 		int maxH = Integer.MIN_VALUE;
 		
