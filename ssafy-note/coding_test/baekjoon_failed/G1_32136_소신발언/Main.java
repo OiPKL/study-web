@@ -3,8 +3,6 @@ package baekjoon_failed.G1_32136_소신발언;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class Main {
 	static int N;
@@ -21,49 +19,56 @@ public class Main {
         for (int i = 0; i < N; i++)
         	cows[i] = Integer.parseInt(tokens[i]);
         
+        /*
+         * 아이디어
+         * 왼쪽에서부터 오른족으로 기준점을 옮겨갈껀데
+         * newH ~ oldH 까지의 hitTime이 newH ~ ooldH 까지의 hitTime보다 크다면 갱신
+         * newH ~ oldH 까지의 hitTime 증가가 더 빠르기 때문
+         */
+        
         int L = 0;
         int R = N - 1;
-        int oldH = L;						// 기준점 이었던것
-        int newH = L;						// 히터위치(기준점)
-        long maxHit = Integer.MIN_VALUE;
-        long minMaxHit = Integer.MAX_VALUE;
+        int ooldH = L;
+        int oldH = L;
+        int newH = L;
+        long oldHitTime = 0;		// newH ~ ooldH 까지의 hitTime
+        long newHitTime = 0;		// newH ~ oldH  까지의 hitTime
+        long minHitTime = Integer.MAX_VALUE;
         
-        while (L + 1 < R) {
+        while (newH < R) {
         	
-        	int[] maxHList = maxHfinder(L + 1, R);
-        	newH = oldH = maxHList[0];
-        	maxHit = (long) cows[newH] * (newH - oldH);
+        	newH = maxIceFinder(oldH + 1, R);
+        	oldHitTime = (long) cows[ooldH] * (newH - ooldH);
+        	newHitTime = (long) cows[oldH] * (newH - oldH);
         	
-        	if (maxHit < minMaxHit) {
-        		minMaxHit = maxHit;
-        		L = newH;
-        	} else
-        		break;
+        	if (newHitTime >= oldHitTime) {
+        		ooldH = oldH;
+        		oldH = newH;
+        	} else {
+        		oldH = newH;
+        	}
+        	
+        	minHitTime = Math.min(minHitTime, Math.max(oldHitTime, newHitTime));
+        	
         }
         
-        System.out.println(minMaxHit);
+        System.out.println(minHitTime);
         
 	}
-        
-        
-	static int[] maxHfinder(int start, int end) {
+	
+	static int maxIceFinder(int start, int end) {
 		
-		Deque<Integer> maxHList = new LinkedList<>();
-		int maxH = Integer.MIN_VALUE;
+		int maxIce = Integer.MIN_VALUE;
+		int maxIceIdx = -1;
 		
 		for (int idx = start; idx <= end; idx++) {
-			if (cows[idx] > maxH) {
-				maxHList = new LinkedList<>();
-				maxHList.addLast(idx);
-				maxH = cows[idx];
-			} else if (cows[idx] == maxH) {
-				maxHList.addLast(idx);
+			if (cows[idx] > maxIce) {
+				maxIce = cows[idx];
+				maxIceIdx = idx;
 			}
 		}
 		
-		int minIdx = maxHList.peekFirst();
-		int maxIdx = maxHList.peekLast();
+		return maxIceIdx;
 		
-		return (new int[] {minIdx, maxIdx});
 	}
 }
