@@ -3,72 +3,59 @@ package baekjoon_failed.G1_32136_소신발언;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Main {
-	static int N;
-	static int[] cows;
-	
 	public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(reader.readLine().trim());
+        int N = Integer.parseInt(reader.readLine().trim());
         String line = reader.readLine().trim();
         
         String[] tokens = line.split(" ");
-        cows = new int[N];
+        int[] cows = new int[N];
+        
+        for (int i = 0; i < tokens.length; i++)
+            cows[i] = Integer.parseInt(tokens[i]);
 
+        // [소넘버][히터위치] 녹는시간 전부 미리 저장
+        long[][] meltingTime = new long[N][N];
         for (int i = 0; i < N; i++)
-        	cows[i] = Integer.parseInt(tokens[i]);
+        	for (int j = 0; j < N; j++)
+        		meltingTime[i][j] = Math.abs(i - j) * cows[i];
         
-        /*
-         * 아이디어
-         * 왼쪽에서부터 오른족으로 기준점을 옮겨갈껀데
-         * newH ~ oldH 까지의 hitTime이 newH ~ ooldH 까지의 hitTime보다 크다면 갱신
-         * newH ~ oldH 까지의 hitTime 증가가 더 빠르기 때문
-         */
-        
+        // 이진탐색
         int L = 0;
         int R = N - 1;
-        int ooldH = L;
-        int oldH = L;
-        int newH = L;
-        long oldHitTime = 0;		// newH ~ ooldH 까지의 hitTime
-        long newHitTime = 0;		// newH ~ oldH  까지의 hitTime
-        long minHitTime = Integer.MAX_VALUE;
+        int H = N / 2;
         
-        while (newH < R) {
+        long minMaxMeltingTime = Integer.MAX_VALUE;
+        while (H != 0 && H != N - 1) {
+        	long maxMeltingTimeL = Integer.MIN_VALUE;
+        	for (int c = L; c < H - 1; c++)
+        		maxMeltingTimeL = Math.max(maxMeltingTimeL, meltingTime[c][H]);
         	
-        	newH = maxIceFinder(oldH + 1, R);
-        	oldHitTime = (long) cows[ooldH] * (newH - ooldH);
-        	newHitTime = (long) cows[oldH] * (newH - oldH);
+        	long maxMeltingTimeR = Integer.MIN_VALUE;
+        	for (int c = H + 1; c < R; c++)
+        		maxMeltingTimeR = Math.max(maxMeltingTimeR, meltingTime[c][H]);
         	
-        	if (newHitTime >= oldHitTime) {
-        		ooldH = oldH;
-        		oldH = newH;
+        	if (maxMeltingTimeL >= maxMeltingTimeR) {
+        		H = H / 2;
+        		R = H - 1;
         	} else {
-        		oldH = newH;
+        		H = H + H / 2;
+        		L = H + 1;
         	}
         	
-        	minHitTime = Math.min(minHitTime, Math.max(oldHitTime, newHitTime));
-        	
+            minMaxMeltingTime = Math.min(minMaxMeltingTime, Math.max(maxMeltingTimeL, maxMeltingTimeR));
         }
         
-        System.out.println(minHitTime);
+        // H = 0
         
-	}
-	
-	static int maxIceFinder(int start, int end) {
-		
-		int maxIce = Integer.MIN_VALUE;
-		int maxIceIdx = -1;
-		
-		for (int idx = start; idx <= end; idx++) {
-			if (cows[idx] > maxIce) {
-				maxIce = cows[idx];
-				maxIceIdx = idx;
-			}
-		}
-		
-		return maxIceIdx;
-		
-	}
+        
+        // H = N - 1
+        
+        System.out.println(minMaxMeltingTime);
+    }
 }
