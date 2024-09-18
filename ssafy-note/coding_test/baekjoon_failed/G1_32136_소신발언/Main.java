@@ -6,56 +6,72 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Main {
+	
+	static int N;
+	static int[] cows;
+//	static long[][] meltingTime;
+	
 	public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
+		
+	       Scanner sc = new Scanner(System.in);
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(reader.readLine().trim());
-        String line = reader.readLine().trim();
-        
-        String[] tokens = line.split(" ");
-        int[] cows = new int[N];
-        
-        for (int i = 0; i < tokens.length; i++)
-            cows[i] = Integer.parseInt(tokens[i]);
-
-        // [소넘버][히터위치] 녹는시간 전부 미리 저장
-        long[][] meltingTime = new long[N][N];
-        for (int i = 0; i < N; i++)
-        	for (int j = 0; j < N; j++)
-        		meltingTime[i][j] = Math.abs(i - j) * cows[i];
-        
-        // 이진탐색
-        int L = 0;
-        int R = N - 1;
-        int H = N / 2;
-        
-        long minMaxMeltingTime = Integer.MAX_VALUE;
-        while (H != 0 && H != N - 1) {
-        	long maxMeltingTimeL = Integer.MIN_VALUE;
-        	for (int c = L; c < H - 1; c++)
-        		maxMeltingTimeL = Math.max(maxMeltingTimeL, meltingTime[c][H]);
-        	
-        	long maxMeltingTimeR = Integer.MIN_VALUE;
-        	for (int c = H + 1; c < R; c++)
-        		maxMeltingTimeR = Math.max(maxMeltingTimeR, meltingTime[c][H]);
-        	
-        	if (maxMeltingTimeL >= maxMeltingTimeR) {
-        		H = H / 2;
-        		R = H - 1;
-        	} else {
-        		H = H + H / 2;
-        		L = H + 1;
-        	}
-        	
-            minMaxMeltingTime = Math.min(minMaxMeltingTime, Math.max(maxMeltingTimeL, maxMeltingTimeR));
+	       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	       N = Integer.parseInt(reader.readLine().trim());
+	       String line = reader.readLine().trim();
+	       
+	       String[] tokens = line.split(" ");
+	       cows = new int[N];
+	       
+	       for (int i = 0; i < tokens.length; i++)
+	           cows[i] = Integer.parseInt(tokens[i]);
+	       
+//	       // [소넘버][히터위치] -> meltingTime 계산
+//	       meltingTime = new long[N][N];
+//	       for (int i = 0; i < N; i++)
+//	    	   for (int j = 0; j < N; j++)
+//	    		   meltingTime[i][j] = Math.abs(i - j) * cows[i];
+	       
+	       int L = 0;
+	       int R = N -1;
+	       long minMaxMeltingTime = Long.MAX_VALUE;
+	       
+	       while (L <= R) {
+	    	   int H = (L + R) / 2;
+	    	   
+	    	   long maxMeltingTimeL = calMaxMeltingTime(H);
+	    	   long maxMeltingTimeR = Long.MAX_VALUE;
+	    	   if (H + 1 < N)
+	    		   maxMeltingTimeR = calMaxMeltingTime(H + 1);
+	    	   
+	    	   /* 
+	    	    * 아이디어
+	    	    * 이진탐색 : 더 작은 쪽으로 이동
+	    	    * 히터의 위치가 변할 때, 각 소의 meltingTime 은 증가or감소 추세기 때문
+	    	    */
+	    	   if (maxMeltingTimeL < maxMeltingTimeR) {
+	    		   minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTimeL);
+	    		   R = H - 1;
+	    	   } else {
+	    		   minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTimeR);
+	    		   L = H + 1;
+	    	   }
+	       }
+	       
+	       System.out.println(minMaxMeltingTime);
+	       
+	}
+	
+	static long calMaxMeltingTime(int H) {
+		
+		long maxMeltingTime = 0;
+//		for (int i = 0; i < N; i++)
+//			maxMeltingTime = Math.max(maxMeltingTime, meltingTime[i][H]);
+        for (int i = 0; i < N; i++) {
+            long currentMeltingTime = Math.abs(i - H) * cows[i];
+            maxMeltingTime = Math.max(maxMeltingTime, currentMeltingTime);
         }
-        
-        // H = 0
-        
-        
-        // H = N - 1
-        
-        System.out.println(minMaxMeltingTime);
-    }
+		
+		return maxMeltingTime;
+	}
+	
 }
