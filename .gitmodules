@@ -1,3 +1,6 @@
 [submodule "ssafy-web-front/live-web-front"]
 	path = ssafy-web-front/live-web-front
 	url = https://lab.ssafy.com/s12/javabi/live-web-front.git
+[submodule "ssafy-web-back/live-web-back"]
+	path = ssafy-web-back/live-web-back
+	url = https://lab.ssafy.com/s12/javabi/live-web-back.git
