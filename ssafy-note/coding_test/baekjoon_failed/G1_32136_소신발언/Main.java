@@ -5,18 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-	
-	static int N;
-	static int[] cows;
-	
 	public static void main(String[] args) throws IOException {
 
 	       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	       N = Integer.parseInt(reader.readLine().trim());
+	       int N = Integer.parseInt(reader.readLine().trim());
 	       String line = reader.readLine().trim();
 	       
 	       String[] tokens = line.split(" ");
-	       cows = new int[N];
+	       int[] cows = new int[N];
 	       
 	       for (int i = 0; i < tokens.length; i++)
 	           cows[i] = Integer.parseInt(tokens[i]);
@@ -28,14 +24,15 @@ public class Main {
     	    */
 	       
 	       int L = 0;
-	       int R = N -1;
+	       int R = N - 1;
+	       int H = (L + R) / 2;
+	       int maxH = -1;
+	       long meltingTime;
 	       long maxMeltingTime = Long.MIN_VALUE;
 	       long minMaxMeltingTime = Long.MAX_VALUE;
 	       
-	       int maxH = 0;
-	       int H = (L + R) / 2;
 	       for (int i = L; i <= R; i++) {
-	    	   long meltingTime = Math.abs(H - i) * cows[i];
+	    	   meltingTime = Math.abs(H - i) * cows[i];
 	    	   if (meltingTime > maxMeltingTime) {
 	    		   maxH = i;
 	    		   maxMeltingTime = meltingTime;
@@ -44,29 +41,39 @@ public class Main {
 	       
 	       minMaxMeltingTime = maxMeltingTime;
 	       
-	       while (L <= R) {
+	       while (L < H && H < R) {
 	    	   
-		       long maxMeltingTimeL = Long.MIN_VALUE;
-		       long maxMeltingTimeR = Long.MIN_VALUE;
+	    	   maxMeltingTime = Long.MIN_VALUE;
 	    	   
 	    	   if (maxH < H) {
-	    		   if (maxH < ((L + H) / 2)) {
-	    			   
-	    		   } else {
-	    			   
-	    		   }
+	    		   R = H;
+	    		   H = (L + R) / 2;
+	    		   
+	    	       for (int i = L; i <= R; i++) {
+	    	    	   meltingTime = Math.abs(H - i) * cows[i];
+	    	    	   if (meltingTime > maxMeltingTime) {
+	    	    		   maxH = i;
+	    	    		   maxMeltingTime = meltingTime;
+	    	    	   }
+	    	       }
 	    	   } else {
-	    		   if (maxH < ((H + R) / 2)) {
-	    			   
-	    		   } else {
-	    			   
-	    		   }
+	    		   L = H;
+	    		   H = (L + R) / 2;
+	    		   
+	    	       for (int i = L; i <= R; i++) {
+	    	    	   meltingTime = Math.abs(H - i) * cows[i];
+	    	    	   if (meltingTime > maxMeltingTime) {
+	    	    		   maxH = i;
+	    	    		   maxMeltingTime = meltingTime;
+	    	    	   }
+	    	       }
 	    	   }
 
+	    	   minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTime);
 	    	   
-
 	       }
+	       
+	       System.out.println(minMaxMeltingTime);
 		
 	}
-	
 }
