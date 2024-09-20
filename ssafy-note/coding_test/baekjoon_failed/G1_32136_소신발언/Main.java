@@ -24,8 +24,8 @@ public class Main {
 	       /*
 	        * 아이디어
 	        * maxMeltingTime 인 소의 위치를 maxCowL, maxCowR
-	        * 찾은 소의 위치에서 히터의 위치가 가까워지면 갱신
-	        * 찾은 소의 위치에서 히터의 위치가 멀어지면 볼 필요없음
+	        * 찾은 소의 위치로부터 히터의 위치가 가까워지면 갱신
+	        * 찾은 소의 위치로부터 히터의 위치가 멀어지면 볼 필요없음
 	        */
 	       
 	       int L = 0;
@@ -33,11 +33,26 @@ public class Main {
 	       int H = (L + R) / 2;
 	       int maxCowL = -1;
 	       int maxCowR = -1;
+	       long maxMeltingTimeL, maxMeltingTimeR;
 	       long minMaxMeltingTime = Long.MAX_VALUE;
 	       
-	       while (  true  ) {
+	       maxMeltingTimeL = 0;
+	       for (int i = L; i <= R; i++) {
+	    	   long meltingTime = (i - L) * cows[i];
+	    	   maxMeltingTimeL = Math.max(maxMeltingTimeL, meltingTime);
+	       }
+	       
+	       maxMeltingTimeR = 0;
+	       for (int i = R; i >= L; i--) {
+	    	   long meltingTime = (R - i) * cows[i];
+	    	   maxMeltingTimeR = Math.max(maxMeltingTimeR, meltingTime);
+	       }
+	       
+	       minMaxMeltingTime = Math.min(maxMeltingTimeL, maxMeltingTimeR);
+	       
+	       while (L <= R) {
 	    	   
-	    	   long maxMeltingTimeL = 0;
+	    	   maxMeltingTimeL = 0;
 	    	   for (int i = L; i <= H - 1; i++) {
 	    		   long meltingTime = (H - i) * cows[i];
 	    		   if (meltingTime >= maxMeltingTimeL) {
@@ -46,7 +61,7 @@ public class Main {
 	    		   }
 	    	   }
 	    	   
-	    	   long maxMeltingTimeR = 0;
+	    	   maxMeltingTimeR = 0;
 	    	   for (int i = R; i >= H + 1; i--) {
 	    		   long meltingTime = (i - H) * cows[i];
 	    		   if (meltingTime >= maxMeltingTimeR) {
@@ -56,11 +71,22 @@ public class Main {
 	    	   }
 	    	   
 	    	   if (maxMeltingTimeL < maxMeltingTimeR) {
-	    		   minMaxMeltingTime = maxMeltingTimeR;
+	    		   L = maxCowL;
+	    		   H = (L + R) / 2;
+	    		   if (minMaxMeltingTime > maxMeltingTimeR)
+	    			   minMaxMeltingTime = maxMeltingTimeR;
+	    		   else
+	    			   break;
 	    	   } else if (maxMeltingTimeR < maxMeltingTimeL) {
-	    		   minMaxMeltingTime = maxMeltingTimeL;
+	    		   R = maxCowR;
+	    		   H = (L + R) / 2;
+	    		   if (minMaxMeltingTime > maxMeltingTimeL)
+	    			   minMaxMeltingTime = maxMeltingTimeL;
+	    		   else
+	    			   break;
 	    	   } else {	// maxMeltingTimeL = maxMeltingTimeR
 	    		   minMaxMeltingTime = maxMeltingTimeL;
+	    		   break;
 	    	   }
 
 	       }
