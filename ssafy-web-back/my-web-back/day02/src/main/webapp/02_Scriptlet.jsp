@@ -8,6 +8,14 @@
 </head>
 <body>
 	<h2>스크립트릿 연습</h2>
+	<%
+		int A = 10;
+		int B = 20;
+		
+		int sum = A + B;
+		
+		out.print(A + " + " + B + " = " + sum);
+	%>
 
 	<a href="index.html">홈으로</a>
 </body>

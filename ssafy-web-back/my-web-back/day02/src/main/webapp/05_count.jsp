@@ -7,6 +7,16 @@
 <title>호출</title>
 </head>
 <body>
+	<%! int count1 = 0; %>
+	<%
+	
+		int count2 = 0;
+	
+		out.print("count1: " + (count1++) + "<br>");
+		out.print("count2: " + (count2++) + "<br>");
+	
+	%>
+
 	<a href="index.html">홈으로</a>
 </body>
 </html>

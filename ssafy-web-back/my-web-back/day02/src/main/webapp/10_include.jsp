@@ -7,5 +7,12 @@
 <title>다른 JSP include</title>
 </head>
 <body>
+
+	<!-- 헤더 -->
+	<%@ include file="template/header.jsp" %>
+	<h2>메인 내용</h2>
+	<!-- 푸터 -->
+	<%@ include file="template/footer.jsp" %>
+
 </body>
 </html>

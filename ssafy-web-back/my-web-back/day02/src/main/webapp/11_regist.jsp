@@ -8,8 +8,14 @@
 </head>
 <body>
 <h3>사람 등록</h3>
+
+	<!--
+	action 속성에 main? /main?
+	context root : main 자동O /main 자동X
+	-->
+
 	<form action="main" method="POST">
-		<input type="hidden" name="action" value="regist">
+		<input type="hidden" name="act" value="regist">
 		<label>이름 : </label>
 		<input type="text" placeholder="이름을 입력하세요" name="name"><br>
 		<label>나이 : </label>
