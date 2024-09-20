@@ -18,60 +18,54 @@ public class Main {
 	       String[] tokens = line.split(" ");
 	       cows = new int[N];
 	       
-	       for (int i = 0; i < tokens.length; i++)
+	       for (int i = 0; i < N; i++)
 	           cows[i] = Integer.parseInt(tokens[i]);
 	       
-    	   /* 
-    	    * 아이디어
-    	    * 이진탐색 : 더 작은 쪽으로 이동
-    	    * 히터의 위치가 변할 때, 각 소의 meltingTime 은 증가or감소 추세기 때문
-    	    */
+	       /*
+	        * 아이디어
+	        * maxMeltingTime 인 소의 위치를 maxCowL, maxCowR
+	        * 찾은 소의 위치에서 히터의 위치가 가까워지면 갱신
+	        * 찾은 소의 위치에서 히터의 위치가 멀어지면 볼 필요없음
+	        */
 	       
-			int L = 0;
-			int R = N - 1;
-			long minMaxMeltingTime = Long.MAX_VALUE;
-			
-	        while (L <= R) {
-	            int M = (L + R) / 2;
-	            long maxMeltingTime = calMaxMeltingTime(M);
-	            // 0 < M, M < N - 1 = 인덱스 범위 밖 방지
-	            long maxMeltingTimeL = (M > 0) ? calMaxMeltingTime(M - 1) : Long.MAX_VALUE;
-	            long maxMeltingTimeR = (M < N - 1) ? calMaxMeltingTime(M + 1) : Long.MAX_VALUE;
-	            
-	            if (maxMeltingTimeL < maxMeltingTimeR) {
-	            	if (maxMeltingTimeL < maxMeltingTime)
-	            		R = M - 1;
-	            	else {
-		                minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTimeL);
-		                break;
-	            	}
-	            } else if (maxMeltingTimeR < maxMeltingTimeL) {
-	            	if (maxMeltingTimeR < maxMeltingTime)
-		                L = M + 1;
-	            	else {
-		                minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTimeR);
-		                break;
-	            	}
-	            } else {
-	                minMaxMeltingTime = Math.min(minMaxMeltingTime, maxMeltingTime);
-	                break;
-	            }
-	        }
-	        
-	        // L = R 인 경우 체크
-	        minMaxMeltingTime = Math.min(minMaxMeltingTime, calMaxMeltingTime(L));
-	        minMaxMeltingTime = Math.min(minMaxMeltingTime, calMaxMeltingTime(R));
+	       int L = 0;
+	       int R = N - 1;
+	       int H = (L + R) / 2;
+	       int maxCowL = -1;
+	       int maxCowR = -1;
+	       long minMaxMeltingTime = Long.MAX_VALUE;
+	       
+	       while (  true  ) {
+	    	   
+	    	   long maxMeltingTimeL = 0;
+	    	   for (int i = L; i <= H - 1; i++) {
+	    		   long meltingTime = (H - i) * cows[i];
+	    		   if (meltingTime >= maxMeltingTimeL) {
+	    			   maxMeltingTimeL = meltingTime;
+	    			   maxCowL = i;
+	    		   }
+	    	   }
+	    	   
+	    	   long maxMeltingTimeR = 0;
+	    	   for (int i = R; i >= H + 1; i--) {
+	    		   long meltingTime = (i - H) * cows[i];
+	    		   if (meltingTime >= maxMeltingTimeR) {
+	    			   maxMeltingTimeR = meltingTime;
+	    			   maxCowR = i;
+	    		   }
+	    	   }
+	    	   
+	    	   if (maxMeltingTimeL < maxMeltingTimeR) {
+	    		   minMaxMeltingTime = maxMeltingTimeR;
+	    	   } else if (maxMeltingTimeR < maxMeltingTimeL) {
+	    		   minMaxMeltingTime = maxMeltingTimeL;
+	    	   } else {	// maxMeltingTimeL = maxMeltingTimeR
+	    		   minMaxMeltingTime = maxMeltingTimeL;
+	    	   }
 
-	        System.out.println(minMaxMeltingTime);
-		
-	}
-	
-	static long calMaxMeltingTime(int H) {
-		long maxMeltingTime = 0;
-		
-		for (int i = 0; i < N; i++)
-			maxMeltingTime = Math.max(maxMeltingTime, Math.abs(H - i) * cows[i]);
-		
-		return maxMeltingTime;
+	       }
+	       
+	       System.out.println(minMaxMeltingTime);
+	       
 	}
 }
