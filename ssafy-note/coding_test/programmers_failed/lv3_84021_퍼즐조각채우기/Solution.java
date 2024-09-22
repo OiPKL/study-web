@@ -1,163 +1,180 @@
 package programmers_failed.lv3_84021_퍼즐조각채우기;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
+import java.util.Queue;
 
 class Solution {
-    public int solution(int[][] board, int[][] table) {
-    	
-    	int[] dn = new int[] {-1, 0, 1, 0};
-    	int[] dm = new int[] {0, 1, 0, -1};
+	
+	static int[] dn = new int[] {0, 1, 0, -1};
+	static int[] dm = new int[] {1, 0, -1, 0};
+	
+	static int N;
+	static boolean[][] tableVisited, boardVisited;
+	static List<List<Integer>> tableList, boardList;
+
+	public int solution(int[][] board, int[][] table) {
     	
     	int answer = 0;
-    	int N = board.length;
-    	boolean[][] boardVisited = new boolean[N][N];
-    	boolean[][] tableVisited = new boolean[N][N];
     	
-    	Stack<int[]> stack = new Stack<>();					// DFS 탐색용
-    	List<List<int[]>> blocksList = new ArrayList<>();	// 블럭 리스트 (블럭당 4개)
-    	List<int[]> blockFlag = new ArrayList<>();			// 블럭좌표저장
-    	List<int[]> blockInfo1 = new ArrayList<>();			// 블럭정보저장
-    	List<int[]> blockInfo2 = new ArrayList<>();			// - 첫번째 블럭 기준 좌표'변화' 저장
-    	List<int[]> blockInfo3 = new ArrayList<>();
-    	List<int[]> blockInfo4 = new ArrayList<>();
-    	List<int[]> boardFlag = new ArrayList<>();			// 보드좌표저장
-    	List<int[]> blockInfo = new ArrayList<>();			// 블럭정보로드
+    	N = board.length;
+    	tableVisited = new boolean[N][N];
+    	boardVisited = new boolean[N][N];
     	
-       	// 테이블 블럭 탐색
-    	for (int n = 0; n < N; n++) {
-    		for (int m = 0; m < N; m++) {
-    			if (table[n][m] == 1 && !tableVisited[n][m]) {
-    				
-    				blockFlag.clear();
-    				blockInfo1.clear();
-    				blockInfo2.clear();
-    				blockInfo3.clear();
-    				blockInfo4.clear();
-    				tableVisited[n][m] = true;
-    				stack.push(new int[] {n, m});
-    				blockFlag.add(new int[] {n, m});
-    				blockInfo1.add(new int[] {0});			// (임시) 사이즈 저장용
-    				blockInfo2.add(new int[] {0});
-    				blockInfo3.add(new int[] {0});
-    				blockInfo4.add(new int[] {0});
-    				
-    				while (!stack.isEmpty()) {
-    					int[] now = stack.pop();
-    					int nNow = now[0];
-    					int mNow = now[1];
-    					
-    					for (int d = 0; d < 4; d++) {
-    						int nNext = nNow + dn[d];
-    						int mNext = mNow + dm[d];
-    						
-    						if (nNext < 0 || nNext == N) continue;
-    						if (mNext < 0 || mNext == N) continue;
-    						if (table[nNext][mNext] == 0) continue;
-    						if (tableVisited[nNext][mNext]) continue;
-    						
-    						tableVisited[nNext][mNext] = true;
-    						stack.push(new int[] {nNext, mNext});
-    						blockFlag.add(new int[] {nNext, mNext});
-    					}
-    				}
-    				// 블럭정보저장	 (블럭 사이즈 -1 생성됨 주의!!!!)
-    				// blockInfo [{size}, {원점블럭기준n변화량,m변화량}, {원점블럭기준n변화량,m변화량}, ... ]
-    				for (int b = 1; b < blockFlag.size(); b++) {
-    					int blockChangeN = blockFlag.get(b)[0] - blockFlag.get(0)[0];
-    					int blockChangeM = blockFlag.get(b)[1] - blockFlag.get(0)[1];
-    					blockInfo1.add(new int[] {blockChangeN, blockChangeM});
-    					blockInfo2.add(new int[] {-blockChangeM, blockChangeN});
-    					blockInfo3.add(new int[] {-blockChangeN, -blockChangeM});
-    					blockInfo4.add(new int[] {blockChangeM, -blockChangeN});
-    				}
-    				int[] blockSize = new int[] {blockFlag.size()};
-    				blockInfo1.set(0, blockSize);
-    				blockInfo2.set(0, blockSize);
-    				blockInfo3.set(0, blockSize);
-    				blockInfo4.set(0, blockSize);
-    				blocksList.add(blockInfo1);
-    				blocksList.add(blockInfo2);
-    				blocksList.add(blockInfo3);
-    				blocksList.add(blockInfo4);
-    			}
-    		}
-    	}
-    				
-    	// 보드 빈칸 딱맞는 블럭 탐색
-    	for (int n = 0; n < N; n++) {
-    		for (int m = 0; m < N; m++) {
-    			if (board[n][m] == 0 && !boardVisited[n][m]) {
-    				
-    				boardFlag.clear();
-    				boardVisited[n][m] = true;
-    				stack.push(new int[] {n, m});
-    				boardFlag.add(new int[] {n, m});
-    				
-    				while (!stack.isEmpty()) {
-    					int[] now = stack.pop();
-    					int nNow = now[0];
-    					int mNow = now[1];
-    					
-    					for (int d = 0; d < 4; d++) {
-    						int nNext = nNow + dn[d];
-    						int mNext = mNow + dm[d];
-    						
-    						if (nNext < 0 || nNext >= N) continue;
-    						if (mNext < 0 || mNext >= N) continue;
-    						if (board[nNext][mNext] == 1) continue;
-    						if (boardVisited[nNext][mNext]) continue;
-    						
-    						boardVisited[nNext][mNext] = true;
-    						stack.push(new int[] {nNext, mNext});
-    						boardFlag.add(new int[] {nNext, mNext});
-    					}
-    				}
-    				// 빈칸 좌표 순회하면서 일치하는 blocksList<blockInfo[nd,md]>
-    				clear:
-    				for (int bl = 0; bl < blocksList.size(); bl++) {	// blockInfo.get(0) = size
-    					blockInfo = blocksList.get(bl);
-    					// 블럭 중복 선택 방지
-    					if (blockInfo.isEmpty()) continue clear;
-    					
-    					check:
-    					for (int bf = 0; bf < boardFlag.size(); bf++) {	// blockInfo.get(1) = 두번째블럭 상대좌표
-    						int nNow = boardFlag.get(bf)[0];
-    						int mNow = boardFlag.get(bf)[1];
-    						// 보드빈칸 사이즈 == 블럭 사이즈 인 경우에만 진행
-    						if (boardFlag.size() != blocksList.get(bl).get(0)[0]) continue;
-    						
-    						for (int bi = 1; bi < blockInfo.size(); bi++) {
-    							int nNext = nNow + blockInfo.get(bi)[0];
-    							int mNext = mNow + blockInfo.get(bi)[1];
-    							
-    							if (nNext < 0 || nNext >= N) continue check;
-        						if (mNext < 0 || mNext >= N) continue check;
-        						if (board[nNext][mNext] == 1) continue check;
-    						}
-    						// 여기까지 도달 -> 보드 빈칸 == 블럭 일치 -> 중복 방지
-    						for (int bl2 = bl / 4 * 4; bl2 < bl / 4 * 4 + 4; bl2++) {
-    							blocksList.get(bl2).clear();
-    						}
-    						answer += boardFlag.size();
-    						break clear;
-    					}
-    				}
-    				
-    			}
-    		}
-    	}
+    	tableList = new ArrayList<>();	// 사이즈, 가로길이, 세로길이, {0 or 1}
+    	boardList = new ArrayList<>();
+    	
+    	// tableInfo
+    	for (int n = 0; n < N; n++)
+    		for (int m = 0; m < N; m++)
+    			if (table[n][m] == 1 && !tableVisited[n][m])
+    				searchBlock(n, m, table, true);
+    	
+    	// boardInfo
+    	for (int n = 0; n < N; n++)
+    		for (int m = 0; m < N; m++)
+    			if (board[n][m] == 0 && !boardVisited[n][m])
+    				searchBlock(n, m, board, false);
+    	
+        for (List<Integer> boardInfo : boardList) {
+        	
+            int boardSize = boardInfo.get(0);
+            int boardHeight = boardInfo.get(1);
+            int boardLength = boardInfo.get(2);
+            
+            
+            for (int i = 0; i < tableList.size(); i++) {
+                List<Integer> tableInfo = tableList.get(i);
+
+                if (boardSize != tableInfo.get(0)) continue;
+                if (boardHeight != tableInfo.get(1)) continue;
+                if (boardLength != tableInfo.get(2)) continue;
+                
+                boolean match = true;
+                for (int j = 3; j < boardInfo.size(); j++) {
+                    if (boardInfo.get(j) != tableInfo.get(j)) {
+                        match = false;
+                        break;
+                    }
+                }
+                
+                if (match) {
+                	answer += boardSize;
+                	tableList.remove(i);
+                	break;
+                }
+                
+                for (int turn = 0; turn < 3;) {
+                	
+                	List<Integer> rotatedTableInfo = rotate(tableInfo);
+                	
+                    if (boardSize != rotatedTableInfo.get(0)) continue;
+                    if (boardHeight != rotatedTableInfo.get(1)) continue;
+                    if (boardLength != rotatedTableInfo.get(2)) continue;
+                    
+                	match = true;
+                    for (int j = 3; j < boardInfo.size(); j++) {
+                        if (boardInfo.get(j) != rotatedTableInfo.get(j)) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    
+                    if (match) {
+                    	answer += boardSize;
+                    	tableList.remove(i);
+                    	break;
+                    }
+                    
+                    tableInfo = rotatedTableInfo;
+                }
+            }
+        }
+    	
     	return answer;
     }
-    
+	
+	static void searchBlock(int n, int m, int[][] map, boolean isTable) {
+		
+		int target = isTable ? 1 : 0;
+		int nonTarget = isTable ? 0 : 1;
+		boolean[][] visited = isTable ? tableVisited : boardVisited;
+		List<List<Integer>> infoList = isTable ? tableList : boardList;
+		
+		int limitL = n;
+		int limitR = n;
+		int limitT = m;
+		int limitB = m;
+		int size = 0;
+		Queue<int[]> bfs = new LinkedList<>();
+		List<int[]> realBlocks = new ArrayList<>();
+		
+		bfs.add(new int[] {n, m, 1});
+		visited[n][m] = true;
+		
+		while (!bfs.isEmpty()) {
+			
+			int[] now = bfs.poll();
+			int nNow = now[0];
+			int mNow = now[1];
+			
+			limitL = Math.min(limitL, nNow);
+			limitR = Math.max(limitR, nNow);
+			limitT = Math.min(limitT, mNow);
+			limitB = Math.max(limitB, mNow);
+			realBlocks.add(new int[] {nNow, mNow});
+			++size;
+			
+			for (int d = 0; d < 4; d++) {
+				int nNext = nNow + dn[d];
+				int mNext = mNow + dm[d];
+				
+				if (nNext < 0 || N <= nNext) continue;
+				if (mNext < 0 || N <= mNext) continue;
+				if (visited[nNext][mNext]) continue;
+				if (map[nNext][mNext] != target) continue;
+				
+				bfs.add(new int[] {nNext, mNext});
+				visited[nNext][mNext] = true;
+			}
+		}
+		
+		int height = limitB - limitT + 1;
+		int length = limitR - limitL + 1;
+		List<Integer> info = new ArrayList<>();
+		
+		info.add(size);
+		info.add(height);
+		info.add(length);
+		
+		for (int nn = limitT; nn <= limitB; nn++)
+			for (int mm = limitL; mm <= limitR; mm++)
+				info.add(realBlocks.contains(new int[]{nn, mm}) ? target : 0);
+		
+		infoList.add(info);
+	}
+	
+	static List<Integer> rotate(List<Integer> info) {
+		
+		int size = info.get(0);
+		int height = info.get(1);
+		int length = info.get(2);
+		List<Integer> rotatedInfo = new ArrayList<>();
+		
+		rotatedInfo.add(size);
+		rotatedInfo.add(length);
+		rotatedInfo.add(height);
+		
+	    int[][] original = new int[height][length];
+	    for (int n = 0; n < height; n++)
+	        for (int m = 0; m < length; m++)
+	            original[n][m] = info.get(3 + n * length + m);
+	    
+	    for (int m = 0; m < length; m++)
+	        for (int n = height - 1; n >= 0; n--)
+	            rotatedInfo.add(original[n][m]);
+	    
+	    return rotatedInfo;
+	}
 }
-
-/*
- * 퍼즐1 빈칸0
- * 퍼즐/빈칸 최대6칸
- * 퍼즐 한번에 하나씩
- * 회전O 뒤집기X
- * 새로채워넣은조각 인접=비어있음X
- * ~~ 최대 몇칸?
- */
