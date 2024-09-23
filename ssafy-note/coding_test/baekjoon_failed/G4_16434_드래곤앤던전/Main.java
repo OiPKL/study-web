@@ -21,45 +21,30 @@ public class Main {
             rooms[n][2] = Integer.parseInt(roomInfo[2]); // HP
         }
         
-        long heroMaxHpBtm = 1;
-        long heroMaxHpTop = 1_000_000_000_000L;
-
-        while (heroMaxHpBtm < heroMaxHpTop) {
+        long heroMaxHp = 1_000_000_000_000_000_000L;
+        long heroMinHp = Long.MAX_VALUE;
+        long heroHp = heroMaxHp;
+        
+        for (int n = 0; n < N; n++) {
             
-        	long heroMaxHp = (heroMaxHpBtm + heroMaxHpTop) / 2;
-            long heroHp = heroMaxHp;
-            boolean clear = true;
-            
-            dungeon:
-            for (int n = 0; n < N; n++) {
-                
-                // Monster
-                if (rooms[n][0] == 1) {
-                	long mopPwr = rooms[n][1];
-                	long mopHp = rooms[n][2] - heroPwr;				// 선빵
-                	long heroAtkCnt = (mopHp + heroPwr - 1) / heroPwr;
-                	long mopAtkCnt = (heroHp + mopPwr - 1) / mopPwr;
-                	long AtkCnt = Math.min(heroAtkCnt, mopAtkCnt);
-                	
-                	heroHp -= AtkCnt * mopPwr;
-                	
-                	if (heroHp < 1) {
-                		clear = false;
-                		break dungeon;
-                	}
-                // Healing
-                } else {
-                    heroPwr += rooms[n][1];
-                    heroHp = Math.min(heroMaxHp, heroHp + rooms[n][2]);
-                }
+            // Monster
+            if (rooms[n][0] == 1) {
+            	long mopPwr = rooms[n][1];
+            	long mopHp = rooms[n][2] - heroPwr;				// 선빵
+            	long heroAtkCnt = (mopHp + heroPwr) / heroPwr;
+            	long mopAtkCnt = (heroHp + mopPwr) / mopPwr;
+            	long AtkCnt = Math.min(heroAtkCnt, mopAtkCnt);
+            	
+            	heroHp -= AtkCnt * mopPwr;
+            	heroMinHp = Math.min(heroMinHp, heroHp);
+            // Healing
+            } else {
+                heroPwr += rooms[n][1];
+                heroHp = Math.min(heroMaxHp, heroHp + rooms[n][2]);
             }
             
-            if (clear)
-            	heroMaxHpTop = heroMaxHp;
-            else
-            	heroMaxHpBtm = heroMaxHp + 1;
-        }
+        }//room
         
-        System.out.println(heroMaxHpBtm);
+        System.out.println(heroMaxHp - heroMinHp + 1);
     }
 }
