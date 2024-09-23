@@ -64,7 +64,7 @@ class Solution {
                     break;
                 }
                 
-                for (int turn = 0; turn < 3;) {
+                for (int turn = 0; turn < 4; turn++) {
                     
                     List<Integer> rotatedTableInfo = rotate(tableInfo);
                     
@@ -147,9 +147,18 @@ class Solution {
         info.add(height);
         info.add(length);
         
-        for (int nn = limitT; nn <= limitB; nn++)
-            for (int mm = limitL; mm <= limitR; mm++)
-                info.add(realBlocks.contains(new int[]{nn, mm}) ? target : nonTarget);
+        boolean[][] blockMap = new boolean[height][length];
+        
+        for (int[] block : realBlocks) {
+            int blockN = block[0] - limitL;
+            int blockM = block[1] - limitT;
+            if (blockN >= 0 && blockN < height && blockM >= 0 && blockM < length)
+            	blockMap[blockN][blockM] = true;
+        }
+        
+        for (int nn = 0; nn < height; nn++)
+        	for (int mm = 0; mm < length; mm++)
+            	info.add(blockMap[nn][mm] ? target : nonTarget);
         
         infoList.add(info);
     }
