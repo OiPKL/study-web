@@ -8,5 +8,12 @@
 <title>예외처리</title>
 </head>
 <body>
+	<h3>C:catch</h3>
+	<c:catch var="errmsg">
+		<div>예외 발생 전</div>
+		<div><%= 1/0 %></div>
+		<div>예외 발생 후</div>
+	</c:catch>
+	${errmsg}
 </body>
 </html>

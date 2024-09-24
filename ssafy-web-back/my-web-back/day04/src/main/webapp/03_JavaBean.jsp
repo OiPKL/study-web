@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import = "com.ssafy.dto.Person" %>
+<%
+	Person p = new Person();
+	p.setName("김싸피");
+	p.setAge(45);
+	p.setHobbies(new String[] {"공부", "롤"});
+	pageContext.setAttribute("p", p);
+%>
 <!DOCTYPE html>
 <html>
 <head>

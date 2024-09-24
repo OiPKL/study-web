@@ -108,7 +108,8 @@ public class Main {
 							
 							treeAgeMap[rn][cn].add(1);
 							for (int g2 = 0; g2 < greenList.size(); g2++) {
-								
+								int r2 = greenList.get(g)[0];
+								int c2 = greenList.get(g)[1];
 							}
 						}
 						

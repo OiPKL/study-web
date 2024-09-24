@@ -8,5 +8,15 @@
 <title>캠퍼스</title>
 </head>
 <body>
+	<h3>c:forToken</h3>
+	<c:forTokens var="campus" items="서울,대전,구미.광주.부울경" delims=",">
+		${campus}<br>
+	</c:forTokens>
+	
+	<hr>
+	
+	<c:forTokens var="campus" items="서울,대전,구미.광주.부울경" delims=",.">
+		${campus}<br>
+	</c:forTokens>
 </body>
 </html>

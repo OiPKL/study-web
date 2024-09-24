@@ -8,5 +8,9 @@
 <title>반찬고르기</title>
 </head>
 <body>
+	<h3>C:forEach2</h3>
+	<c:forEach items="${paramValues.dish}" var="dish" varStatus="status">
+		${dish} <c:if test="${not status.last}">,</c:if>
+	</c:forEach>
 </body>
 </html>
