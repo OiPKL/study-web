@@ -1,48 +1,54 @@
 package baekjoon;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
 	
-	static int N;
-	static int[] arr, dp;
-	static boolean[] visited;
+	static int[] dn = {0, 1, 0, -1};
+	static int[] dm = {1, 0, -1, 0};
+	
+	static int N, M;
+	static int[][] miro;
+	static boolean[][] visited;
+	
+	static Queue<int[]> bfs1;
+	static Queue<int[]> bfs2;
 	
 	public static void main(String[] args) {
-		
+
 		Scanner sc = new Scanner(System.in);
 		
 		N = sc.nextInt();
+		M = sc.nextInt();
+		sc.nextLine();
 		
-		arr = new int[N];
-		dp = new int[N];
-		visited = new boolean[N];
-		
+		miro = new int[N][M];
+		visited = new boolean[N][M];
 		for (int n = 0; n < N; n++) {
-			arr[n] = sc.nextInt();
-			dp[n] = 1;
+			String line = sc.nextLine();
+			for (int m = 0; m < M; m++) {
+				char ch = line.charAt(m);
+				miro[n][m] = ch - '0';
+			}
 		}
-		
-		for (int n = 0; n < N; n++)
-			getDp(n);
-		
-        int max = 0;
-        for (int n = 0; n < N; n++)
-            max = Math.max(max, getDp(n));
-		
-		System.out.println(max);
+
+		searchingBeforeBomb();
+        
+        System.out.println(-1);
 	}
 	
-	static int getDp(int x) {
+	static void searchingBeforeBomb() {
 		
-		if (visited[x])
-			return dp[x];
+		bfs1 = new LinkedList<>();
+
+		bfs1.add(new int[] {0, 0, 1});
+		visited[0][0] = true;
 		
-		for (int n = 0; n < x; n++)
-			if(arr[n] < arr[x])
-				dp[x] = Math.max(dp[x], getDp(n) + 1);
+	}
+	
+	static void searchingAfterBomb() {
 		
-		visited[x] = true;
-		return dp[x];
 	}
 }
