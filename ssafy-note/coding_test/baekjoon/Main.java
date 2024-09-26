@@ -1,31 +1,92 @@
 package baekjoon;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
+	
+	static int[] dn = {-1, 0, 1, 0};
+	static int[] dm = {0, 1, 0, -1};
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		int TC = sc.nextInt();
-		for (int tc = 1; tc <= TC; tc++) {
+		int N = sc.nextInt();
+		int M = sc.nextInt();
+		
+		int[][] map = new int[N][M];
+		for (int n = 0; n < N; n++)
+			for (int m = 0; m < M; m++)
+				map[n][m] = sc.nextInt();
+		
+		int time = 0;
+		int cheeseCntMemo = 0;
+		while (true) {
 			
-			int N = sc.nextInt();
-			int[] coins = new int[N+1];
-			for (int i = 1; i <= N; i++)
-				coins[i] = sc.nextInt();
-			int K = sc.nextInt();
+			Queue<int[]> bfs = new LinkedList<>();
+			Queue<int[]> melting = new LinkedList<>();
+			boolean[][] visited = new boolean[N][M];
 			
-			int[] dp = new int[K+1];
-			dp[0] = 1;
+			bfs.add(new int[] {0, 0});
+			visited[0][0] = true;
 			
-			for (int i = 1; i <= N; i++) {
-				int coin = coins[i];
-				for (int j = coin; j <= K; j++)
-					dp[j] += dp[j - coin];
+			while (!bfs.isEmpty()) {
+				
+				int[] now = bfs.poll();
+				int nNow = now[0];
+				int mNow = now[1];
+				
+				int cnt = 0;
+				for (int d = 0; d < 4; d++) {
+					int nNext = nNow + dn[d];
+					int mNext = mNow + dm[d];
+					
+					if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext || visited[nNext][mNext])
+						continue;
+					
+					if (map[nNext][mNext] == 0) {
+						bfs.add(new int[] {nNext, mNext});
+						visited[nNext][mNext] = true;
+					}
+				}
+				
+			}//bfs
+			
+			int cheeseCnt = 0;
+			for (int n = 0; n < N; n++) {
+				for (int m = 0; m < M; m++) {
+					
+					if (map[n][m] == 1) {
+						cheeseCnt++;
+						
+						boolean contact = false;
+						for (int d = 0; d < 4; d++) {
+							int nNext = n + dn[d];
+							int mNext = m + dm[d];
+							
+							if (visited[nNext][mNext])
+								contact = true;
+						}
+						
+						if (contact)
+							melting.add(new int[] {n, m});
+					}
+				}
 			}
 			
-			System.out.println(dp[K]);
-		}//tc
+			if (!melting.isEmpty())
+				while (!melting.isEmpty()) {
+					int[] cheese = melting.poll();
+					map[cheese[0]][cheese[1]] = 0;
+					cheeseCntMemo = cheeseCnt;
+				}
+			else break;
+			time++;
+		}
+		
+		System.out.println(time);
+		System.out.println(cheeseCntMemo);
 	}
 }
