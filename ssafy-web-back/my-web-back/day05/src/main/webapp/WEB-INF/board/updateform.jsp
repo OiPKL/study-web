@@ -8,8 +8,9 @@
 </head>
 <body>
 	<h2>게시글등록</h2>
-	<form action="board?action=write" method="POST">
+	<form action="board" method="POST">
 		<input type="hidden" name="action" value="update">
+		<input type="hidden" name="id" value="${board.id}">
 		<div>
 			글 제목 : <input type="text" name="title" value="${board.title}">
 		</div>
@@ -17,10 +18,10 @@
 			글 쓰니 : <input type="text" name="writer" value="${board.writer}">
 		</div>
 		<div>
-			글 내용 : <textarea rows="10" cols="30" name="content"></textarea>
+			글 내용 : <textarea rows="10" cols="30" name="content">${board.content}</textarea>
 		</div>
 		<div>
-			<input type="submit" value="게시글등록">
+			<input type="submit" value="게시글 수정">
 		</div>
 	</form>
 </body>

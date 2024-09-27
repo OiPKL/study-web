@@ -54,12 +54,14 @@ public class BoardController extends HttpServlet {
 		
 	}
 
-	private void doUpdate(HttpServletRequest request, HttpServletResponse response) {
+	private void doUpdate(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Board board = service.getBoard(Integer.parseInt(request.getParameter("id")));
 		board.setTitle(request.getParameter("title"));
 		board.setContent(request.getParameter("content"));
 		
 		service.modifyBoard(board);
+		
+		response.sendRedirect("board?action=list");
 	}
 
 	private void doUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,13 +69,14 @@ public class BoardController extends HttpServlet {
 
 		Board board = service.getBoard(id);
 		request.setAttribute("board", board);
-		request.getRequestDispatcher("WEB-INF/board/detail.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/board/updateform.jsp").forward(request, response);
 	}
 
-	private void doRemove(HttpServletRequest request, HttpServletResponse response) {
+	private void doRemove(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
 		
 		service.removeBoard(id);
+		response.sendRedirect("board?action=list");
 	}
 
 	private void doDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,5 +1,6 @@
 package com.ssafy.board.model.repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,19 +24,17 @@ public class BoardRepositoryImpl implements BoardRepository {
 	
 	@Override
 	public List<Board> selectAll() {
-//		List<Board> tmp = new ArrayList<>();
-//		for (int key : boards.keySet()) {
-//			tmp.add(boards.get(key));
-//		}
-//		return tmp;
-		
-		return (List<Board>)boards.values();
+		List<Board> tmp = new ArrayList<>();
+		for (int key : boards.keySet()) {
+			tmp.add(boards.get(key));
+		}
+		return tmp;
 	}
 
 	@Override
 	public Board selectOne(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		return boards.get(id);
 	}
 
 	@Override

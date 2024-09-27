@@ -26,7 +26,8 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Board getBoard(int id) {
-		return null;
+		repo.updateViewCnt(id);
+		return repo.selectOne(id);
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void modifyBoard(Board board) {
-		
+		repo.updateBoard(board);
 	}
 
 	@Override

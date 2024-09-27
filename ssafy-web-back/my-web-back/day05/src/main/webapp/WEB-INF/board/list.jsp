@@ -10,7 +10,7 @@
 <body>
 	<table>
 		<tr>
-			<th>아이디</th>
+			<th>ID</th>
 			<th>제목</th>
 			<th>쓰니</th>
 			<th>조회수</th>
@@ -19,7 +19,7 @@
 		<c:forEach items="${list}" var="board">
 			<tr>
 				<td>${board.id}</td>
-				<td><a href="board?action=detail&id=${board.id}>${board.title}</td>
+				<td><a href="board?action=detail&id=${board.id}">${board.title}</a></td>
 				<td>${board.writer}</td>
 				<td>${board.viewCnt}</td>
 				<td>${board.regDate}</td>
