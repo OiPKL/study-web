@@ -7,31 +7,15 @@ public class Main {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		int N = sc.nextInt();
-		int K = sc.nextInt();
+		int T = sc.nextInt();
+		int W = sc.nextInt();
 		
-		int[] coins = new int[N+1];
-		for (int i = 1; i <= N; i++)
-			coins[i] = sc.nextInt();
+		int[] jadu = new int[T+1];
+		for (int t = 1; t <= T; t++)
+			jadu[t] = sc.nextInt();
 		
-		if (N == 1) {
-			System.out.println(K % coins[1] == 0 ? K / coins[1] : -1);
-			return;
-		}
+		int[][] dp = new int[T+1][3];
 		
-		int[] dp = new int[K+1];
-		for (int i = 1; i <= K; i++)
-			dp[i] = Integer.MAX_VALUE;
 		
-		for (int i = 1; i <= N; i++) {
-			int coin = coins[i];
-			
-			for (int j = coin; j <= K; j++) {
-				if (dp[j-coin] != Integer.MAX_VALUE)
-					dp[j] = Math.min(dp[j], dp[j-coin] + 1);
-			}
-		}
-		
-		System.out.println(dp[K] != Integer.MAX_VALUE ? dp[K] : -1);
 	}
 }

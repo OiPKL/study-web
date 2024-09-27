@@ -33,7 +33,6 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public Board selectOne(int id) {
-		// TODO Auto-generated method stub
 		return boards.get(id);
 	}
 
