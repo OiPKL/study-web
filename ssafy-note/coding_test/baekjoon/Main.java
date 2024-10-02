@@ -11,7 +11,7 @@ public class Main {
 		int W = sc.nextInt();
 		int[] answer = new int[T+1];
 		for (int t = 1; t <= T; t++)
-			answer[t] = (sc.nextInt()) % 2;
+			answer[t] = sc.nextInt() % 2;
 		
 		// w 이동횟수
 		// w 짝수 = 1번나무
@@ -20,9 +20,9 @@ public class Main {
 		for (int w = 1; w <= W; w++) {
 			for (int t = 1; t <= T; t++) {
 				if (w % 2 != answer[t])
-					dp[w][t] = Math.max(dp[w-1][t], dp[w][t-1] + 1);
+					dp[w][t] = Math.max(dp[w][t-1], dp[w-1][t] + 1);
 				else
-					dp[w][t] = dp[w-1][t];
+					dp[w][t] = Math.max(dp[w][t-1], dp[w-1][t]);
 			}
 		}
 		
