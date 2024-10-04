@@ -1,36 +1,56 @@
 package programmers;
 
-class Solution {
-    public int solution(int m, int n, int[][] puddles) {
-    	
-    	int[][] dp = new int[m+1][n+1];
-    	
-    	for (int[] puddle : puddles)
-    		dp[puddle[0]][puddle[1]] = -1;
-    	
-        dp[1][1] = 1;
-        
-        for (int i = 1; i <= m; i++) {
-        	if (dp[i][1] == -1) break;
-        	dp[i][1] = 1;
-        }
-        
-        for (int j = 1; j <= n; j++) {
-        	if (dp[1][j] == -1) break;
-        	dp[1][j] = 1;
-        }
-        
-        for (int i = 2; i <= m; i++) {
-        	for (int j = 2; j <= n; j++) {
-                if (dp[i][j] == -1) continue;
-                if (dp[i-1][j] != -1)
-                    dp[i][j] += dp[i-1][j];
-                if (dp[i][j-1] != -1)
-                    dp[i][j] += dp[i][j-1];
-                dp[i][j] %= 1_000_000_007;
-        	}
-        }
+import java.util.HashMap;
 
-        return dp[m][n];
+class Solution {
+    public int solution(String[] friends, String[] gifts) {
+
+    	HashMap<String, Integer> keys = new HashMap<>();
+    	int N = friends.length;
+    	int[][] keyMap = new int[N][N];
+    	
+    	for (int i = 0; i < N; i++)
+    		keys.put(friends[i], i);
+    	
+    	for (String gift : gifts) {
+    		String gi = gift.split(" ")[0];
+    		String ft = gift.split(" ")[1];
+    		int giver = keys.get(gi);
+    		int taker = keys.get(ft);
+    		keyMap[giver][taker]++;
+    	}
+    	
+    	// 선물지수 저장
+    	int[] scores = new int[N];
+    	for (int i = 0; i < N; i++) {
+    		int score = 0;
+    		for (int j = 0; j < N; j++) {
+    			score += keyMap[i][j];
+    			score -= keyMap[j][i];
+    		}
+    		scores[i] = score;
+    	}
+    	
+    	// 선물의수 저장
+    	int[] cnts = new int[N];
+    	for (int i = 0; i < N; i++) {
+    		for (int j = i + 1; j < N; j++) {
+    			int cntI = keyMap[i][j];
+    			int cntJ = keyMap[j][i];
+    			
+    			if (cntI > cntJ) cnts[i]++;
+    			else if (cntJ > cntI) cnts[j]++;
+    			else {
+    				if (scores[i] > scores[j]) cnts[i]++;
+    				else if (scores[j] > scores[i]) cnts[j]++;
+    			}
+    		}
+    	}
+    	
+    	int maxCnt = 0;
+    	for (int i = 0; i < N; i++)
+    		maxCnt = Math.max(maxCnt, cnts[i]);
+    	
+    	return maxCnt;
     }
 }
