@@ -1,55 +1,66 @@
 package baekjoon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.Scanner;
+
+class Trie {
+	Trie[] child = new Trie[10];
+	boolean isEnd = false;
+}
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        
-        String[] firstLine = br.readLine().split(" ");
-        int N1 = Integer.parseInt(firstLine[0]);
-        int N2 = Integer.parseInt(firstLine[1]);
-        
-        String[] titles = new String[N1];
-        int[] limits = new int[N1];
-        HashSet<Integer> check = new HashSet<>();
-        
-        int idx = 0;
-        for (int i = 0; i < N1; i++) {
-            String line = br.readLine();
-            String[] splits = line.split(" ");
-            int limit = Integer.parseInt(splits[1]);
-            
-            // 중복값 제거
-            // 이거로도 시간초과 떠서 버퍼드리더 가져옴
-            if (!check.contains(limit)) {
-                check.add(limit);
-                titles[idx] = splits[0];
-                limits[idx] = limit;
-                idx++;
-            }
-        }
-        
-        for (int i = 0; i < N2; i++) {
-            int power = Integer.parseInt(br.readLine());
-            
-            int L = 0;
-            int R = idx - 1;
-            while (L <= R) {
-                int M = (L + R) / 2;
-                if (limits[M] < power)
-                    L = M + 1;
-                else
-                    R = M - 1;
-            }
-            
-            sb.append(titles[L]).append("\n");
-        }
-        
-        System.out.print(sb);
+    public static void main(String[] args) {
+    	
+    	Scanner sc = new Scanner(System.in);
+    	
+    	int TC = sc.nextInt();
+    	for (int tc = 1; tc <= TC; tc++) {
+    		
+    		int N = sc.nextInt();
+    		sc.nextLine();
+    		
+    		String[] phoneNumbers = new String[N];
+    		for (int i = 0; i < N; i++)
+    			phoneNumbers[i] = sc.nextLine();
+    		
+    		Trie root = new Trie();
+    		boolean isConsistent = true;
+    		
+    		for (int i = 0; i < N; i++) {
+    			if (!insert(root, phoneNumbers[i])) {
+    				isConsistent = false;
+    				break;
+    			}
+    		}
+    		
+    		System.out.println(isConsistent ? "YES" : "NO");
+    	}
+    	
+    }
+    
+    static boolean insert(Trie root, String phoneNumber) {
+    	
+    	Trie currNode = root;
+    	
+    	for (char ch : phoneNumber.toCharArray()) {
+    		int num = ch - '0';
+    		if (currNode.child[num] == null)
+    			currNode.child[num] = new Trie();
+
+    		currNode = currNode.child[num];
+    		
+    		// 123 1234
+    		if (currNode.isEnd) return false;
+    	}
+    	
+    	// 123 123
+        if (currNode.isEnd) return false;
+    	
+    	currNode.isEnd = true;
+    	
+    	// 1234 123
+    	for (Trie child : currNode.child)
+    	    if (child != null) return false;
+    	
+    	return true;
     }
 }
