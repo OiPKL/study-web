@@ -6,134 +6,89 @@ import java.util.List;
 import java.util.Queue;
 
 class Solution {
-    
-    static int[] dn = new int[] {0, 1, 0, -1};
-    static int[] dm = new int[] {1, 0, -1, 0};
-    
-    static int N;
+    static int[] dn = new int[]{-1, 0, 1, 0};
+    static int[] dm = new int[]{0, 1, 0, -1};
+
+    static int answer, N;
     static boolean[][] tableVisited, boardVisited;
-    static List<List<Integer>> tableList, boardList;
+    static List<int[][]>[] tableList, boardList;
 
     public int solution(int[][] board, int[][] table) {
-        
-        int answer = 0;
-        
+        answer = 0;
         N = board.length;
         tableVisited = new boolean[N][N];
         boardVisited = new boolean[N][N];
-        
-        tableList = new ArrayList<>();    // 사이즈, 가로길이, 세로길이, {0 or 1}
-        boardList = new ArrayList<>();
-        
-        // tableInfo
+
+        tableList = new ArrayList[7];
+        boardList = new ArrayList[7];
+        for (int i = 0; i < 7; i++) {
+            tableList[i] = new ArrayList<>();
+            boardList[i] = new ArrayList<>();
+        }
+
         for (int n = 0; n < N; n++)
             for (int m = 0; m < N; m++)
                 if (table[n][m] == 1 && !tableVisited[n][m])
                     searchBlock(n, m, table, true);
-        
-        // boardInfo
+
         for (int n = 0; n < N; n++)
             for (int m = 0; m < N; m++)
                 if (board[n][m] == 0 && !boardVisited[n][m])
                     searchBlock(n, m, board, false);
-        
-        for (List<Integer> boardInfo : boardList) {
-            
-            int boardSize = boardInfo.get(0);
-            int boardHeight = boardInfo.get(1);
-            int boardLength = boardInfo.get(2);
-            
-            for (int i = 0; i < tableList.size(); i++) {
-                List<Integer> tableInfo = tableList.get(i);
 
-                if (boardSize != tableInfo.get(0)) continue;
-                if (boardHeight != tableInfo.get(1)) continue;
-                if (boardLength != tableInfo.get(2)) continue;
-                
-                boolean match = true;
-                for (int j = 3; j < boardInfo.size(); j++) {
-                    if (boardInfo.get(j) != tableInfo.get(j)) {
-                        match = false;
+        for (int i = 1; i <= 6; i++) {
+            for (int[][] boardInfo : boardList[i]) {
+            	for (int j = 0; j < tableList[i].size(); j++) {
+            		int[][] tableInfo = tableList[i].get(j);
+                    if (canMatch(boardInfo, tableInfo)) {
+                    	tableList[i].remove(j);
+                        answer += i;
                         break;
                     }
-                }
-                
-                if (match) {
-                    answer += boardSize;
-                    tableList.remove(i);
-                    break;
-                }
-                
-                for (int turn = 0; turn < 4; turn++) {
-                    
-                    List<Integer> rotatedTableInfo = rotate(tableInfo);
-                    
-                    if (boardSize != rotatedTableInfo.get(0)) continue;
-                    if (boardHeight != rotatedTableInfo.get(1)) continue;
-                    if (boardLength != rotatedTableInfo.get(2)) continue;
-                    
-                    match = true;
-                    for (int j = 3; j < boardInfo.size(); j++) {
-                        if (boardInfo.get(j) != rotatedTableInfo.get(j)) {
-                            match = false;
-                            break;
-                        }
-                    }
-                    
-                    if (match) {
-                        answer += boardSize;
-                        tableList.remove(i);
-                        break;
-                    }
-                    
-                    tableInfo = rotatedTableInfo;
-                }
+            	}
             }
         }
-        
+
         return answer;
     }
     
     static void searchBlock(int n, int m, int[][] map, boolean isTable) {
-        
+    	
         int target = isTable ? 1 : 0;
-        int nonTarget = isTable ? 0 : 1;
         boolean[][] visited = isTable ? tableVisited : boardVisited;
-        List<List<Integer>> infoList = isTable ? tableList : boardList;
+        List<int[][]>[] infoList = isTable ? tableList : boardList;
         
-        int limitL = n;
-        int limitR = n;
-        int limitT = m;
-        int limitB = m;
-        int size = 0;
+        int limitT = n;
+        int limitB = n;
+        int limitL = m;
+        int limitR = m;
+        
         Queue<int[]> bfs = new LinkedList<>();
         List<int[]> realBlocks = new ArrayList<>();
         
-        bfs.add(new int[] {n, m, 1});
+        bfs.add(new int[] {n, m});
         visited[n][m] = true;
         
         while (!bfs.isEmpty()) {
-            
-            int[] now = bfs.poll();
-            int nNow = now[0];
-            int mNow = now[1];
-            
-            limitL = Math.min(limitL, nNow);
-            limitR = Math.max(limitR, nNow);
-            limitT = Math.min(limitT, mNow);
-            limitB = Math.max(limitB, mNow);
+        	
+        	int[] now = bfs.poll();
+        	int nNow = now[0];
+        	int mNow = now[1];
+        	
+        	limitT = Math.min(limitT, nNow);
+        	limitB = Math.max(limitB, nNow);
+            limitL = Math.min(limitL, mNow);
+            limitR = Math.max(limitR, mNow);
             realBlocks.add(new int[] {nNow, mNow});
-            ++size;
             
             for (int d = 0; d < 4; d++) {
+            	
                 int nNext = nNow + dn[d];
                 int mNext = mNow + dm[d];
                 
-                if (nNext < 0 || N <= nNext) continue;
-                if (mNext < 0 || N <= mNext) continue;
-                if (visited[nNext][mNext]) continue;
-                if (map[nNext][mNext] != target) continue;
-                
+                if (nNext < 0 || N <= nNext || mNext < 0 || N <= mNext ||
+                		visited[nNext][mNext] || map[nNext][mNext] != target) continue;
+            	
                 bfs.add(new int[] {nNext, mNext});
                 visited[nNext][mNext] = true;
             }
@@ -141,48 +96,49 @@ class Solution {
         
         int height = limitB - limitT + 1;
         int length = limitR - limitL + 1;
-        List<Integer> info = new ArrayList<>();
+        int[][] info = new int[height][length];
         
-        info.add(size);
-        info.add(height);
-        info.add(length);
+        for (int[] realBlock : realBlocks)
+        	info[realBlock[0] - limitT][realBlock[1] - limitL] = 1;
         
-        boolean[][] blockMap = new boolean[height][length];
-        
-        for (int[] block : realBlocks) {
-            int blockN = block[0] - limitL;
-            int blockM = block[1] - limitT;
-            if (blockN >= 0 && blockN < height && blockM >= 0 && blockM < length)
-            	blockMap[blockN][blockM] = true;
-        }
-        
-        for (int nn = 0; nn < height; nn++)
-        	for (int mm = 0; mm < length; mm++)
-            	info.add(blockMap[nn][mm] ? target : nonTarget);
-        
-        infoList.add(info);
+        infoList[realBlocks.size()].add(info);
     }
     
-    static List<Integer> rotate(List<Integer> info) {
+    static boolean canMatch(int[][] boardInfo, int[][] tableInfo) {
+        for (int r = 0; r < 4; r++) {
+            if (checkBlock(boardInfo, tableInfo))
+                return true;
+            tableInfo = rotateBlock(tableInfo);
+        }
+        return false;
+    }
+    
+    static boolean checkBlock(int[][] boardInfo, int[][] tableInfo) {
+    	int boardHeight = boardInfo.length;
+    	int tableHeight = tableInfo.length;
+    	int boardLength = boardInfo[0].length;
+    	int tableLength = tableInfo[0].length;
+    	
+    	if (boardHeight != tableHeight || boardLength != tableLength) 
+    		return false;
+    	
+    	for (int n = 0; n < boardHeight; n++)
+    		for (int m = 0; m < boardLength; m++)
+    			if (boardInfo[n][m] != tableInfo[n][m])
+    				return false;
+    	
+    	return true;
+    }
+    
+    static int[][] rotateBlock(int[][] info) {
+        int height = info.length;
+        int length = info[0].length;
+        int[][] rotated = new int[length][height];
         
-        int size = info.get(0);
-        int height = info.get(1);
-        int length = info.get(2);
-        List<Integer> rotatedInfo = new ArrayList<>();
+        for (int r = 0; r < height; r++)
+            for (int c = 0; c < length; c++)
+                rotated[c][height - 1 - r] = info[r][c];
         
-        rotatedInfo.add(size);
-        rotatedInfo.add(length);
-        rotatedInfo.add(height);
-        
-        int[][] original = new int[height][length];
-        for (int n = 0; n < height; n++)
-            for (int m = 0; m < length; m++)
-                original[n][m] = info.get(3 + n * length + m);
-        
-        for (int m = 0; m < length; m++)
-            for (int n = height - 1; n >= 0; n--)
-                rotatedInfo.add(original[n][m]);
-
-        return rotatedInfo;
+        return rotated;
     }
 }
