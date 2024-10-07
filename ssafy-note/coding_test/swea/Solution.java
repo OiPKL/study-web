@@ -23,7 +23,7 @@ public class Solution {
 			K = sc.nextInt();
 			sc.nextLine();
 			
-			int[] now = new int[] {-1, -1};
+			int[] start = new int[] {-1, -1};
 			int[] goal = new int[] {-1, -1};
 			map = new char[N][N];
 			
@@ -33,19 +33,24 @@ public class Solution {
 				
 				for (int c = 0; c < N; c++) {
 					if (map[r][c] == 'X')
-						now = new int[] {r, c};
+						start = new int[] {r, c};
 					if (map[r][c] == 'Y')
 						goal = new int[] {r, c};
 				}
 			}
 			
-			int rNow = now[0];
-			int cNow = now[1];
+			int[] now;
+			int rNow = start[0];
+			int cNow = start[1];
 			int dWay = 0;
 			int cnt = 0;
 			int cut = K;
 			
-			bfs = new PriorityQueue<>((a, b) -> a[3] - b[3]);
+			bfs = new PriorityQueue<>((a, b) -> {
+				if (a[3] != b[3])
+					return a[3] - b[3];
+				return b[4] - a[4];
+			});
 			visited = new int[N][N];
 			for (int r = 0; r < N; r++)
 				for (int c = 0; c < N; c++)
@@ -81,23 +86,21 @@ public class Solution {
 		}
 	}
 	
-	static boolean canMove(int rNext, int cNext) {
-		if (rNext < 0 || N <= rNext || cNext < 0 || N <= cNext)
-			return false;
-		return true;
-	}
-	
 	static void addBfs(int rNext, int cNext, int dWay, int cnt, int cut) {
-		if (canMove(rNext, cNext)) {
-			if (map[rNext][cNext] == 'T') {
-				if (cut > 1) {
+		
+		if (rNext < 0 || N <= rNext || cNext < 0 || N <= cNext) return;
+		
+		if (map[rNext][cNext] == 'T') {
+			if (cut >= 1) {
+				if (cnt + 1 <= visited[rNext][cNext]) {
 					bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut - 1});
-					visited[rNext][cNext] = Math.min(visited[rNext][cNext], cnt + 1);
+					visited[rNext][cNext] = cnt + 1;
 				}
 			}
-			else {
+		} else {
+			if (cnt + 1 <= visited[rNext][cNext]) {
 				bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut});
-				visited[rNext][cNext] = Math.min(visited[rNext][cNext], cnt + 1);
+				visited[rNext][cNext] = cnt + 1;
 			}
 		}
 	}
