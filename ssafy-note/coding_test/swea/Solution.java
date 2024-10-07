@@ -9,7 +9,7 @@ public class Solution {
 	static int[] dc = {0, 1, 0, -1};
 	static int N, K;
 	static char[][] map;
-	static int[][] visited;
+	static int[][][] visited;
 	static PriorityQueue<int[]> bfs;
 	
 	public static void main(String[] args) {
@@ -51,13 +51,14 @@ public class Solution {
 					return a[3] - b[3];
 				return b[4] - a[4];
 			});
-			visited = new int[N][N];
+			visited = new int[N][N][K + 1];
 			for (int r = 0; r < N; r++)
 				for (int c = 0; c < N; c++)
-					visited[r][c] = Integer.MAX_VALUE;
+					for (int k = 0; k <= K; k++)
+			            visited[r][c][k] = Integer.MAX_VALUE;
 			
 			bfs.add(new int[] {rNow, cNow, dWay, cnt, cut});
-			visited[rNow][cNow] = 0;
+			visited[rNow][cNow][cut] = cnt;
 			boolean finished = false;
 			
 			while(!bfs.isEmpty()) {
@@ -69,7 +70,7 @@ public class Solution {
 				cnt = now[3];
 				cut = now[4];
 				
-				System.out.println(rNow + "|" + cNow + "|" + dWay + "|" + cnt);
+//				System.out.println(rNow + "|" + cNow + "|" + dWay + "|" + cnt);
 				
 				if (rNow == goal[0] && cNow == goal[1]) {
 					finished = true;
@@ -91,17 +92,15 @@ public class Solution {
 		if (rNext < 0 || N <= rNext || cNext < 0 || N <= cNext) return;
 		
 		if (map[rNext][cNext] == 'T') {
-			if (cut >= 1) {
-				if (cnt + 1 <= visited[rNext][cNext]) {
-					bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut - 1});
-					visited[rNext][cNext] = cnt + 1;
-				}
-			}
+		    if (cut >= 1 && cnt + 1 < visited[rNext][cNext][cut - 1]) {
+		        bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut - 1});
+		        visited[rNext][cNext][cut - 1] = cnt + 1;
+		    }
 		} else {
-			if (cnt + 1 <= visited[rNext][cNext]) {
-				bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut});
-				visited[rNext][cNext] = cnt + 1;
-			}
+		    if (cnt + 1 < visited[rNext][cNext][cut]) {
+		        bfs.add(new int[] {rNext, cNext, dWay, cnt + 1, cut});
+		        visited[rNext][cNext][cut] = cnt + 1;
+		    }
 		}
 	}
 }
