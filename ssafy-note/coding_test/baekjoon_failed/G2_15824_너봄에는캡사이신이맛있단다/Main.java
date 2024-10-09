@@ -1,4 +1,4 @@
-package baekjoon;
+package baekjoon_failed.G2_15824_너봄에는캡사이신이맛있단다;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -40,6 +40,7 @@ public class Main {
     	System.out.println(sum);
 	}
     
+    // 제곱 계산 분할정복?
     static long pow(int k) {
     	long result = 1;
     	for (int i = 0; i < k; i++)
