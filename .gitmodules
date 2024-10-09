@@ -7,3 +7,6 @@
 [submodule "ssafy-web-back/live-web-db"]
 	path = ssafy-web-back/live-web-db
 	url = https://lab.ssafy.com/s12/javabi/live-db.git
+[submodule "ssafy-web-back/live-spring"]
+	path = ssafy-web-back/live-spring
+	url = https://lab.ssafy.com/s12/javabi/live-spring.git
