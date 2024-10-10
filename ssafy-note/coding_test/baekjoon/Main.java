@@ -25,9 +25,9 @@ public class Main {
 		// 머리 빠개지는 중............
 		for (int d = 2; d <= K; d++)
 			for (int p = 1; p <= N; p++)
-				for (int i = 1; i <= d && i <= K/2; i++)
+				for (int i = 1; i <= d; i++)
 					for (int j = 0; j <= p; j++)
-						dp[d][p] += dp[i][j] * dp[d-i][p-j];
+						dp[d][p] += (dp[i][j] * dp[d-i][p-j]) % mod;
 					
 		for (int d = 0; d <= K; d++) {
 			for (int p = 0; p <= N; p++)
