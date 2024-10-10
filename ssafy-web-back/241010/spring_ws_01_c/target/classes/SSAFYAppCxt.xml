@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 학생(Student) 정보 등록 (학번, 이름) -->
+	<!-- bean의 id를 부여하는 이유는 다른 bean에서 참조하기 위함 -->
+	
+    <!-- 1. 객체를 생성할 때, 생성자를 이용하여 값을 주입 -->
+    <bean class="com.ssafy.ws.Student" id="s1">
+        <constructor-arg value="1"/>
+        <constructor-arg value="김싸피"/>
+    </bean>
+
+    <bean class="com.ssafy.ws.Student" id="s2">
+        <constructor-arg value="2"/>
+        <constructor-arg value="박싸피"/>
+    </bean>
+
+    <bean class="com.ssafy.ws.Student" id="s3">
+        <constructor-arg value="3"/>
+        <constructor-arg value="최싸피"/>
+    </bean>
+
+    <!-- 2. 객체를 비어있는 객체로 생성한 후, property를 이용하여 값을 주입 -->
+    <bean class="com.ssafy.ws.Student" id="s4">
+        <property name="id" value="4"/>
+        <property name="name" value="송싸피"/>
+    </bean>
+
+    <bean class="com.ssafy.ws.Student" id="s5">
+        <property name="id" value="5"/>
+        <property name="name" value="황싸피"/>
+    </bean>
+
+    <!-- 3. 반(Classroom)의 이름과 학생 정보 등록 -->
+    <bean class="com.ssafy.ws.Classroom" id="classroom">
+        <constructor-arg value="1반"/>
+        <constructor-arg>
+            <list>
+                <ref bean="s1"/>
+                <ref bean="s2"/>
+                <ref bean="s3"/>
+                <ref bean="s4"/>
+                <ref bean="s5"/>
+            </list>
+        </constructor-arg>
+    </bean>
+</beans>

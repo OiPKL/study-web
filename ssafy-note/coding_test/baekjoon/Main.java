@@ -19,12 +19,15 @@ public class Main {
 		for (int d = 0; d <= K; d++)
 			dp[d][0] = 1;
 		
+		for (int p = 0; p <= N; p++)
+			dp[1][p] = 1;
+		
 		// 머리 빠개지는 중............
-		for (int d = 1; d <= K; d++)
+		for (int d = 2; d <= K; d++)
 			for (int p = 1; p <= N; p++)
-				for (int i = 0; i <= d; i++)
+				for (int i = 1; i <= d && i <= K/2; i++)
 					for (int j = 0; j <= p; j++)
-						
+						dp[d][p] += dp[i][j] * dp[d-i][p-j];
 					
 		for (int d = 0; d <= K; d++) {
 			for (int p = 0; p <= N; p++)
