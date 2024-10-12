@@ -1,36 +1,42 @@
 package baekjoon;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-	
-	static int mod = 1_000_000_000;
-	
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
 		
 		int N = sc.nextInt();
-		int K = sc.nextInt();
+		int[] liquids = new int[N];
 		
-		int[][] dp = new int[K+1][N+1];
+		for (int i = 0; i < N; i++)
+			liquids[i] = sc.nextInt();
 		
-        for (int k = 0; k <= K; k++)
-            dp[k][0] = 1;
+		Arrays.sort(liquids);
+		
+		int L = 0;
+		int R = N - 1;
+		int minSum = Integer.MAX_VALUE;
+		int pickedL = L;
+		int pickedR = R;
+		
+		while (L < R) {
+			
+			int sum = liquids[L] + liquids[R];
+			if (Math.abs(sum) < Math.abs(minSum)) {
+				minSum = sum;
+				pickedL = L;
+				pickedR = R;
+			}
 
-        for (int n = 0; n <= N; n++)
-            dp[1][n] = 1;
-
-        for (int k = 2; k <= K; k++)
-            for (int n = 1; n <= N; n++)
-                dp[k][n] = (dp[k-1][n] + dp[k][n-1]) % mod;
-					
-//		for (int d = 0; d <= K; d++) {
-//			for (int p = 0; p <= N; p++)
-//				System.out.printf("%3d" + " ", dp[d][p]);
-//			System.out.println();
-//		}
+			if (sum < 0)
+				L++;
+			else
+				R--;
+		}
 		
-		System.out.println(dp[K][N]);
+		System.out.println(liquids[pickedL] + " " + liquids[pickedR]);
 	}
 }
