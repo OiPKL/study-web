@@ -13,8 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//이 서블릿이 호출되기 위해서는 url 상에 http://server_ip:port/context_name/main 이 필요하다.
-
+// 0. http://server_ip:port/context_name/main
 @WebServlet("/main")
 public class MainServlet extends HttpServlet {
 	
@@ -52,7 +51,7 @@ public class MainServlet extends HttpServlet {
 		}
 	}
 
-	void doList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Movie> movieList = dao.selectAllMovies();
 		
 		// 3. setAttribute
