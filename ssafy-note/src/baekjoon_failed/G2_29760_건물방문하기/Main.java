@@ -1,4 +1,4 @@
-package baekjoon;
+package baekjoon_failed.G2_29760_건물방문하기;
 
 import java.util.PriorityQueue;
 import java.util.Scanner;
