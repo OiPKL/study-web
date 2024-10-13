@@ -18,10 +18,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/main")
 public class MainServlet extends HttpServlet {
 	
+	// 1. 싱글턴
 	MovieDao dao = new MovieDaoImpl();
 	
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 2. getParameter
 		String action = request.getParameter("action");
 		System.out.println("요청 왔음 | 파라미터: " + action);
 		
@@ -29,14 +31,14 @@ public class MainServlet extends HttpServlet {
 		case "list":
 			doList(request, response);
 			break;
+		case "detail":
+			doDetail(request, response);
+			break;
 		case "registForm":
 			doRegistForm(request, response);
 			break;
 		case "regist":
 			doRegist(request, response);
-			break;
-		case "detail":
-			doDetail(request, response);
 			break;
 		case "updateForm":
 			doUpdateForm(request, response);
@@ -48,30 +50,45 @@ public class MainServlet extends HttpServlet {
 			doDeleteMovie(request, response);
 			break;
 		}
-		
 	}
 
 	void doList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doList");
-		// 포워딩 하기 전 DB 목록 받아오기
 		List<Movie> movieList = dao.selectAllMovies();
-		request.setAttribute("movies", movieList);
 		
-		// list.jsp로 포워딩
+		// 3. setAttribute
+		request.setAttribute("movies", movieList);
+		// 4-1. getRequestDispatcher
+		// 4-2. forward
 		request.getRequestDispatcher("/list.jsp").forward(request, response);
 	}
 	
+	private void doDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 2. getParameter
+		String id = request.getParameter("id");
+		
+		Movie movie = dao.selectOne(id);
+		
+		// 3. setAttribute
+		request.setAttribute("movie", movie);
+		// 4-1. getRequestDispatcher
+		// 4-2. forward
+		request.getRequestDispatcher("/detail.jsp").forward(request, response);
+	}
+	
 	private void doRegistForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 4-1. getRequestDispatcher
+		// 4-2. forward
 		request.getRequestDispatcher("/regist.jsp").forward(request, response);
 	}
 	
 	private void doRegist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Movie movie = new Movie();
+		// 2-1. getParameter
 		String title = request.getParameter("title");
 		String director = request.getParameter("director");
 		String genre = request.getParameter("genre");
 		int runningTime = Integer.parseInt(request.getParameter("runningTime"));
-
+		// 2-2. setter
+		Movie movie = new Movie();
 		movie.setTitle(title);
 		movie.setDirector(director);
 		movie.setGenre(genre);
@@ -79,56 +96,47 @@ public class MainServlet extends HttpServlet {
 		
 		int result = dao.insertMovie(movie);
 		
-		if (result == 1) {
+		// 4. sendRedirect
+		if (result == 1)
 			response.sendRedirect("main?action=list");
-		}
-	}
-	
-	private void doDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		
-		Movie movie = dao.selectOne(id);
-		System.out.println(movie);
-
-		request.setAttribute("movie", dao.selectOne(id));
-		request.getRequestDispatcher("/detail.jsp").forward(request, response);
-	}
-	
-	private void doDeleteMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String id = request.getParameter("id");
-		
-		dao.deleteMovie(id);
-		
-		response.sendRedirect("main?action=list");
 	}
 
 
 	private void doUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 2. getParameter
 		String id = request.getParameter("id");
 		
 		Movie movie = dao.selectOne(id);
 		
+		// 4-1. getRequestDispatcher
+		// 4-2. forward
 		request.setAttribute("movie", movie);
-		request.getRequestDispatcher("update.jsp").forward(request, response);
+		request.getRequestDispatcher("/update.jsp").forward(request, response);
 	}
 
 	
 	private void doUpdateMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		Movie movie = new Movie();
+		// 2-1. getParameter
 		String id = request.getParameter("id");
 		String title = request.getParameter("title");
-//		String director = request.getParameter("director");
-//		String genre = request.getParameter("genre");
-//		int runningTime = Integer.parseInt(request.getParameter("runningTime"));
-		
+		// 2-2. setter
+		Movie movie = new Movie();
 		movie.setId(id);
 		movie.setTitle(title);
-//		movie.setDirector(director);
-//		movie.setGenre(genre);
-//		movie.setRunningTime(runningTime);
 		
 		dao.updateMovie(movie);
 		
+		// 4. sendRedirect
+		response.sendRedirect("main?action=list");
+	}
+	
+	private void doDeleteMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// 2. getParameter
+		String id = request.getParameter("id");
+		
+		dao.deleteMovie(id);
+		
+		// 4. sendRedirect
 		response.sendRedirect("main?action=list");
 	}
 }

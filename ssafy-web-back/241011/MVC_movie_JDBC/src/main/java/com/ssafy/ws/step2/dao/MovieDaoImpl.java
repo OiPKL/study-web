@@ -12,6 +12,7 @@ import com.ssafy.ws.step2.util.DBUtil;
 
 public class MovieDaoImpl implements MovieDao {
 
+	// 1. 싱글턴
 	DBUtil util = DBUtil.getInstance();
 	
 	@Override
@@ -36,7 +37,7 @@ public class MovieDaoImpl implements MovieDao {
 				movie.setDirector(rs.getString("director"));
 				movie.setGenre(rs.getString("genre"));
 				movie.setRunningTime(rs.getInt("runningTime"));
-				
+				// 2. movie -> movies 추가
 				movies.add(movie);
 			}
 		} catch (SQLException e) {
@@ -61,6 +62,7 @@ public class MovieDaoImpl implements MovieDao {
 		try {
 			conn = util.getConnection();
 			pstmt = conn.prepareStatement(sql);
+			// 3. DB: 1부터 시작
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
@@ -90,13 +92,14 @@ public class MovieDaoImpl implements MovieDao {
 		try {
 			conn = util.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			// 1부터 시작
-			pstmt.setString(1, "0");					// AutoIncrement
+			// 3-1. DB: 1부터 시작
+			// 3-2. 0: AutoIncrement
+			pstmt.setString(1, "0");
 			pstmt.setString(2, movie.getTitle());
 			pstmt.setString(3, movie.getGenre());
 			pstmt.setString(4, movie.getDirector());
 			pstmt.setInt(5, movie.getRunningTime());
-			
+			// 4. executeUpdate
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -105,6 +108,29 @@ public class MovieDaoImpl implements MovieDao {
 		}
 		
 		return 1;
+	}
+	
+	@Override
+	public void updateMovie(Movie movie) {
+		String sql = "UPDATE movies SET title = ? WHERE id = ?";
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = util.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			// 3-1. DB: 1부터 시작
+			// 3-2. 0: AutoIncrement
+			pstmt.setString(1, movie.getTitle());
+			pstmt.setString(2, movie.getId());
+			// 4. executeUpdate
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			util.close(pstmt, conn);
+		}
 	}
 
 	@Override
@@ -117,31 +143,9 @@ public class MovieDaoImpl implements MovieDao {
 		try {
 			conn = util.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			// 1부터 시작
+			// 3. DB: 1부터 시작
 			pstmt.setString(1, id);
-			
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			util.close(pstmt, conn);
-		}
-	}
-
-	@Override
-	public void updateMovie(Movie movie) {
-		String sql = "UPDATE movies SET title = ? WHERE id = ?";
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			conn = util.getConnection();
-			pstmt = conn.prepareStatement(sql);
-			// 1부터 시작
-			pstmt.setString(1, movie.getTitle());
-			pstmt.setString(2, movie.getId());
-			
+			// 4. executeUpdate
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
