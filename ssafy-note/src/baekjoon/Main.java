@@ -1,6 +1,5 @@
 package baekjoon;
 
-import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Main {
@@ -11,53 +10,63 @@ public class Main {
         int N = sc.nextInt();
         int H = sc.nextInt();
         int W = sc.nextInt();
+        
+        // [층수][왼/오][호수/가로minTime]
+        int[][][] dp = new int[H+1][2][2];
 
-        boolean[] visited = new boolean[N];
-        int[][] rooms = new int[N][2];
-        for (int i = 0; i < N; i++) {
-            rooms[i][0] = sc.nextInt();
-            rooms[i][1] = sc.nextInt();
-        }
-        
-        int nowH = 1;
-        int nowW = 1;
-        int answer = 0;
-        
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[3] - b[3]);
+        dp[0][0][0] = 1;
+        dp[0][1][0] = 1;
+        dp[1][0][0] = 1;
+        dp[1][1][0] = 1;
+        for (int h = 2; h <= H; h++)
+        	dp[h][0][0] = Integer.MAX_VALUE;
 
         for (int i = 0; i < N; i++) {
-            int nextH = rooms[i][0];
-            int nextW = rooms[i][1];
-            
-            int time = Math.abs(nowH - nextH) * 100 + Math.abs(nowW - nextW);
-            pq.add(new int[] {i, nextH, nextW, time});
+        	int h = sc.nextInt();
+        	int w = sc.nextInt();
+        	
+        	dp[h][0][0] = Math.min(dp[h][0][0], w);
+        	dp[h][1][0] = Math.max(dp[h][1][0], w);
         }
         
-        for (int i = 0; i < N; i++) {
-        	int[] next = pq.poll();
-        	int nextI = next[0];
-        	int nextH = next[1];
-        	int nextW = next[2];
-        	int time = next[3];
-        	
-        	nowH = nextH;
-        	nowW = nextW;
-        	answer += time;
-        	visited[nextI] = true;
-        	
-        	pq = new PriorityQueue<>((a, b) -> a[3] - b[3]);
-        	
-            for (int j = 0; j < N; j++) {
-            	if (visited[j]) continue;
-            	
-                nextH = rooms[j][0];
-                nextW = rooms[j][1];
-                
-                time = Math.abs(nowH - nextH) * 100 + Math.abs(nowW - nextW);
-                pq.add(new int[] {j, nextH, nextW, time});
-            }
+        int floor = 0;
+        for (int h = 1; h <= H; h++) {
+        	if (dp[h][0][0] != Integer.MAX_VALUE) {
+        		// 최고층 갱신 -> (floor - 1) x 100
+        		floor = h;
+        		// 머리 빠개지는 중......... 맞겠지???????
+        		// 오->왼 방문
+        		dp[h][0][1] = (dp[h][1][0] <= dp[h-1][1][0] ?
+        				dp[h-1][1][0] - dp[h][0][0] :
+        				(dp[h][1][0] - dp[h-1][1][0]) + (dp[h][1][0] - dp[h][0][0]))
+        				+ dp[h-1][1][1];
+        		// 왼->오 방문
+        		dp[h][1][1] = (dp[h][0][0] >= dp[h-1][0][0] ?
+        				dp[h][1][0] - dp[h-1][0][0] :
+        				(dp[h-1][0][0] - dp[h][0][0]) + (dp[h][1][0] - dp[h][0][0]))
+        				+ dp[h-1][0][1];
+        		// 왼=오
+        		if (dp[h][0][0] == dp[h][1][0]) {
+        			int tmp = Math.min(dp[h][0][1], dp[h][1][1]);
+        			dp[h][0][1] = tmp;
+        			dp[h][1][1] = tmp;
+        		}
+        	} else {
+        		// 아래층 정보 복사
+        		dp[h][0] = dp[h-1][0];
+        		dp[h][1] = dp[h-1][1];
+        	}
         }
-
-        System.out.println(answer);
+        
+        System.out.println("****************************************");
+        for (int h = H; h >= 1; h--) {
+        	System.out.printf("[%2d %2d] [%2d %2d]", dp[h][0][0], dp[h][0][1], dp[h][1][0], dp[h][1][1]);
+        	System.out.println();
+        }
+        
+        int time = (floor - 1) * 100;
+        time += Math.min(dp[floor][0][1], dp[floor][1][1]);
+        
+        System.out.println(time);
     }
 }
