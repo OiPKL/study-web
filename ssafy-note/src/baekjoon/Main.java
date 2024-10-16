@@ -1,58 +1,75 @@
 package baekjoon;
 
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
+	
+	static int N, B, C;
+	static int[] cows;
+	
+    public static void main(String[] args) throws IOException {
     	
-    	Scanner sc = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        N = Integer.parseInt(st.nextToken());
+        B = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        
+        cows = new int[N];
+        st = new StringTokenizer(br.readLine());
+
+        for (int i = 0; i < N; i++)
+            cows[i] = Integer.parseInt(st.nextToken());
     	
-    	int N = sc.nextInt();
+    	Arrays.sort(cows);
     	
-    	// 도착시간~시니어 순
-    	PriorityQueue<int[]> cows = new PriorityQueue<>((a, b) -> {
-    		if (a[1] != b[1])
-    			return a[1] - b[1];
-    		return a[0] - b[0];
-    	});
+    	int L = 0;			// 불가능
+    	int R = cows[N-1];	// 가능
+    	int answer = R;
     	
-    	// 시니어 순
-    	PriorityQueue<int[]> waitingCows = new PriorityQueue<>((a, b) -> {
-    		return a[0] - b[0];
-    	});
-    	
-    	// 시니어 도착시간 섭취시간
-    	for (int i = 0; i < N; i++)
-    		cows.add(new int[] {i, sc.nextInt(), sc.nextInt()});
-    	
-    	int time = 0;
-    	int maxWaitingTime = 0;
-    	while (!cows.isEmpty()) {
+    	while (L <= R) {
     		
-    		if (!waitingCows.isEmpty()) {
-    			
-    			int[] eatingCow = waitingCows.poll();
-    			maxWaitingTime = Math.max(maxWaitingTime, time - eatingCow[1]);
-    			time += eatingCow[2];
-    		} else {
-    			
-    			int[] eatingCow = cows.poll();
-    			time += eatingCow[2];
-			}
+    		int M = (L + R) / 2;
     		
-    		while (true) {
-    			if (!cows.isEmpty()) {
-    				int[] firstCow = cows.peek();
-    				
-    				if (firstCow[1] > time) break;
-    				
-    				waitingCows.add(cows.poll());
-    			} else
-    				break;
-    		} 
+    		if (canCarry(M)) {
+    			answer = M;
+    			R = M - 1;
+    		}
+    		else
+    			L = M + 1;
     	}
     	
-    	System.out.println(maxWaitingTime);
+    	System.out.println(answer);
+    }
+    
+    static boolean canCarry(int M) {
+    	
+    	int idx = 0;
+    	int cntBus = 0;
+    	
+    	while (idx < N) {
+    		
+    		cntBus++;
+    		
+    		int time = cows[idx];
+    		int cntCow = 0;
+    		
+    		while (idx < N) {
+    			// 정원 초과 ~ 버스 출발
+    			if (cntCow >= C) break;
+    			// 시간 초과 ~ 버스 출발
+    			if (cows[idx] - time > M) break;
+
+    			idx++;
+    			cntCow++;
+    		}
+    	}
+    	
+    	return cntBus <= B;
     }
 }
