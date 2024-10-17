@@ -1,20 +1,17 @@
 package com.ssafy.ws.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ssafy.ws.dto.Book;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 // @Controller: 해당 클래스가 Controller임을 명시합니다.
 @Controller
@@ -78,48 +75,64 @@ public class MyController {
      * void: 메서드가 반환하는 값을 응답 본문으로 사용하지 않고, ServletResponse, HttpServletResponse, OutputStream, Writer 등의 입력인자를 사용하여 직접 응답을 생성합니다.
      */
     // Q1. context root "/" 으로 요청이 들어오면 "index"이라는 이름의 뷰를 반환하는 메서드
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/")
     public String index() {
         return "index";
     }
 
     // Q2. "/about"으로 POST 요청이 오면 "/test2.jsp"로 리다이렉트하는 메서드
-    @RequestMapping(value = "/about", method = RequestMethod.POST)
+    @PostMapping("/about")
+//    @RequestMapping(value = "/about", method = RequestMethod.POST)
     public String about() {
         return "redirect:/test2.jsp";
     }
 
     // Q3. articleId라는 경로 변수를 사용하여 "article" 뷰를 반환하는 메서드
-    @RequestMapping(value = "/articles/{articleId}", method = RequestMethod.GET)
+    @GetMapping("/articles/{articleId}")
+//    @RequestMapping(value = "/articles/{articleId}", method = RequestMethod.GET)
     public String getArticle(@PathVariable("articleId") String articleId, Model model) {
+    	System.out.println(articleId);
         model.addAttribute("articleId", articleId);
         return "article";
     }
 
     // Q4. HttpServletRequest와 HttpServletResponse를 사용하여 뷰를 반환하는 메서드
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public void getProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String productId = request.getParameter("id");
-        PrintWriter out = response.getWriter();
-        out.print("<html><head><meta charset='UTF-8'><title>MVC 컨트롤러 테스트</title></head>"
-        + "<body><h1>상품 아이디: " + productId + "</h1>"
-        + "<span>이 내용은 ServletResponse에 의해 만들어졌습니다.</span><br>"
-        + "<a href='./'>메인으로</a>"
-        + "</body></html>");
+//    @GetMapping("/products")
+//    public void getProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String productId = request.getParameter("id");
+//        PrintWriter out = response.getWriter();
+//        out.print("<html><head><meta charset='UTF-8'><title>MVC 컨트롤러 테스트</title></head>"
+//        + "<body><h1>상품 아이디: " + productId + "</h1>"
+//        + "<span>이 내용은 ServletResponse에 의해 만들어졌습니다.</span><br>"
+//        + "<a href='./'>메인으로</a>"
+//        + "</body></html>");
+//    }
+    
+    // Servlet -> Spring
+    @GetMapping("/products")
+    public String getProducts(@RequestParam("id") String productId, Model model) throws IOException {
+    	model.addAttribute("productId", productId);
+    	return "productDetail";
     }
 
     // Q5. book이라는 변수를 사용하여 "bookDetails" 뷰를 반환하는 메서드
-    @RequestMapping(value = "/books", method = RequestMethod.POST)
+    @PostMapping("/books")
     public String createBookDetails(@ModelAttribute Book book, Model model) {
-        model.addAttribute("bookId", book.getId());
-        model.addAttribute("title", book.getTitle());
-        model.addAttribute("author", book.getAuthor());
+//    public String createBookDetails(Book book, Model model) {
+    	// 매개변수에 DTO가 들어가 있을 때, Spring이 해당 객체 인스턴스를 생성하고 (-> Setter 콘솔창 확인)
+    	// 파라미터가 같은 Setter를 호출해서 값을 할당
+    	// = @ModelAttribute 사용 ~ 자동 할당
+    	System.out.println(book);
+    	model.addAttribute("book", book);
+//        model.addAttribute("bookId", book.getId());
+//        model.addAttribute("title", book.getTitle());
+//        model.addAttribute("author", book.getAuthor());
         return "bookDetails";
     }
 
     // Q6. category와 query라는 변수를 사용하여 "searchResults" 뷰를 반환하는 메서드
-    @RequestMapping(value = "/search/{category}", method = RequestMethod.GET)
-    public String search(@PathVariable String category, @RequestParam String query, Model model) {
+    @GetMapping("/search/{category}")
+    public String search(@PathVariable("category") String category, @RequestParam("query") String query, Model model) {
         model.addAttribute("query", query);
         model.addAttribute("category", category);
         return "searchResults";

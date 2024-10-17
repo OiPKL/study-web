@@ -19,6 +19,7 @@ public class Book {
     }
 
     public void setId(int id) {
+    	System.out.println("SET ID: " + id);
         this.id = id;
     }
 
@@ -27,6 +28,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
+    	System.out.println("SET TITLE: " + title);
         this.title = title;
     }
 
@@ -35,6 +37,12 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+    	System.out.println("SET AUTHOR: " + author);
         this.author = author;
     }
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", author=" + author + "]";
+	}
 }
