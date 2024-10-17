@@ -1,4 +1,4 @@
-package baekjoon;
+package baekjoon_failed.G4_20166_문자열지옥에빠진호석;
 
 import java.util.ArrayList;
 import java.util.Collections;
