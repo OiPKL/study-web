@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SATTO HOME</title>
+<style>
+	div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 90vh;
+	}
+	@keyframes fontBlink {
+		0% { color: purple; }
+		100% { color: red; }
+	}	
+	a {
+		text-decoration: none;
+		font-size: 120px;
+		font-weight: 1000;
+		animation-name: fontBlink;
+		animation-duration: 0.2s;
+		animation-iteration-count: infinite;
+		animation-timing-function: steps(2, end);
+	}
+</style>
+</head>
+<body>
+<div>
+	<a href="/ssato">SATTO 시작하기</a>
+</div>
+</body>
+</html>
