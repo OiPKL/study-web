@@ -8,9 +8,9 @@ pageEncoding="UTF-8" %>
   <body>
     <h1>책 상세보기</h1>
 
-    <p>책 아이디 : ${bookId}</p>
-    <p>책 제목 : ${title}</p>
-    <p>책 저자 : ${author}</p>
+    <p>책 아이디 : ${book.id}</p>
+    <p>책 제목 : ${book.title}</p>
+    <p>책 저자 : ${book.author}</p>
 
     <a href="./">뒤로가기</a>
   </body>

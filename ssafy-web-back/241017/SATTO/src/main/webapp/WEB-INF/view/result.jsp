@@ -33,7 +33,7 @@
 	
 <hr>
 	<div id="submit">
-		<a href="/ssato">다시하기</a>
+		<a href="/ssato" id="submitButton">다시하기</a>
 	</div>
 
 

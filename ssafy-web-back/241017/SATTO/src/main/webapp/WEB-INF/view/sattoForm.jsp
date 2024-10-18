@@ -11,7 +11,7 @@
 			</div>
 			<div>
 				<label for="hand">수 동</label>
-			<input type="radio" name="type" value="hand" id="hand">
+				<input type="radio" name="type" value="hand" id="hand">
 			</div>
 		</div>
 		<input type="number" name="num" class="num">
@@ -25,7 +25,7 @@
 	
 	<div id="${msg.status}">${msg.body}</div>
 	<div id="submit">
-	<input type="submit" value="응모하기">
+	<input type="submit" value="응모하기" id="submitButton">
 	</div>
 	</form>
 

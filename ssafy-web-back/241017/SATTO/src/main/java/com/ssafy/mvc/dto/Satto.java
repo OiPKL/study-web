@@ -24,7 +24,11 @@ public class Satto {
 			}
 		}
 		while (this.nums.size() < 6) {
-			this.nums.add(new Random().nextInt(45) + 1);
+			int nextNum = new Random().nextInt(45) + 1;
+
+			if (!this.nums.contains(nextNum)) {
+				this.nums.add(nextNum);
+			}
 		}
 	}
 

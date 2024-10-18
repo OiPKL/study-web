@@ -100,6 +100,15 @@
 		color: red;
 	}
 </style>
+<script>
+    window.onload = function() {
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById("submitButton").click();
+            }
+        });
+    }
+</script>
 <body>
 <div id="main">
 <a href="/" id="satto" class="blink">SATTO</a>

@@ -27,7 +27,6 @@ public class MainController {
 
 	@PostMapping("/ssato")
 	String satto(@RequestParam String type, @RequestParam List<Integer> num, HttpSession session, Model model) {
-		Satto userSatto;
 
 		Message msg = util.validCheck(type, num);
 		if (msg.getStatus().equals("error")) {
@@ -35,12 +34,7 @@ public class MainController {
 			return "sattoForm";
 		}
 
-		if (type == "auto") {
-			userSatto = new Satto();
-		} else {
-			userSatto = new Satto(num);
-		}
-
+		Satto userSatto = new Satto(num);
 		Satto serverSatto = new Satto();
 
 		int match = userSatto.compare(serverSatto);

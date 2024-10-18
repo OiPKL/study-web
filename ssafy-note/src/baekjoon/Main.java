@@ -1,9 +1,13 @@
 package baekjoon;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 	
@@ -11,69 +15,86 @@ public class Main {
 	static int[] dn = {-1, -1, -1, 0, 1, 1, 1, 0};
 	static int[] dm = {-1, 0, 1, 1, 1, 0, -1, -1};
 	static char[][] map;
-	static List<StringBuilder>[][] dp;
 	static List<String> words;
-	
-    public static void main(String[] args) {
+	static HashMap<String, Integer>[][] dp;
 
-    	Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
     	StringBuilder sb = new StringBuilder();
     	
-    	N = sc.nextInt();
-    	M = sc.nextInt();
-    	K = sc.nextInt();
-    	sc.nextLine();
+    	N = Integer.parseInt(st.nextToken());
+    	M = Integer.parseInt(st.nextToken());
+    	K = Integer.parseInt(st.nextToken());
     	
     	map = new char[N][M];
     	for (int n = 0; n < N; n++)
-    		map[n] = sc.nextLine().toCharArray();
-
+    		map[n] = br.readLine().toCharArray();
+    	
     	words = new ArrayList<>();
     	for (int k = 0; k < K; k++)
-    		words.add(sc.nextLine());
+    		words.add(br.readLine());
     	
-    	dp = new ArrayList[N][M];
+    	int maxKey = N * N + M;
+    	dp = new HashMap[maxKey][6];
+    	for (int i = 0; i < maxKey; i++)
+    		for (int j = 0; j <= 5; j++)
+    			dp[i][j] = new HashMap<>();
+    	
     	for (int n = 0; n < N; n++) {
     		for (int m = 0; m < M; m++) {
-    			dp[n][m] = new ArrayList<>();
-    			getDp(new StringBuilder(Character.toString(map[n][m])), n, m, n, m);
-    			Collections.sort(dp[n][m], (a, b) -> a.toString().compareTo(b.toString()));
+    			int key = N * n + m;
+    			dp[key][5] = getDp(key, 5);
     		}
     	}
     	
-    	sb = new StringBuilder();
     	for (String word : words) {
-    		int cnt = 0;
-    		for (int n = 0; n < N; n++) {
-    			for (int m = 0; m < M; m++) {
-    				
-    				for (StringBuilder memo : dp[n][m])
-    					if (word.equals(memo.toString())) cnt++;
-    				
-    			}
-    		}
     		
-    		sb.append(cnt).append("\n");
+    		int cnt = 0;
+    		int length = word.length();
+        	for (int n = 0; n < N; n++) {
+        		for (int m = 0; m < M; m++) {
+        			int key = N * n + m;
+        			
+        			if (dp[key][length].containsKey(word))
+        				cnt += dp[key][length].get(word);
+        		}
+        	}
+    		
+        	sb.append(cnt).append("\n");
     	}
-    	
+    
     	System.out.println(sb);
     }
-    
-    static void getDp(StringBuilder str, int nStart, int mStart, int nNow, int mNow) {
-    	
-    	if (str.length() < 1 || str.length() > 5)
-    		return;
-    	
-    	dp[nStart][mStart].add(new StringBuilder(str));
-    	
-    	for (int d = 0; d < 8; d++) {
-    		int nNext = (nNow + dn[d] + N) % N;
-    		int mNext = (mNow + dm[d] + M) % M;
+	
+	static HashMap<String, Integer> getDp(int key, int length) {
+		
+		int nNow = key / N;
+		int mNow = key % N;
+		
+		if (!dp[key][length].isEmpty())
+			return dp[key][length];
+		
+		if (length == 1) {
+			dp[key][length].put(map[nNow][mNow]+"", 1);
+			return dp[key][length];
+		}
+		
+		for (int d = 0; d < 8; d++) {
+    		int nPrev = (nNow + dn[d] + N) % N;
+    		int mPrev = (mNow + dm[d] + M) % M;
+    		int prevKey = N * nPrev + mPrev;
     		
-            str.append(Character.toString(map[nNext][mNext]));
-            getDp(str, nStart, mStart, nNext, mNext);
-            str.setLength(str.length() - 1);
-    	}
-    	
-    }
+    		// N * n + m -> 10 * n + m
+    		System.out.println(length + " " + d + " " + key + " " + prevKey);
+    		
+    		for (String prevStr : getDp(prevKey, length - 1).keySet()) {
+    			String newStr = prevStr + map[nNow][mNow];
+    			dp[key][length].put(newStr, dp[key][length].getOrDefault(newStr, 0) + 1);
+    		}
+		}
+		
+		return dp[key][length];
+	}
 }

@@ -22,7 +22,7 @@ public class Util {
 					return new Message("error", "6개의 숫자를 모두 입력해주세요");
 				}
 
-				if (num < 0 || num > 45) {
+				if (num <= 0 || num > 45) {
 					return new Message("error", "1~45사이의 숫자를 입력해주세요");
 				}
 
