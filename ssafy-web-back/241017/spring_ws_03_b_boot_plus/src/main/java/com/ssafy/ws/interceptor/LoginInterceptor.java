@@ -11,15 +11,22 @@ import jakarta.servlet.http.HttpSession;
 public class LoginInterceptor implements HandlerInterceptor{
 	
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		HttpSession session = request.getSession();
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 		
-		if(session.getAttribute("loginUser") == null) {
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) {
+			System.out.println("로그인 안했음");
 			response.sendRedirect("/");
 			return false;
+		} else {
+			System.out.println("로그인 했음");
+			return true;
 		}
 		
-		return true;
+		
 	}
+	
 
 }
