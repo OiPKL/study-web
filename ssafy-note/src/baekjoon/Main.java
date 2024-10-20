@@ -1,9 +1,9 @@
 package baekjoon;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
 
@@ -12,54 +12,47 @@ public class Main {
 	static int[] dn = {-1, 0, 1, 0};
 	static int[] dm = {0, 1, 0, -1};
 	
-	static int N, M, number, answer;
+	static int N, number, answer;
 	static int[][] bada;
 	static boolean[][] visited1;
 	static List<List<int[]>> islandInfos;
-	static int[][] bridges;
+	static int[][] visited2;
 	
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
 
 		N = sc.nextInt();
-		M = sc.nextInt();
 		number = 2;
 		
-		bada = new int[N][M];
+		bada = new int[N][N];
 		for (int n = 0; n < N; n++)
-			for (int m = 0; m < M; m++)
+			for (int m = 0; m < N; m++)
 				bada[n][m] = sc.nextInt();
 		
 		islandInfos = new ArrayList<>();
-		visited1 = new boolean[N][M];
+		visited1 = new boolean[N][N];
 		for (int n = 0; n < N; n++)
-			for (int m = 0; m < M; m++)
+			for (int m = 0; m < N; m++)
 				if (bada[n][m] == 1 && !visited1[n][m])
 					findIsland(n, m);
 		
-		bridges = new int[number][number];
+		answer = Integer.MAX_VALUE;
+		visited2 = new int[N][N];
+		for (int n = 0; n < N; n++)
+			for (int m = 0; m < N; m++)
+				visited2[n][m] = Integer.MAX_VALUE;
 		buildBridge();
 		
 //		System.out.println();
 //		for (int n = 0; n < N; n++) {
-//			for (int m = 0; m < M; m++) {
+//			for (int m = 0; m < N; m++) {
 //				System.out.print(bada[n][m] + " ");
 //			}
 //			System.out.println();
 //		}
-//		
-//		System.out.println();
-//		for (int n = 2; n < number; n++) {
-//			for (int m = 2; m < number; m++) {
-//				System.out.print(bridges[n][m] + " ");
-//			}
-//			System.out.println();
-//		}
-
-        answer = 0;
-        calMinCost();
-        System.out.println(answer);
+		
+		System.out.println(answer);
 	}
 
 	static void findIsland(int n, int m) {
@@ -84,7 +77,7 @@ public class Main {
 				int nNext = nNow + dn[d];
 				int mNext = mNow + dm[d];
 				
-				if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext ||
+				if (nNext < 0 || N <= nNext || mNext < 0 || N <= mNext ||
 					bada[nNext][mNext] == 0 || visited1[nNext][mNext]) continue;
 				
 				bfs.add(new int[] {nNext, mNext});
@@ -106,70 +99,37 @@ public class Main {
 				int[] now = islandInfo.get(i);
 				int nNow = now[0];
 				int mNow = now[1];
+				int cnt = 0;
 				
-				for (int d = 0; d < 4; d++) {
-	                int nNext = nNow;
-	                int mNext = mNow;
-					int cnt = 0;
+				PriorityQueue<int[]> bfs = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+				bfs.add(new int[] {nNow, mNow, 0});
+				
+				while (!bfs.isEmpty()) {
 					
-					while (true) {
-	                    nNext += dn[d];
-	                    mNext += dm[d];
+					now = bfs.poll();
+					nNow = now[0];
+					mNow = now[1];
+					cnt = now[2];
+					
+					if (bada[nNow][mNow] != 0 && bada[nNow][mNow] != islandNo) {
+						answer = Math.min(answer, cnt - 1);
+						break;
+					}
+					
+					for (int d = 0; d < 4; d++) {
+						int nNext = nNow + dn[d];
+						int mNext = mNow + dm[d];
+						
+	                    if (nNext < 0 || N <= nNext || mNext < 0 || N <= mNext ||
+		                    bada[nNext][mNext] == islandNo) continue;
 	                    
-	                    if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext ||
-	                    	bada[nNext][mNext] == islandNo) break;
-	                    
-	                    if (bada[nNext][mNext] != 0) {
-	                        if (cnt >= 2) {
-	                            int nextIslandNo = bada[nNext][mNext];
-	                            if (bridges[islandNo][nextIslandNo] == 0)
-	                            	bridges[islandNo][nextIslandNo] = cnt;
-	                            else
-	                            	bridges[islandNo][nextIslandNo] = Math.min(bridges[islandNo][nextIslandNo], cnt);
-	                        }
-	                        break;
+	                    if (cnt + 1 < visited2[nNext][mNext]) {
+	                    	bfs.add(new int[] {nNext, mNext, cnt + 1});
+	                    	visited2[nNext][mNext] = cnt + 1;
 	                    }
-	                    cnt++;
-	                }
+					}
 				}
 			}
 		}
 	}
-	
-    static void calMinCost() {
-    	
-    	boolean[] visited2 = new boolean[number];
-    	int[] minCosts = new int[number];
-    	Arrays.fill(minCosts, Integer.MAX_VALUE);
-    	minCosts[2] = 0;
-    	
-    	for (int i = 2; i < number; i++) {
-    		int islandNo = -1;
-    		int minCost = Integer.MAX_VALUE;
-    		
-    		// 미방문 섬 중에서 최소비용 섬 찾기
-    		for (int j = 2; j < number; j++) {
-    			if (!visited2[j] && minCosts[j] < minCost) {
-    				islandNo = j;
-    				minCost = minCosts[j];
-    			}
-    		}
-    		
-    		// 모든 섬 연결 실패
-            if (islandNo == -1) {
-            	answer = -1;
-            	return;
-            }
-    		
-    		visited2[islandNo] = true;
-    		answer += minCost;
-    		
-    		// 선택한 섬과 연결된 섬들 비용 업데이트
-    		for (int j = 2; j < number; j++) {
-    			if (!visited2[j] && bridges[islandNo][j] != 0) {
-    				minCosts[j] = Math.min(minCosts[j], bridges[islandNo][j]);
-    			}
-    		}
-    	}
-    }
 }
