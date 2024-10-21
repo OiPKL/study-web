@@ -14,7 +14,7 @@ import jakarta.servlet.ServletResponse;
 //단점 : 경로를 지정할 수 없다.
 //@Component
 //@Order(1)
-public class MyFilter implements Filter{
+public class MyFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

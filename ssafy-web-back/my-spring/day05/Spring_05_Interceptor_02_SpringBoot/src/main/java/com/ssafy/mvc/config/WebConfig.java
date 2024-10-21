@@ -11,28 +11,24 @@ import com.ssafy.mvc.interceptor.CInterceptor;
 import com.ssafy.mvc.interceptor.LoginInterceptor;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer{
-	//의존성 주입 (필드주입,생성자주입,설정자주입)
+public class WebConfig implements WebMvcConfigurer {
+	// 의존성 주입 (필드주입,생성자주입,설정자주입)
 	@Autowired
 	private AInterceptor aInterceptor;
 	@Autowired
 	private BInterceptor bInterceptor;
 	@Autowired
 	private CInterceptor cInterceptor;
-	
+
 	@Autowired
 	private LoginInterceptor loginInterceptor;
-	
-	
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 //		registry.addInterceptor(aInterceptor).addPathPatterns("/hello");
 //		registry.addInterceptor(bInterceptor).addPathPatterns("/hello");
 //		registry.addInterceptor(cInterceptor).addPathPatterns("/hello");
 		registry.addInterceptor(loginInterceptor).addPathPatterns("/regist").excludePathPatterns("/hello");
-		
-		
-		
+
 	}
 }

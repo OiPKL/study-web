@@ -3,7 +3,7 @@ package com.example.mvc.model.dto;
 public class User {
 	private String id;
 	private String pw;
-	
+
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
