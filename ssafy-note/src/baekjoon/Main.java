@@ -47,9 +47,14 @@ public class Main {
     
     static void getDp(int selected, int parent) {
     	
-    	dp[selected][0] = 
+    	if (dp[selected][0] == 0) {
+    		dp[selected][0] = 0;
+    		
+    	}
     	
-    	for ()
-    	
+    	if (dp[selected][1] == 0) {
+    		dp[selected][1] = heads[selected];
+    		
+    	}
     }
 }
