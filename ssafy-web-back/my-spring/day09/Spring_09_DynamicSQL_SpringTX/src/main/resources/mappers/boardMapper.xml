@@ -60,7 +60,16 @@
 	
 	<!-- 게시글 검색 -->
 	<select id="search" resultType="Board" parameterType="SearchCondition">
-		
+		SELECT * FROM board
+		<!-- 검색 조건 -->
+		<if test="key != 'none'">
+			<!-- 문자열이 아닌 key로 입력받기 위해 ${ } 사용 -->
+			WHERE ${key} LIKE concat('%', #{word}, '%')
+		</if>
+		<!-- 정렬 조건 -->
+		<if test="orderBy != 'none'">
+			ORDER BY ${orderBy} ${orderByDir};
+		</if>
 	</select>
 	
 </mapper>

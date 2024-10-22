@@ -3,6 +3,7 @@ package com.ssafy.board.model.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.board.model.dao.BoardDao;
 import com.ssafy.board.model.dto.Board;
@@ -35,18 +36,21 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.selectOne(id);
 	}
 
+	@Transactional
 	@Override
 	public void writeBoard(Board board) {
 		System.out.println("게시글 작성 완료");
 		boardDao.insertBoard(board);
 	}
 
+	@Transactional
 	@Override
 	public void removeBoard(int id) {
 		System.out.println("게시글 삭제 완료");
 		boardDao.deleteBoard(id);
 	}
 
+	@Transactional
 	@Override
 	public void modifyBoard(Board board) {
 		System.out.println("게시글 수정 완료");

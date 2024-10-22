@@ -1,25 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>�Խñ� ���</title>
+<title>게시글 목록</title>
 <%@ include file="../common/bootstrap.jsp" %>
 </head>
 <body>
 	<div class="container">
-		<h2>�Խñ� ���</h2>
+		<h2>게시글 목록</h2>
 		<hr>
 		<%@ include file="../common/searchForm.jsp" %>
 		<table class="table text-center">
 			<tr>
-				<th>��ȣ</th>
-				<th>����</th>
-				<th>�۾���</th>
-				<th>��ȸ��</th>
-				<th>��¥</th>
+				<th>번호</th>
+				<th>제목</th>
+				<th>글쓴이</th>
+				<th>조회수</th>
+				<th>날짜</th>
 			</tr>
 			<c:forEach items="${boards }" var="board">
 			<tr>
@@ -32,7 +32,7 @@
 			</c:forEach>
 		</table>
 		<div class="d-flex justify-content-end">
-			<a href="writeform" class="btn btn-outline-primary">���</a> 
+			<a href="writeform" class="btn btn-outline-primary">등록</a> 
 		</div>
 	</div>
 </body>

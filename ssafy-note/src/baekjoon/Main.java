@@ -47,7 +47,7 @@ public class Main {
     
     static void getDp(int selected, int parent) {
     	
-    	
+    	dp[selected][0] = 
     	
     	for ()
     	
