@@ -47,14 +47,16 @@ public class Main {
     
     static void getDp(int selected, int parent) {
     	
-    	if (dp[selected][0] == 0) {
-    		dp[selected][0] = 0;
-    		
-    	}
+    	if (dp[selected][0] != 0) return;
     	
-    	if (dp[selected][1] == 0) {
-    		dp[selected][1] = heads[selected];
+    	dp[selected][1] = heads[selected];
+    	
+    	for (int neighbor : roads[selected]) {
     		
+    		getDp(neighbor, selected);
+    		
+    		dp[selected][0] += Math.max(dp[neighbor][0], dp[neighbor][1]);
+    		dp[selected][1] += dp[neighbor][0];
     	}
     }
 }
