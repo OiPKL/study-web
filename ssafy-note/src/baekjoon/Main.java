@@ -14,5 +14,7 @@ public class Main {
 		int R = Integer.parseInt(st.nextToken());
 		int C = Integer.parseInt(st.nextToken());
 		
+		
+		
     }
 }

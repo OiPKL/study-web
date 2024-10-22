@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -16,16 +15,24 @@ public class Main {
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
 	
+	static int R, C, wayCnt;
+	static char[][] map;
+	static List<int[]>swans;
+	static int[] swan1, swan2;
+	static int[][][] visited;
+	static Stack<int[]> validWay;
+	static boolean complete;
+	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int R = Integer.parseInt(st.nextToken());
-		int C = Integer.parseInt(st.nextToken());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
 		
-		char[][] map = new char[R][C];
-		List<int[]>swans = new ArrayList<>();
+		map = new char[R][C];
+		swans = new ArrayList<>();
 		for (int r = 0; r < R; r++) {
 			String line = br.readLine();
 			for (int c = 0; c < C; c++) {
@@ -35,21 +42,72 @@ public class Main {
 			}
 		}
 		
-		int[] swan1 = swans.get(0);
-		int[] swan2 = swans.get(1);
+		swan1 = swans.get(0);
+		swan2 = swans.get(1);
 		
-		int[][][] visited = new int[R][C][2];
+		visited = new int[R][C][2];
 		for (int r = 0; r < R; r++)
 			for (int c = 0; c < C; c++)
 				visited[r][c][0] = Integer.MAX_VALUE;
+//				visited[r][c][0] = 9;
 		
-		// 1. "알고스팟" : 최소 얼음 부수기
+		
+		// 1. 최소 얼음 부수기
+		wayCnt = -1;
+		bfs();
+
+		
+//		for (int r = 0; r < R; r++) {
+//			for (int c = 0; c < C; c++)
+//				System.out.printf("%2d ", visited[r][c][0]);
+//			System.out.println();
+//		}
+//		System.out.println();
+//		
+//		for (int r = 0; r < R; r++) {
+//			for (int c = 0; c < C; c++)
+//				System.out.printf("%2d ", visited[r][c][1]);
+//			System.out.println();
+//		}
+//		System.out.println(wayCnt);
+		
+		
+		// 2. 최적 경로 역추적
+		complete = false;
+		validWay = new Stack<>();
+		btk(swan2[0], swan2[1], wayCnt - 1);
+		
+		
+//		while (!validWay.isEmpty())
+//			System.out.println(Arrays.toString(validWay.pop()));
+
+		
+		// 3. L~L 얼음 녹는 시간 구하기
+		int cnt = 0;
+		int maxCnt = 0;
+		while (!validWay.isEmpty()) {
+			
+			int[] now = validWay.pop();
+			int rNow = now[0];
+			int cNow = now[1];
+			
+			if (map[rNow][cNow] == 'X')
+				cnt++;
+			else {
+				maxCnt = Math.max(maxCnt, cnt);
+				cnt = 0;
+			}
+		}
+		
+		System.out.println((maxCnt + 1) / 2);
+    }
+
+	static void bfs() {
 		PriorityQueue<int[]> bfs = new PriorityQueue<>((a, b) -> a[3] - b[3]);
 		
 		bfs.add(new int[] {swan1[0], swan1[1], 0, 0});
 		visited[swan1[0]][swan1[1]][0] = 0;
 		
-		int wayCnt = -1;
 		while (!bfs.isEmpty()) {
 			
 			int[] now = bfs.poll();
@@ -87,48 +145,42 @@ public class Main {
 				}
 			}
 		}
-		
-		for (int r = 0; r < R; r++) {
-			for (int c = 0; c < C; c++)
-				System.out.printf("%2d ", visited[r][c][0]);
-			System.out.println();
-		}
-		System.out.println();
-		
-		for (int r = 0; r < R; r++) {
-			for (int c = 0; c < C; c++)
-				System.out.printf("%2d ", visited[r][c][1]);
-			System.out.println();
-		}
-		System.out.println(wayCnt);
+	}
+	
+	static void btk(int rNow, int cNow, int target) {
 
-		// 2. "배틀싸피" : 역 BFS 경로 추적
-		Queue<int[]> way = new LinkedList<>();
-		way.add(new int[] {swan2[0], swan2[1]});
-		for (int i = wayCnt - 1; i >= 0; i--) {
+		if (rNow == swan1[0] && cNow == swan1[1]) {
+	        validWay.add(new int[]{rNow, cNow});
+	        complete = true;
+	        return;
+	    }
+	    
+	    if (complete) return;
+	    
+	    validWay.add(new int[]{rNow, cNow});
+	    
+	    List<int[]> nextWay = new ArrayList<>();
+
+	    for (int d = 0; d < 4; d++) {
+	    	
+			int rNext = rNow + dr[d];
+			int cNext = cNow + dc[d];
 			
-			int[] now = way.peek();
-			int rNow = now[0];
-			int cNow = now[1];
-			
-			for (int d = 0; d < 4; d++) {
-				
-				int rNext = rNow + dr[d];
-				int cNext = cNow + dc[d];
-				
-				if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext) continue;
-				
-				if (visited[rNext][cNext][1] == i)
-					way.add(new int[] {rNext, cNext});
-			}
-		}
-		
-		while (!way.isEmpty()) {
-			System.out.println(Arrays.toString(way.poll()));
-		}
-		
-		// 3. L ~ L 얼음 녹는 시간 구하기
-    }
+			if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext) continue;
+
+	        if (visited[rNext][cNext][1] == target)
+	        	nextWay.add(new int[] {rNext, cNext});
+	    }
+	    
+	    nextWay.sort((a, b) -> {
+	    	return visited[a[0]][a[1]][0] - visited[b[0]][b[1]][0];
+	    });
+	    
+	    for (int[] next : nextWay)
+	    	btk(next[0], next[1], target - 1);
+
+	    if (!complete) validWay.pop();
+	}
 }
 
 
@@ -136,22 +188,22 @@ public class Main {
 
 1 7
 LXX.XXL
-2 -> 1
+= 1
 
 1 8
 LXX.XX.L
-2 -> 2
+= 1
 
 1 8
 L.XXXXXL
-3 -> 3
+= 3
 
 1 9
 LX.X.X.XL
-2 -> 1
+= 1
 
 1 9
 LX.X.X.XL
-2 -> 1
+= 1
 
  */
