@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -15,13 +16,14 @@ public class Main {
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
 	
-	static int R, C, wayCnt;
+	static int R, C, wayCnt, maxCnt;
 	static char[][] map;
 	static List<int[]>swans;
 	static int[] swan1, swan2;
 	static int[][][] visited;
 	static Stack<int[]> validWay;
 	static boolean complete;
+	static boolean[][] visited2;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -54,7 +56,7 @@ public class Main {
 		
 		// 1. 최소 얼음 부수기
 		wayCnt = -1;
-		bfs();
+		findMinBreakingWay();
 
 		
 //		for (int r = 0; r < R; r++) {
@@ -75,7 +77,7 @@ public class Main {
 		// 2. 최적 경로 역추적
 		complete = false;
 		validWay = new Stack<>();
-		btk(swan2[0], swan2[1], wayCnt - 1);
+		findValidWay(swan2[0], swan2[1], wayCnt - 1);
 		
 		
 //		while (!validWay.isEmpty())
@@ -83,26 +85,13 @@ public class Main {
 
 		
 		// 3. L~L 얼음 녹는 시간 구하기
-		int cnt = 0;
-		int maxCnt = 0;
-		while (!validWay.isEmpty()) {
-			
-			int[] now = validWay.pop();
-			int rNow = now[0];
-			int cNow = now[1];
-			
-			if (map[rNow][cNow] == 'X')
-				cnt++;
-			else {
-				maxCnt = Math.max(maxCnt, cnt);
-				cnt = 0;
-			}
-		}
+		maxCnt = 0;
+		calMaxMeltingTime();
 		
-		System.out.println((maxCnt + 1) / 2);
+		System.out.println(maxCnt);
     }
 
-	static void bfs() {
+	static void findMinBreakingWay() {
 		PriorityQueue<int[]> bfs = new PriorityQueue<>((a, b) -> a[3] - b[3]);
 		
 		bfs.add(new int[] {swan1[0], swan1[1], 0, 0});
@@ -147,7 +136,7 @@ public class Main {
 		}
 	}
 	
-	static void btk(int rNow, int cNow, int target) {
+	static void findValidWay(int rNow, int cNow, int target) {
 
 		if (rNow == swan1[0] && cNow == swan1[1]) {
 	        validWay.add(new int[]{rNow, cNow});
@@ -177,9 +166,52 @@ public class Main {
 	    });
 	    
 	    for (int[] next : nextWay)
-	    	btk(next[0], next[1], target - 1);
+	    	findValidWay(next[0], next[1], target - 1);
 
 	    if (!complete) validWay.pop();
+	}
+	
+	static void calMaxMeltingTime() {
+		while (!validWay.isEmpty()) {
+			
+			int[] way = validWay.pop();
+			int rWay = way[0];
+			int cWay = way[1];
+			
+			if (map[rWay][cWay] == 'X') {
+				
+				Queue<int[]> bfs = new LinkedList<>();
+				visited2 = new boolean[R][C];
+				
+				bfs.add(new int[] {rWay, cWay, 0});
+				visited2[rWay][cWay] = true;
+				
+				while (!bfs.isEmpty()) {
+					
+					int[] now = bfs.poll();
+					int rNow = now[0];
+					int cNow = now[1];
+					int cnt = now[2];
+					
+					if (map[rNow][cNow] != 'X') {
+						maxCnt = Math.max(maxCnt, cnt);
+						break;
+					}
+					
+				    for (int d = 0; d < 4; d++) {
+				    	
+						int rNext = rNow + dr[d];
+						int cNext = cNow + dc[d];
+						
+						if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext ||
+							visited2[rNext][cNext]) continue;
+				    
+						bfs.add(new int[] {rNext, cNext, cnt + 1});
+						visited2[rNext][cNext] = true;
+				    }
+				}
+			}
+		}
 	}
 }
 
@@ -188,22 +220,6 @@ public class Main {
 
 1 7
 LXX.XXL
-= 1
-
-1 8
-LXX.XX.L
-= 1
-
-1 8
-L.XXXXXL
-= 3
-
-1 9
-LX.X.X.XL
-= 1
-
-1 9
-LX.X.X.XL
 = 1
 
  */
