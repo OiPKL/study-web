@@ -72,31 +72,53 @@ public class Main {
 				int start = start0 + d * 25 + c;
 				
 				if (dp[start - 25][0] != 0 || dp[start - 25][1] != 0 || dp[start - 25][2] != 0) {
-					dp[start][0] = dp[start - 25][0];
-					dp[start][1] = dp[start - 25][1];
-					dp[start][2] = dp[start - 25][2];
-					dp[start][3] = dp[start - 25][3] + 1;
+					
+					int noD = dp[start][0] + dp[start][1] + dp[start][2] + dp[start][3];
+					int yesD = dp[start - 25][0] + dp[start - 25][1] + dp[start - 25][2] + dp[start - 25][3] + 1;
+					
+					if (yesD >= noD) {
+						dp[start][0] = dp[start - 25][0];
+						dp[start][1] = dp[start - 25][1];
+						dp[start][2] = dp[start - 25][2];
+						dp[start][3] = dp[start - 25][3] + 1;
+					}
 				}
 			}
 		}
 		
-		for (int x = 1; x <= maxD; x++)
-			System.out.printf(" %2d", x);
-		System.out.println();
-		System.out.println();
-		for (int x = 1; x <= maxD; x++)
-			System.out.printf(" %2d", dp[x][0]);
-		System.out.println();
-		for (int x = 1; x <= maxD; x++)
-			System.out.printf(" %2d", dp[x][1]);
-		System.out.println();
-		for (int x = 1; x <= maxD; x++)
-			System.out.printf(" %2d", dp[x][2]);
-		System.out.println();
-		for (int x = 1; x <= maxD; x++)
-			System.out.printf(" %2d", dp[x][3]);
-		System.out.println();
-		System.out.println();
+		// 그리디 반례 추가
+		for (int x = 26; x <= start0; x++) {
+			if (dp[x - 25][0] != 0 || dp[x - 25][1] != 0 || dp[x - 25][2] != 0) {
+				
+				int noD = dp[x][0] + dp[x][1] + dp[x][2] + dp[x][3];
+				int yesD = dp[x - 25][0] + dp[x - 25][1] + dp[x - 25][2] + dp[x - 25][3] + 1;
+				
+				if (yesD >= noD) {
+					dp[x][0] = dp[x - 25][0];
+					dp[x][1] = dp[x - 25][1];
+					dp[x][2] = dp[x - 25][2];
+					dp[x][3] = dp[x - 25][3] + 1;
+				}
+			}
+		}
+		
+//		for (int x = 1; x <= maxD; x++)
+//			System.out.printf(" %2d", x);
+//		System.out.println();
+//		System.out.println();
+//		for (int x = 1; x <= maxD; x++)
+//			System.out.printf(" %2d", dp[x][0]);
+//		System.out.println();
+//		for (int x = 1; x <= maxD; x++)
+//			System.out.printf(" %2d", dp[x][1]);
+//		System.out.println();
+//		for (int x = 1; x <= maxD; x++)
+//			System.out.printf(" %2d", dp[x][2]);
+//		System.out.println();
+//		for (int x = 1; x <= maxD; x++)
+//			System.out.printf(" %2d", dp[x][3]);
+//		System.out.println();
+//		System.out.println();
 		
 		if (maxD >= X)
 			System.out.printf("%d %d %d %d", dp[X][0], dp[X][1], dp[X][2], dp[X][3]);
