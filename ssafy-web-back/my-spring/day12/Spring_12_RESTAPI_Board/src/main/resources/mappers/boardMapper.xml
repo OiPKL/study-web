@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 연결하고자 하는 dao 풀패키지명 -->
+<mapper namespace="com.ssafy.board.model.dao.BoardDao">
+
+<!-- mybatis.configuration.map-underscore-to-camel-case=true -->
+<!-- 아래 resultMap 은 생략 가능해짐 -->
+
+<!--  	<resultMap type="Board" id="boardMap">
+		<result column="id" property="id"/>
+		<result column="writer" property="writer"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="view_cnt" property="viewCnt"/>
+		<result column="reg_date" property="regDate"/>
+	</resultMap> -->
+
+	<!-- 전체 게시글 조회 : TypeAlias 설정 -->
+	<!-- <select id="selectAll" resultType="com.ssafy.board.model.dto.Board"> -->
+	<select id="selectAll" resultType="Board">
+		<!-- DTO-DB 변수명 불일치 문제 ~~ Alias 로 맞춰주기 -->
+		<!-- SELECT id, content, writer, title, reg_date AS regDate, view_cnt AS viewCnt FROM board; -->
+		SELECT * FROM board;
+	</select>
+	
+	<!-- 상세 게시글 조회 : resultMap 설정 -->
+<!-- 	<select id="selectOne" resultMap="boardMap" parameterType="int"> -->
+	<select id="selectOne" resultType="Board" parameterType="int">
+		SELECT * FROM board
+		WHERE id = #{id};
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertBoard" parameterType="Board" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO board (title, writer, content)
+		VALUES (#{title}, #{writer}, #{content});
+	</insert>
+
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM board
+		WHERE id = #{id};
+	</delete>
+
+	<!-- 조회수 증가 -->
+	<update id="updateViewCnt" parameterType="int">
+		UPDATE board
+		SET view_cnt = view_cnt+1
+		WHERE id = #{id};
+	</update>
+
+	<!-- 업데이트 -->
+	<update id="updateBoard" parameterType="Board">
+		UPDATE board
+		SET title = #{title}, content = #{content}, reg_date = now()
+		WHERE id = #{id};
+	</update>
+	
+	<!-- 게시글 검색 -->
+	<select id="search" resultType="Board" parameterType="SearchCondition">
+		SELECT * FROM board
+		<!-- 검색 조건 -->
+		<if test="key != null">
+			<!-- 문자열이 아닌 key로 입력받기 위해 ${ } 사용 -->
+			WHERE ${key} LIKE concat('%', #{word}, '%')
+		</if>
+		<!-- 정렬 조건 -->
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} ${orderByDir};
+		</if>
+	</select>
+	
+</mapper>

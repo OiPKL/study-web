@@ -25,54 +25,60 @@ public class Main {
 		int[][] dp = new int[maxD + 1][4];
 		for (int a = 1; a <= A; a++)
 			dp[a][0] = a;
-		
-		if (maxA != maxB) {
-			int gap = Math.max(maxA, 5);
-			for (int b = gap; b <= maxB; b += gap) {
-				for (int a = 1; a <= gap; a++) {
-					if (dp[a][0] != 0) {
-						dp[b + a][0] = dp[a][0];
-						dp[b + a][1] = b / gap;
-					}
-				}
-			}
-		} else {
-			for (int b = 1; b <= B; b++)
+		for (int b = 1; b <= B; b++)
+			if (dp[b * 5][0] == 0)
 				dp[b * 5][1] = b;
-		}
-		
-		if (maxB != maxC) {
-			int gap = Math.max(maxB, 10);
-			for (int c = gap; c <= maxC; c += gap) {
-				for (int b = 1; b <= gap; b++) {
-					if (dp[b][0] != 0 || dp[b][1] != 0) {
-						dp[c + b][0] = dp[b][0];
-						dp[c + b][1] = dp[b][1];
-						dp[c + b][2] = c / gap;
-					}
-				}
-			}
-		} else {
-			for (int c = 1; c <= C; c++)
+		for (int c = 1; c <= C; c++)
+			if (dp[c * 10][0] == 0 && dp[c * 10][1] == 0)
 				dp[c * 10][2] = c;
-		}
+		for (int d = 1; d <= D; d++)
+			if (dp[d * 25][0] == 0 && dp[d * 25][1] == 0 && dp[d * 25][2] == 0)
+				dp[d * 25][3] = d;
 		
-		if (maxC != maxD) {
-			int gap = Math.max(maxC, 25);
-			for (int d = gap; d <= maxD - gap; d += gap) {
-				for (int c = 1; c <= gap; c++) {
-					if (dp[c][0] != 0 || dp[c][1] != 0 || dp[c][2] != 0) {
-						dp[d + c][0] = dp[c][0];
-						dp[d + c][1] = dp[c][1];
-						dp[d + c][2] = dp[c][2];
-						dp[d + c][3] = d / gap;
-					}
+		int gap = Math.max(maxA, 5);
+		for (int b = 1; b <= B; b++) {
+			for (int a = 1; a <= gap; a++) {
+				
+				if (dp[a][0] != 0) {
+					dp[a + b * 5][0] = dp[a][0];
+					dp[a + b * 5][1] = b;
+					dp[a + b * 5][2] = 0;
+					dp[a + b * 5][3] = 0;
 				}
 			}
-		} else {
-			for (int d = 1; d <= D; d++)
-				dp[d * 25][3] = d;
 		}
+		
+		gap = Math.max(maxB, 10);
+		for (int c = 1; c <= C; c++) {
+			
+		}
+		
+		
+		gap = Math.max(maxB, 10);
+		for (int c = 1; c <= C; c++) {
+			for (int b = 1; b <= gap; b++) {
+				
+				if (dp[b + (c-1) * 10][0] != 0 || dp[b + (c-1) * 10][1] != 0) {
+					dp[b + c * 10][0] = dp[b + (c-1) * 10][0];
+					dp[b + c * 10][1] = dp[b + (c-1) * 10][1];
+					dp[b + c * 10][2] = dp[b + (c-1) * 10][1] + 1;
+					dp[b + c * 10][3] = 0;
+				}
+			}
+		}
+		
+//		gap = Math.max(maxC, 25);
+//		for (int d = gap; d < maxD; d += gap) {
+//			for (int c = 1; c <= gap; c++) {
+//				
+//				if (dp[c][0] != 0 || dp[c][1] != 0 || dp[c][2] != 0) {
+//					dp[d + c][0] = dp[c][0];
+//					dp[d + c][1] = dp[c][1];
+//					dp[d + c][2] = dp[c][2];
+//					dp[d + c][3] = d / gap;
+//				}
+//			}
+//		}
 		
 		for (int x = 1; x <= maxD; x++)
 			System.out.printf(" %2d", x);
