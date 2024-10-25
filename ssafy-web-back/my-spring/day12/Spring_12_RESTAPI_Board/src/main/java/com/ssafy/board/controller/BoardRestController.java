@@ -53,6 +53,7 @@ public class BoardRestController {
 		if (board != null)
 			return ResponseEntity.ok(board);
 		
+		// 본문이 없는 응답 반환 -> .build() 추가
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
