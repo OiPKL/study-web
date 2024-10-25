@@ -57,13 +57,14 @@ public class BoardRestController {
 	}
 	
 	// 게시글 등록 (Form 데이터)
-	@PostMapping("/board")
+	@PostMapping("/board")			// json 데이터 -> @RequestBody 필요
 	public ResponseEntity<?> write(@ModelAttribute Board board) {
 		
 		boardService.writeBoard(board);
 		System.out.println(board);
 		
 		return new ResponseEntity<Board>(board, HttpStatus.CREATED);
+//		return new ResponseEntity<>(result, result == 1 ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
 	}
 	
 	// 게시글 삭제
@@ -77,6 +78,7 @@ public class BoardRestController {
 			return ResponseEntity.status(HttpStatus.OK).body("Board Deleted");
 		
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed");
+//		return new ResponseEntity<>(result, result == 1 ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST);
 	}
 	
 	// 게시글 수정
@@ -87,6 +89,7 @@ public class BoardRestController {
 		boardService.modifyBoard(board);
 		
 		return new ResponseEntity<Void>(HttpStatus.OK);
+//		return new ResponseEntity<>(result, result == 1 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 	
 	// 게시글 검색
