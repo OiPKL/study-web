@@ -1,55 +1,72 @@
 package programmers;
 
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 class Solution {
 	
-	static int[] between;
+	static int N, W, targetIdx;
 	
-    public int solution(int D, int[] rocks, int N) {
+    public int solution(String sString, String tString, String[] words) {
     	
-    	Arrays.sort(rocks);
+    	N = words.length;
+    	W = sString.length();
+    	targetIdx = -1;
     	
-    	between = new int[rocks.length+1];
+        for (int n = 0; n < N; n++)
+            if (words[n].equals(tString))
+                targetIdx = n;
     	
-    	int tmp = 0;
-    	for (int i = 0; i < rocks.length; i++) {
-    		int rock = rocks[i];
-    		between[i] = rock - tmp;
-    		tmp = rock;
-    	}
-    	between[rocks.length] = D - tmp;
+    	if (targetIdx == -1)
+    		return 0;
     	
-    	int L = 1;
-    	int R = D;
-    	int answer = -1;
-    	while (L <= R) {
-    		int M = (L + R) / 2;
+    	Queue<int[]> bfs = new LinkedList<>();
+    	boolean[] visited = new boolean[N];
+    	
+    	bfs.add(new int[] {-1, 0});
+    	
+    	while (!bfs.isEmpty()) {
     		
-    		if (cntRemoved(M) <= N)	{	// 가능
-    			answer = M;
-    			L = M + 1;
-    		}
-    		else						// 불가능
-    			R = M - 1;
+    		int[] now = bfs.poll();
+    		int nowIdx = now[0];
+    		int cnt = now[1];
+    		
+            if (nowIdx == -1) {
+                for (int nextIdx = 0; nextIdx < N; nextIdx++) {
+                    
+                	if (check(sString, words[nextIdx])) {
+                    	
+                        bfs.add(new int[] {nextIdx, cnt + 1});
+                        visited[nextIdx] = true;
+                    }
+                }
+                
+            } else if (nowIdx == targetIdx) {
+                return cnt;
+                
+            } else {
+                for (int nextIdx = 0; nextIdx < N; nextIdx++) {
+
+                	if (visited[nextIdx]) continue;
+                    
+                    if (check(words[nowIdx], words[nextIdx])) {
+                        bfs.add(new int[] {nextIdx, cnt + 1});
+                        visited[nextIdx] = true;
+                    }
+                }
+            }
     	}
     	
-    	return answer;
+    	return 0;
     }
     
-    static int cntRemoved(int minDistance) {
+    static boolean check(String word1, String word2) {
+    	
     	int cnt = 0;
-    	int sumDistance = 0;
-    	
-    	for (int distance : between) {
-    		sumDistance += distance;
-    		
-    		if (sumDistance >= minDistance)
-    			sumDistance = 0;
-    		else
+    	for (int w = 0; w < W; w++)
+    		if (word1.charAt(w) != word2.charAt(w))
     			cnt++;
-    	}
     	
-    	return cnt;
+    	return cnt == 1;
     }
 }
