@@ -4,4 +4,9 @@
 <mapper namespace="com.ssafy.ws.model.dao.UserDao">
 
 	<!-- User 정보를 조회한다. -->
+	<select id="select" resultType="User" parameterType="String">
+		SELECT id, name
+		FROM user
+		WHERE id = #{id};
+	</select>
 </mapper>
