@@ -117,8 +117,12 @@ public class MyController {
 		return "redirect:/";
 	}
 
-	@RequestMapping("/logout")
+	@GetMapping("/logout")
 	public String logout(HttpSession session) {
+		// 로그아웃을 하는 방법 2가지!
+		// 1. 세션에서 유저 속성을 지우는 작업
+//		session.removeAttribute("loginUser");
+		// 2. 세션 자체를 초기화
 		session.invalidate();
 		return "redirect:/";
 	}

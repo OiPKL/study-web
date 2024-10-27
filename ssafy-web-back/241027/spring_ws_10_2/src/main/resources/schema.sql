@@ -1,3 +1,8 @@
+DROP DATABASE IF EXISTS ssafydb;
+CREATE DATABASE ssafydb;
+
+USE ssafydb;
+
 CREATE TABLE `movies` (
 	`ID` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Title` varchar(40) CHARACTER SET utf8mb4 NOT NULL,

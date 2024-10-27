@@ -25,11 +25,13 @@ import com.ssafy.ws.model.service.UserService;
 @RequestMapping("/movieapi")
 @CrossOrigin("*")
 public class MovieRestController {
-	@Autowired
-	MovieService ms;
-
-	@Autowired
-	UserService us;
+	
+	// GetMapping
+	// select(READ)
+	@GetMapping("/user/{id}")
+	public ResponseEntity<?> selectUser(@PathVariable String id) {
+		return null;
+	}
 
 	// GetMapping
 	// search(READ)
@@ -56,16 +58,5 @@ public class MovieRestController {
 	public ResponseEntity<?> delete(@PathVariable int id) {
 		return null;
 	}
-
-	private ResponseEntity<String> exceptionHandling(Exception e) {
-		e.printStackTrace();
-		return new ResponseEntity<String>("sorry: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	// GetMapping
-	// select(READ)
-	@GetMapping("/user/{id}")
-	public ResponseEntity<?> selectUser(@PathVariable String id) {
-		return null;
-	}
+	
 }
