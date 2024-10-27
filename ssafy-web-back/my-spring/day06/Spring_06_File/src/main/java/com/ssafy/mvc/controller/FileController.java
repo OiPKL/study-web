@@ -34,6 +34,7 @@ public class FileController {
 		if (file != null && file.getSize() > 0) {
 			String fileName = file.getOriginalFilename();
 			// 코드로 저기 있는 img라고 하는 폴더를 가지고 와야겠다.
+			// 임의의 파일 생성 필요 -> target 폴더 안의 static/img 안에 이미지 저장
 			Resource resource = resourceLoader.getResource("classpath:/static/img");
 			file.transferTo(new File(resource.getFile(), fileName));
 

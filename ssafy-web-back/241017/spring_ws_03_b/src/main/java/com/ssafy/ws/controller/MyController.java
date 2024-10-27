@@ -95,18 +95,6 @@ public class MyController {
         model.addAttribute("articleId", articleId);
         return "article";
     }
-
-    // Q4. HttpServletRequest와 HttpServletResponse를 사용하여 뷰를 반환하는 메서드
-//    @GetMapping("/products")
-//    public void getProducts(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String productId = request.getParameter("id");
-//        PrintWriter out = response.getWriter();
-//        out.print("<html><head><meta charset='UTF-8'><title>MVC 컨트롤러 테스트</title></head>"
-//        + "<body><h1>상품 아이디: " + productId + "</h1>"
-//        + "<span>이 내용은 ServletResponse에 의해 만들어졌습니다.</span><br>"
-//        + "<a href='./'>메인으로</a>"
-//        + "</body></html>");
-//    }
     
     // Servlet -> Spring
     @GetMapping("/products")
@@ -118,15 +106,8 @@ public class MyController {
     // Q5. book이라는 변수를 사용하여 "bookDetails" 뷰를 반환하는 메서드
     @PostMapping("/books")
     public String createBookDetails(@ModelAttribute Book book, Model model) {
-//    public String createBookDetails(Book book, Model model) {
-    	// 매개변수에 DTO가 들어가 있을 때, Spring이 해당 객체 인스턴스를 생성하고 (-> Setter 콘솔창 확인)
-    	// 파라미터가 같은 Setter를 호출해서 값을 할당
-    	// = @ModelAttribute 사용 ~ 자동 할당
     	System.out.println(book);
     	model.addAttribute("book", book);
-//        model.addAttribute("bookId", book.getId());
-//        model.addAttribute("title", book.getTitle());
-//        model.addAttribute("author", book.getAuthor());
         return "bookDetails";
     }
 
