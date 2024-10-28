@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- MySQL과 SpecialtyDao 를 맵핑하는 mapper임 -->
+<mapper namespace="com.ssafy.exam.model.dao.SpecialtyDao">
+
+	<!--
+	DAO 메서드명을 id로 하고 Specialty DTO 객체를 파라미터로 받음
+	snake_case로 작성된 변수명들은 MySQL 에 작성된 변수명을 그대로 사용해야함
+	mybatis.configuration.map-underscore-to-camel-case=true 설정
+	=> #{ } 안의 DTO 객체 변수명들을 맵핑해줌
+	
+	parameterType : 요청으로 받는 파라미터 자료형
+	resultType : 반환되는 자료형
+	-->
+	
+	<insert id="insertSpecialty" parameterType="Specialty">
+		INSERT INTO specialty(specialty_code, specialty_name)
+		VALUES (#{specialtyCode}, #{specialtyName});
+	</insert>
+	
+	<select id="selectSpecialtyByCode" parameterType="int" resultType="Specialty">
+		SELECT * FROM specialty
+		WHERE specialty_code = #{specialtyCode};
+	</select>
+	
+	<delete id="deleteSpecialty" parameterType="int">
+		DELETE FROM specialty
+		WHERE specialty_code = #{specialtyCode};
+	</delete>
+
+</mapper>

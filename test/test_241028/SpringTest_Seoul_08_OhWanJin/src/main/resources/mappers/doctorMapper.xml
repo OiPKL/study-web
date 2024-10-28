@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- MySQL과 DoctorDao를 맵핑하는 mapper임 -->
+<mapper namespace="com.ssafy.exam.model.dao.DoctorDao">
+
+	<!--
+	DAO 메서드명을 id로 하고 Specialty DTO 객체를 파라미터로 받음
+	snake_case로 작성된 변수명들은 MySQL 에 작성된 변수명을 그대로 사용해야함
+	mybatis.configuration.map-underscore-to-camel-case=true 설정
+	=> #{ } 안의 DTO 객체 변수명들을 맵핑해줌
+	
+	parameterType : 요청으로 받는 파라미터 자료형
+	resultType : 반환되는 자료형
+	-->
+	
+	<insert id="insertDoctor" parameterType="Doctor">
+		INSERT INTO doctor(doctor_id, name, age, specialty_code, experience_years, specialty_name)
+		VALUES (#{doctorId}, #{name}, #{age}, #{specialtyCode}, #{experienceYears}, #{specialtyName});
+	</insert>
+	
+	<select id="selectAllDoctorById" parameterType="int" resultType="Doctor">
+		SELECT * FROM doctor
+	</select>
+	
+	<select id="selectDoctorById" parameterType="int" resultType="Doctor">
+		SELECT * FROM doctor
+		WHERE doctor_id = #{doctorId};
+	</select>
+	
+	<update id="updateDoctor" parameterType="Doctor">
+	<!-- 실패.. -->
+		UPDATE doctor
+		SET 
+	</update>
+	
+	<delete id="deleteDoctor" parameterType="int">
+		DELETE FROM doctor
+		WHERE doctor_id = #{doctorId};
+	</delete>
+
+</mapper>
