@@ -3,24 +3,22 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 public class Main {
-	
+
 	static int[] dr = {-1, -1, -1, 0, 1, 1, 1, 0};
 	static int[] dc = {-1, 0, 1, 1, 1, 0, -1, -1};
+	static int[] score = {0, 0, 0, 1, 1, 2, 3, 5, 11};
 	
 	static int W;
 	static TreeMap<String, Boolean>[] words, copys;
 	static char[][] board;
-	static List<String>[][][] dp;
+	static boolean[][] visited;
 	static int totalScore, wordCnt, longgestWordLength;
 	static String longgestWord;
 	
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -45,19 +43,14 @@ public class Main {
 		for (int tc = 1; tc <= TC; tc++) {
 			
 			board = new char[4][4];
-			for (int r = 0; r < 4; r++) {
-				String line = br.readLine();
-				for (int c = 0; c < 4; c++)
-					board[r][c] = line.charAt(c);
-			}
+			for (int r = 0; r < 4; r++)
+				board[r] = br.readLine().toCharArray();
 			
 			if (tc != TC) br.readLine();
 			
 			copys = new TreeMap[9];
-			for (int i = 1; i <= 8; i++) {
-				copys[i] = new TreeMap<>();
-				copys[i].putAll(words[i]);
-			}
+			for (int i = 1; i <= 8; i++)
+				copys[i] = new TreeMap<>(words[i]);
 			
 			/* 
 			 * 출력
@@ -79,15 +72,15 @@ public class Main {
 			wordCnt = 0;
 			longgestWordLength = 0;
 			longgestWord = "";
-			dp = new ArrayList[4][4][9];
-			for (int r = 0; r < 4; r++)
-				for (int c = 0; c < 4; c++)
-					for (int i = 0; i <= 8; i++)
-						dp[r][c][i] = new ArrayList<>();
+			visited = new boolean[4][4];
 			
-			for (int r = 0; r < 4; r++)
-				for (int c = 0; c < 4; c++)
-					getDp(r, c, 8);
+			for (int r = 0; r < 4; r++) {
+				for (int c = 0; c < 4; c++) {
+					visited[r][c] = true;
+					btk(r, c, 1, board[r][c] + "");
+					visited[r][c] = false;
+				}
+			}
 			
 			sb.append(totalScore).append(" ");
 			sb.append(longgestWord).append(" ");
@@ -97,80 +90,41 @@ public class Main {
 		System.out.println(sb);
 	}
 	
-	static void getDp(int rNow, int cNow, int length) {
+	static void btk(int rNow, int cNow, int length, String word) {
 		
-		if (length <= 0) {
-			dp[rNow][cNow][length].add("");
-			return;
-		}
+		if (length > 8) return;
 		
-		char newChar = board[rNow][cNow];
+		if (copys[length].containsKey(word) && !copys[length].get(word))
+			calScore(length, word);
 		
 		for (int d = 0; d < 8; d++) {
 			
 			int rNext = rNow + dr[d];
 			int cNext = cNow + dc[d];
 			
-			if (rNext < 0 || 4 <= rNext || cNext < 0 || 4 <= cNext) continue;
+			if (rNext < 0 || 4 <= rNext || cNext < 0 || 4 <= cNext ||
+					visited[rNext][cNext]) continue;
 			
-			if (!dp[rNext][cNext][length - 1].isEmpty()) {
-				
-				for (String newStr : dp[rNext][cNext][length - 1]) {
-					newStr = newChar + newStr;
-					dp[rNow][cNow][length].add(newStr);
-					calScore(length, newStr);
-				}
-			} else {
-				getDp(rNext, cNext, length - 1);
-				
-				for (String newStr : dp[rNext][cNext][length - 1]) {
-					newStr = newChar + newStr;
-					dp[rNow][cNow][length].add(newStr);
-					calScore(length, newStr);
-				}
-			}
+			visited[rNext][cNext] = true;
+			btk(rNext, cNext, length + 1, word + board[rNext][cNext]);
+			visited[rNext][cNext] = false;
 		}
 	}
 	
-	static void calScore(int length, String key) {
+	static void calScore(int length, String word) {
 		
-		if (copys[length].containsKey(key) && !copys[length].get(key)) {
-			
-			copys[length].remove(key);
-			copys[length].put(key, true);
-			
-			wordCnt++;
-			
-			switch (length) {
-			case 3:
-				totalScore += 1;
-				break;
-			case 4:
-				totalScore += 1;
-				break;
-			case 5:
-				totalScore += 2;
-				break;
-			case 6:
-				totalScore += 3;
-				break;
-			case 7:
-				totalScore += 5;
-				break;
-			case 8:
-				totalScore += 11;
-				break;
-			}
-			
-			if (length > longgestWordLength) {
-				longgestWordLength = length;
-				longgestWord = key;
-			} else if (length == longgestWordLength) {
-				if (longgestWord.isEmpty())
-					longgestWord = key;
-				else
-					longgestWord = compareLonggestWord(key, longgestWord);
-			}
+		copys[length].put(word, true);
+		totalScore += score[length];
+		wordCnt++;
+		
+		if (length > longgestWordLength) {
+			longgestWordLength = length;
+			longgestWord = word;
+		} else if (length == longgestWordLength) {
+			if (longgestWord.isEmpty())
+				longgestWord = word;
+			else
+				longgestWord = compareLonggestWord(word, longgestWord);
 		}
 	}
 	
