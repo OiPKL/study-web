@@ -41,7 +41,7 @@ public class DoctorRestController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<?> getAllDoctors(Doctor doctor) {
+	public ResponseEntity<?> getAllDoctors() {
 		
 		List<Doctor> doctors = doctorService.getAllDoctors();
 		

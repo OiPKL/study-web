@@ -32,6 +32,7 @@ public class SpecialtyRestController {
 		
 		boolean result = specialtyService.addSpecialty(specialty);
 		
+//		return new ResponseEntity<Specialty>(specialty, HttpStatus.CREATED);
 		if (result)
 			return ResponseEntity.ok(specialty);
 		return ResponseEntity.badRequest().build();

@@ -20,8 +20,8 @@
 		VALUES (#{doctorId}, #{name}, #{age}, #{specialtyCode}, #{experienceYears}, #{specialtyName});
 	</insert>
 	
-	<select id="selectAllDoctorById" parameterType="int" resultType="Doctor">
-		SELECT * FROM doctor
+	<select id="selectAllDoctors" resultType="Doctor">
+		SELECT * FROM doctor;
 	</select>
 	
 	<select id="selectDoctorById" parameterType="int" resultType="Doctor">
