@@ -20,6 +20,7 @@ public class Main {
 	static int totalScore, wordCnt, longgestWordLength;
 	static String longgestWord;
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -122,6 +123,11 @@ public class Main {
 			} else {
 				getDp(rNext, cNext, length - 1);
 				
+				for (String newStr : dp[rNext][cNext][length - 1]) {
+					newStr = newChar + newStr;
+					dp[rNow][cNow][length].add(newStr);
+					calScore(length, newStr);
+				}
 			}
 		}
 	}
@@ -136,7 +142,10 @@ public class Main {
 			wordCnt++;
 			
 			switch (length) {
-			case 3, 4:
+			case 3:
+				totalScore += 1;
+				break;
+			case 4:
 				totalScore += 1;
 				break;
 			case 5:
@@ -170,9 +179,7 @@ public class Main {
 		
 		if (A.compareTo(B) < 0)
 			return A;
-		else if (A.compareTo(B) > 0)
-			return B;
 		else
-			return "ZZZZ";
+			return B;
 	}
 }
