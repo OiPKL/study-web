@@ -3,8 +3,8 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 
 public class Main {
 
@@ -13,7 +13,7 @@ public class Main {
 	static int[] score = {0, 0, 0, 1, 1, 2, 3, 5, 11};
 	
 	static int W;
-	static TreeMap<String, Boolean>[] words, copys;
+	static HashMap<String, Boolean>[] words, copys;
 	static char[][] board;
 	static boolean[][] visited;
 	static int totalScore, wordCnt, longgestWordLength;
@@ -27,9 +27,9 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		W = Integer.parseInt(st.nextToken());
 		
-		words = new TreeMap[9];
+		words = new HashMap[9];
 		for (int i = 1; i <= 8; i++)
-			words[i] = new TreeMap<>();
+			words[i] = new HashMap<>();
 		
 		for (int w = 0; w < W; w++) {
 			String line = br.readLine();
@@ -48,9 +48,9 @@ public class Main {
 			
 			if (tc != TC) br.readLine();
 			
-			copys = new TreeMap[9];
+			copys = new HashMap[9];
 			for (int i = 1; i <= 8; i++)
-				copys[i] = new TreeMap<>(words[i]);
+				copys[i] = new HashMap<>(words[i]);
 			
 			/* 
 			 * 출력
