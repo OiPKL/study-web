@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>FirstVueApp</title>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <h1>{{ hour }}시 {{ minute }}분 {{ second }}초</h1>
+  </div>
+
+  <script>
+    // console.log('Vue : ', Vue)
+
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+      setup() {
+        const message = ref("째깍째깍째깍째깍째깍째깍")
+        const hour = ref(0)
+        const minute = ref(0)
+        const second = ref(0)
+
+        setInterval(() => {
+          second.value++
+          if (second.value == 60){
+            second.value = 0
+            minute.value++
+          }
+          if (minute.value == 60){
+            minute.value = 0
+            hour.value++
+          }
+        }, 1)
+
+        return {
+          message,
+          hour,
+          minute,
+          second,
+        }
+      }
+    }).mount("#app")
+
+  </script>
+</body>
+</html>
