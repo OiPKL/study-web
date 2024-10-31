@@ -10,3 +10,6 @@
 [submodule "ssafy-web-back/live-spring"]
 	path = ssafy-web-back/live-spring
 	url = https://lab.ssafy.com/s12/javabi/live-spring.git
+[submodule "ssafy-web-front/live-vue"]
+	path = ssafy-web-front/live-vue
+	url = https://lab.ssafy.com/s12/javabi/live-vue.git
