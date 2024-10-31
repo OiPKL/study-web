@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Vue</title>
+  <!-- 1. CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 6. 꺼내서 사용할 때는 .value 없이도 동작 -->
+    <h1>{{ message }}</h1>
+    <h1>{{ message.split('').reverse().join('') }}</h1>
+  </div>
+
+  <script>
+    const { createApp, ref } = Vue;
+    // 2. Vue Instance 생성 ~ body와 연동
+    const app = createApp({
+      setup() {
+        // 4. 변수 사용 위해서는 ref 메서드로 감싸기
+        const message = ref("Hello")
+        console.log(message)
+        console.log(message.value)
+        // 5. 템플릿 사용시에는 반환 필요
+        return {
+          message
+        }
+      }
+    })
+
+    // 3. DOM과 연동
+    app.mount("#app");
+  </script>
+</body>
+
+</html>
