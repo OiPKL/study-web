@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.mvc.model.dao.VideoDao">
+	<select id="selectAllVideos" parameterType="SearchCondition" resultType="Video">
+		SELECT * FROM video
+		<if test="key != null">
+			WHERE ${key} LIKE CONCAT('%', #{word}, '%')
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} ${orderByDir}
+		</if>
+	</select>
+	<select id="selectVideoById" parameterType="int" resultType="Video">
+		SELECT * FROM video
+		WHERE video_id = #{id}
+	</select>
+	<select id="updateViewCnt" parameterType="int">
+		UPDATE video
+		SET view_cnt = view_cnt + 1
+		WHERE video_id = #{id}
+	</select>
+</mapper>
