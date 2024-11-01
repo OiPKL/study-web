@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController //@Controller + @ResponseBody
 @RequestMapping("/api-board")
 @Tag(name="BoardRestful API", description = "게시판 CRUD")
+@CrossOrigin("*")
 public class BoardRestController {
 	//서비스 의존성 주입
 	private final BoardService boardService;
@@ -46,11 +48,16 @@ public class BoardRestController {
 	
 	//검색 
 	@GetMapping("/board")
+//	@CrossOrigin(value="*", methods=RequestMethod.GET)
 	@Operation(summary = "게시글 검색 및 조회", description = "조건에 따른 검색을 수행할 수 있습니다.")
 	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition){
 		System.out.println(condition);
 		List<Board> list = boardService.search(condition);
 		
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Access-Control-Allow-Origin", "*");
+//		
+//		return new ResponseEntity<>(list, headers, HttpStatus.OK);
 		
 		if(list == null || list.size() == 0) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
