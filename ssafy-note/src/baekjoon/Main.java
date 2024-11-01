@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, K, minScore, answer;
+	static int N, K, answer;
 	static int[] papers;
 	
     public static void main(String[] args) throws IOException {
@@ -23,14 +23,14 @@ public class Main {
     	for (int n = 0; n < N; n++)
     		papers[n] = Integer.parseInt(st.nextToken());
     	
-    	int L = 0;				// 오답
-    	int R = 2_000_000;		// 정답
+    	int L = 0;
+    	int R = 2_000_000;
     	while (L <= R) {
     		
     		int M = (L + R) / 2;
     		
-    		if (isPossible(M)) {
-    			answer = minScore;
+    		if (canMax(M)) {
+    			answer = M;
     			L = M + 1;
     		} else {
     			R = M - 1;
@@ -40,27 +40,20 @@ public class Main {
     	System.out.println(answer);
     }
 
-    static boolean isPossible(int maxScore) {
+    static boolean canMax(int minMaxScore) {
     	
-    	int idx = 0;	// 시험지 인덱스
-    	int cnt = 0;	// 그룹 개수
+    	int idx = 0;
+    	int cnt = 0;
+    	int score = 0;
     	
     	while (idx < N) {
     		
-    		cnt++;
+    		score += papers[idx++];
     		
-    		int score = 0;
-    		int minSum = Integer.MAX_VALUE;
-    		while (idx < N) {
-    			
-    			if (score + papers[idx] <= maxScore) {
-    				score += papers[idx];
-    				idx++;
-    			} else {
-    				minSum = Math.min(minSum, score);
-    				break;
-    			}
-    		}
+			if (score >= minMaxScore) {
+				score = 0;
+				cnt++;
+			}
     	}
     	
     	return cnt >= K;
