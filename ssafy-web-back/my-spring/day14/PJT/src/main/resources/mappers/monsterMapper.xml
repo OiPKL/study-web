@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.world.model.dao.MonsterDao">
+	
+	<select id="selectAll" resultType="Monster">
+		SELECT * FROM monster;
+	</select>
+	
+	<select id="selectOne" resultType="Monster" parameterType="int">
+		SELECT * FROM monster
+		WHERE id = #{id};
+	</select>
+
+	<update id="validateMonsters">
+		INSERT INTO monster(name, hp, atk)
+		VALUES
+		("피카츄", 50, 20), ("라이츄", 60, 40), ("파이리", 30, 10),
+		("꼬부기", 30, 12), ("버터플", 40, 8), ("이상해씨", 30, 6);
+	</update>
+	
+	<update id="invalidateMonster" parameterType="int">
+		UPDATE monster
+		SET status = false
+		WHERE id = #{id};
+	</update>
+	
+	<update id="decreaseMonsterHp" parameterType="Damage">
+		UPDATE monster
+		SET hp = hp - #{damage}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

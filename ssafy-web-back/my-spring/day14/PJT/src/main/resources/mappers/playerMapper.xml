@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.world.model.dao.PlayerDao">
+
+	<select id="selectAll" resultType="Player">
+		SELECT * FROM player;
+	</select>
+	
+	<select id="selectOne" resultType="Player" parameterType="int">
+		SELECT * FROM player
+		WHERE id = #{id};
+	</select>
+
+	<insert id="insertPlayer" parameterType="Player" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO player (name)
+		VALUES (#{name});
+	</insert>
+	
+	<update id="invalidatePlayer" parameterType="int">
+		UPDATE player
+		SET status = false
+		WHERE id = #{id};
+	</update>
+	
+	<update id="decreasePlayer" parameterType="Damage">
+		UPDATE player
+		SET hp = hp - #{damage}
+		WHERE id = #{id}
+	</update>
+
+</mapper>
