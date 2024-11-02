@@ -1,4 +1,4 @@
-package swea.B형대비.승강제리그;
+package DAY_00.B형대비.승강제리그;
 
 import java.util.Arrays;
 
