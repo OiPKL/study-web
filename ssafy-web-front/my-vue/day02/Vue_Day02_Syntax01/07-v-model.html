@@ -1,30 +1,52 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Vue</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  </head>
 
-  <body>
-    <div id="app"></div>
-    <script>
-      const { createApp, ref } = Vue;
+<head>
+  <meta charset="UTF-8" />
+  <title>Vue</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
 
-      const app = createApp({
-        setup() {
-          const checked = ref(false);
-          const checkedNames = ref([]);
-          const selected = ref("");
+<body>
+  <div id="app">
+    <input type="checkbox" v-model="checked" id="check">
+    <label for="check">로봇체크</label>
+    <hr>
+    <div>checkedNames: {{ checkedNames }}</div>
+    <input type="checkbox" value="A" v-model="checkedNames" id="A">
+    <label for="A">A</label>
+    <input type="checkbox" value="B" v-model="checkedNames" id="B">
+    <label for="B">B</label>
+    <input type="checkbox" value="C" v-model="checkedNames" id="C">
+    <label for="C">C</label>
+    <hr>
+    <div>selected: {{ selected }}</div>
+    <select v-model="selected" name="selected">
+      <option value="" disabled>선택</option>
+      <option value="D">D</option>
+      <option value="E">E</option>
+      <option value="F">F</option>
+    </select>
+    <hr>
+  </div>
+  <script>
+    const { createApp, ref } = Vue;
 
-          return {
-            checked,
-            checkedNames,
-            selected,
-          };
-        },
-      });
-      app.mount("#app");
-    </script>
-  </body>
+    const app = createApp({
+      setup() {
+        const checked = ref(false);
+        const checkedNames = ref([]);
+        const selected = ref("");
+
+        return {
+          checked,
+          checkedNames,
+          selected,
+        };
+      },
+    });
+    app.mount("#app");
+  </script>
+</body>
+
 </html>

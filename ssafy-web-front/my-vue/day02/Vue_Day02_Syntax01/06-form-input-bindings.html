@@ -1,31 +1,42 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Vue</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <p>{{inputText1}}</p>
-      <hr />
-      <p>{{inputText2}}</p>
-    </div>
-    <script>
-      const { createApp, ref } = Vue;
+<head>
+  <meta charset="UTF-8" />
+  <title>Vue</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
 
-      const app = createApp({
-        setup() {
-          const inputText1 = ref("");
-          const inputText2 = ref("");
-          return {
-            inputText1,
-            inputText2,
-          };
-        },
-      });
-      app.mount("#app");
-    </script>
-  </body>
+<body>
+  <div id="app">
+    <!-- v-bind & v-on 사용 -->
+    <input type="text" @input="onInput">
+    <p>{{inputText1}}</p>
+    <hr />
+    <!-- v-model 사용 -->
+    <input type="text" v-model="inputText2">
+    <p>{{inputText2}}</p>
+  </div>
+  <script>
+    const { createApp, ref } = Vue;
+
+    const app = createApp({
+      setup() {
+        const inputText1 = ref("");
+        const inputText2 = ref("");
+        const onInput = function(){
+          inputText1.value = event.currentTarget.value
+        }
+
+        return {
+          inputText1,
+          inputText2,
+          onInput,
+        };
+      },
+    });
+    app.mount("#app");
+  </script>
+</body>
+
 </html>

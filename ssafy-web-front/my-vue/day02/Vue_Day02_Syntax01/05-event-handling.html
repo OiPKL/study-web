@@ -1,27 +1,72 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Vue</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <p>Count : {{count}}</p>
-      <button @click="count++">증가</button>
-      <button @click="count--">감소</button>
-    </div>
-    <script>
-      const { createApp, ref } = Vue;
+<head>
+  <meta charset="UTF-8" />
+  <title>Vue</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
 
-      const app = createApp({
-        setup() {
-          const count = ref(0);
-          return { count };
-        },
-      });
-      app.mount("#app");
-    </script>
-  </body>
+<body>
+  <div id="app">
+    <p>Count : {{count}}</p>
+    <!-- Inline Handlers -->
+    <button @click="count++">증가</button>
+    <button @click="count--">감소</button>
+    <hr>
+    <!-- Method Handlers : 이를 트리거 하는 기본 DOM Event 객체를 자동으로 수신 -->
+    <button @click="myFunc">메서드동작</button>
+    <hr>
+    <!-- Inline Handlers 에서 기본 이벤트 대신 사용자 지정 인자를 전달 가능 -->
+    <button @click="greeting('ㅎㅇ')">하이</button>
+    <button @click="greeting('ㅂ2')">바이</button>
+    <!-- Inline Handlers 에서 원래 DOM 이벤트에 접근 ($변수 통해 접근) -->
+    <button @click="warning('경고', $event)">제출</button>
+    <hr>
+    <!-- Event Modifiers : 링크 연결을 막음 -->
+    <a @click.stop.prevent="onLink" href="https://www.naver.com">네이버</a>
+    <hr>
+    <!-- Event Modifiers : 엔터키 입력일 때 onSubmit 이벤트 호출 -->
+    <input type="text" @keyup.enter="onSubmit">엔터키</input>
+  </div>
+  <script>
+    const { createApp, ref } = Vue;
+
+    const app = createApp({
+      setup() {
+        const count = ref(0);
+        const name = ref("ymg")
+        const myFunc = function(event) {
+          console.log(event)
+          console.log(event.target)
+          console.log(`Hello ${name.value}`)
+        }
+        const greeting = function(message){
+          console.log(message)
+        }
+        const warning = function(message, event){
+          console.log(message)
+          console.log(event)
+        }
+        const onLink = function(){
+          console.log("링크 막음")
+        }
+        const onSubmit = function(){
+          console.log("엔터 클릭")
+        }
+
+        return {
+          count,
+          myFunc,
+          greeting,
+          warning,
+          onLink,
+          onSubmit,
+        };
+      },
+    });
+    app.mount("#app");
+  </script>
+</body>
+
 </html>

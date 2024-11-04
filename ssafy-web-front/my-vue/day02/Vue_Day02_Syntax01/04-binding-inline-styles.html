@@ -7,7 +7,16 @@
   </head>
 
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- :style은 JavaScript 객체 값에 대한 바인딩을 지원 (HTML style 속성) -->
+      <div :style="{color: activeColor, fontSize: fontSize+'px'}">글자</div>
+      <!-- 실제 CSS 처럼 kebab-cased 키 문자열도 지원, (단 camelCase를 권장) -->
+      <div :style="{'font-size': fontSize+'px'}">글자</div>
+      <!-- 스타일 객체에 직접 바인딩 하는 것을 권장 -->
+      <div :style="styleObj">글자</div>
+      <!-- 여러 스타일 객체의 배열에 :style 바인딩 가능 -->
+      <div :style="[styleObj, styleObj2]">글자</div>
+    </div>
     <script>
       const { createApp, ref } = Vue;
 

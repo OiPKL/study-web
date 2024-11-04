@@ -17,13 +17,39 @@
 
   <body>
     <div id="app">
+      <!-- 객체를 :class에 전달하여 클래스를 동적으로 전환 가능 -->
+      <div :class="{active : isActive}">글자색</div>
+      <!-- 객체에 더 많은 필드를 포함하여 여러 클래스를 전환 가능 -->
+      <div :class="{active : isActive, 'text-primary' : hasInfo}">글자색</div>
+      <!-- inline 방식 아니어도 가능 -->
+      <div :class="classObj">글자색</div>
+      <hr>
+      <!-- :class를 배열에 바인딩하여 클래스 목록을 적용 가능 -->
+      <div :class="[activeClass, infoClass]">글자색</div>
+      <!-- 배열 구문 내에서 객체 구문 사용 가능 -->
+      <div :class="[{avtive : isActive}, infoClass]">글자색</div>
     </div>
     <script>
       const { createApp, ref } = Vue;
 
       const app = createApp({
         setup() {
-          return {};
+          const isActive = ref(true)
+          const hasInfo = ref(true)
+          const classObj = ref({
+            active : isActive,
+            'text-primary' : hasInfo
+          })
+          const activeClass = ref("active")
+          const infoClass = ref("text-primary")
+
+          return {
+            isActive,
+            hasInfo,
+            classObj,
+            activeClass,
+            infoClass,
+          };
         },
       });
       app.mount("#app");
