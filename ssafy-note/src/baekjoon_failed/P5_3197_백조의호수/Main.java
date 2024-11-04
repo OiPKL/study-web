@@ -52,8 +52,8 @@ public class Main {
 		visited1 = new int[R][C][2];
 		for (int r = 0; r < R; r++)
 			for (int c = 0; c < C; c++)
-				visited1[r][c][0] = Integer.MAX_VALUE;
-//				visited1[r][c][0] = 9;
+//				visited1[r][c][0] = Integer.MAX_VALUE;
+				visited1[r][c][0] = 9;
 		
 		// 1. 최소 얼음 부수는 최적의 경로 찾기
 		wayCnt = -1;
