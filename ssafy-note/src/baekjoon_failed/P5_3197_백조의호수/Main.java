@@ -87,7 +87,7 @@ public class Main {
 //			System.out.println(Arrays.toString(validWay.pop()));
 		
 		// 3. 최적 경로 상의 meltingTime 계산
-		minMeltingTime = -1;
+		minMeltingTime = 0;
 		meltingTimeMap = new int[R][C];
 		while (!validWay.isEmpty()) {
 			
@@ -223,6 +223,15 @@ public class Main {
 }
 
 /*
+
+1 2
+LL
+0
+
+2 1
+L
+L
+0
 
 1 7
 LXX.XXL
