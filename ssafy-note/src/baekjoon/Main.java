@@ -8,19 +8,18 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, M, K;
-	static long sum;
+	static StringTokenizer st;
+	static StringBuilder sb;
+	static int N, M, N1, N2, W;
 	static int[][] adj;
 	
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-		sum = 0;
+		N = Integer.parseInt(br.readLine());
+		M = Integer.parseInt(br.readLine());
+		sb = new StringBuilder();
 		
 		adj = new int[N][N];
 		for (int i = 0; i < N; i++)
@@ -30,16 +29,11 @@ public class Main {
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int node1 = Integer.parseInt(st.nextToken()) - 1;
-			int node2 = Integer.parseInt(st.nextToken()) - 1;
+			N1 = Integer.parseInt(st.nextToken()) - 1;
+			N2 = Integer.parseInt(st.nextToken()) - 1;
+			W = Integer.parseInt(st.nextToken());
 			
-			if (i == K - 1) {
-				adj[node1][node2] = 1;
-				adj[node2][node1] = 1;
-			} else {
-				adj[node1][node2] = 0;
-				adj[node2][node1] = 0;
-			}
+			adj[N1][N2] = W;
 		}
 		
 		for (int k = 0; k < N; k++)
@@ -47,13 +41,12 @@ public class Main {
 				for (int j = 0; j < N; j++)
 					adj[i][j] = Math.min(adj[i][j], adj[i][k] + adj[k][j]);
 		
-//		for (int i = 0; i < N; i++)
-//			System.out.println(Arrays.toString(adj[i]));
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++)
+				sb.append(adj[i][j] != 1_000_000_000 ? adj[i][j] : 0).append(" ");
+			sb.append("\n");
+		}
 		
-		for (int i = 0; i < N; i++)
-			for (int j = i+1; j < N; j++)
-				sum += adj[i][j];
-		
-		System.out.println(sum);
+		System.out.println(sb);
 	}
 }
