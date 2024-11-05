@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>{{ count }}</p>
+      <button @click="count++">증가</button>
+    </div>
+    <script>
+      const { createApp, ref, onMounted, onUpdated } = Vue;
+
+      const app = createApp({
+        setup() {
+          const count = ref(0)
+
+          // Vue 컴포넌트 인스턴스가 초기 렌더링 및 DOM 요소 생성이 완료된 후
+          // 초기 API 통신을 위해 보여주고 싶은 기본 화면
+          onMounted(() => {
+            console.log("연결완료")
+          })
+
+          // 반응형 데이터의 변경으로 인해 컴포넌트의 DOM이 업데이트된 후
+          onUpdated(() => {
+            console.log("업데이트")
+          })
+
+          return {
+            count,
+          };
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <h2>ToDoList</h2>
+      <p>{{ todos.length > 0 ? "Not Yet" : "Completed" }}</p>
+      <hr>
+      <h2>Computed</h2>
+      <p>{{ rests }}</p>
+      <p>{{ rests }}</p>
+      <hr>
+      <h2>Method</h2>
+      <p>{{ getRests() }}</p>
+      <p>{{ getRests() }}</p>
+    </div>
+    <script>
+      const { createApp, ref, computed } = Vue;
+
+      const app = createApp({
+        setup() {
+          const todos = ref([
+            {text: "todo1"},
+            {text: "todo2"},
+            {text: "todo3"},
+          ])
+
+          // computed -> console창 1번 출력
+          const rests = computed(() => {
+            console.log(1)
+            return todos.value.length > 0 ? "Not Yet" : "Completed"
+          })
+          
+          // method -> console창 2번 출력
+          const getRests = function() {
+            console.log(2)
+            return todos.value.length > 0 ? "Not Yet" : "Completed"
+          }
+
+          return {
+            todos,
+            rests,
+            getRests,
+          };
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>

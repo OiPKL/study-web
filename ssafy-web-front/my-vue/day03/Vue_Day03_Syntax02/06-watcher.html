@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>Count: {{ count }}</p>
+      <button @click="count++">증가</button>
+      <hr>
+      <input v-model="message">
+      <p>Message Length: {{ messageLength }}</p>
+    </div>
+    <script>
+      const { createApp, ref, watch } = Vue;
+
+      const app = createApp({
+        setup() {
+          const count = ref(0)
+
+          // 감시하는 변수에 변화가 생겼을 때 기본 동작 (콘솔 확인)
+          const countWatch = watch(count, (newValue, oldValue) => {
+            console.log(`newValue : ${newValue} / oldValue : ${oldValue}`)
+          })
+
+          // 감시하는 변수에 변화가 생겼을 때 연관 데이터 업데이트
+          const message = ref('')
+          const messageLength = ref(0)
+
+          const messageWatch = watch(message, (newValue, oldValue) => {
+            messageLength.value = newValue.length
+          })
+
+          return {
+            count,
+            countWatch,
+            message,
+            messageLength,
+            messageWatch,
+          };
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>
