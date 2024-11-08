@@ -1,5 +1,7 @@
 <script setup>
 
+import { ref } from 'vue'
+
 const props = defineProps({
     'childColor': Object,
     'myIdx': Number,
@@ -12,10 +14,12 @@ const clickEvent = () => {
     emits('myClick');
 }
 
+const toggle = ref(true)
+
 </script>
 
 <template>
-    <div>
+    <div v-show="toggle" @click="toggle = !toggle">
         <div @click="clickEvent" :style="{ 'background-color': childColor.color }" class="box"
             :class="{ 'selected': myIdx == selectedIdx }">
             <span>{{ childColor.emoji }}</span>

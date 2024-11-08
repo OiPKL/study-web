@@ -27,19 +27,9 @@ const detectChildEvent = (index) => {
     :childColor="color" 
     :myIdx="forIndex" 
     :selectedIdx="selectedIdx"
-    v-for="(color, forIndex) in backgroundColors"></Box>
+    v-for="(color, forIndex) in backgroundColors"
+    :key="color.color"/>
   </div>
-
-
-
-
-      <!-- <div 
-    class="box" 
-    @click="selectedIdx = index" 
-    :class="{'selected' : selectedIdx == index}" 
-    :style="{'background-color':color}" 
-    v-for="(color, index) in backgroundColors" :key="color">
-    </div> -->
 </template>
 
 <style scoped>

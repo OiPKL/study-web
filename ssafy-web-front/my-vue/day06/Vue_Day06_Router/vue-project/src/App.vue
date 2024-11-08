@@ -9,6 +9,8 @@
     <RouterLink :to="{name: 'about'}">aboutName</RouterLink> | 
     <RouterLink :to="{name: 'user', params: {id: 'ssafy1'}}">User1</RouterLink> | 
     <RouterLink :to="{name: 'user', params: {id: 'ssafy2'}}">User2</RouterLink> | 
+    <RouterLink :to="{name: 'login'}">Login</RouterLink> | 
+    <RouterLink :to="{name: 'board'}">Board</RouterLink>
   </nav>
 
   <RouterView/>
