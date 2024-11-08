@@ -1,16 +1,18 @@
 
 <template>
-  <header>
-    <nav>
-      <RouterLink :to="{ name: 'home' }">Home</RouterLink>
-      <span> | </span>
-      <RouterLink :to="{ name: 'about' }">About</RouterLink>
-      <span> | </span>
-      <RouterLink :to="{ name: 'user', params:{username:username}}">User</RouterLink>
-    </nav>
-  </header>
-  <input v-model="username">
-  <RouterView />
+  <div>
+    <header>
+      <nav>
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <span> | </span>
+        <RouterLink :to="{ name: 'about' }">About</RouterLink>
+        <span> | </span>
+        <RouterLink :to="{ name: 'user', params:{username:username}}">User</RouterLink>
+      </nav>
+    </header>
+    <input v-model="username">
+    <RouterView />
+  </div>
 </template>
 
 <script setup>
