@@ -1,3 +1,4 @@
+package DAY_02.파핑파핑지뢰찾기;
 import java.util.*;
 import java.io.*;
 

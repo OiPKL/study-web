@@ -1,3 +1,4 @@
+package DAY_03.knapsack;
 import java.util.Scanner;
 
 public class Solution2 {

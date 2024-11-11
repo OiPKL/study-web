@@ -1,3 +1,4 @@
+package DAY_03.B형대비.리스트복사;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

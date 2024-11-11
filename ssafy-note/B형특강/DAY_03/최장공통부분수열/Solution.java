@@ -1,3 +1,4 @@
+package DAY_03.최장공통부분수열;
 import java.util.Scanner;
 
 public class Solution {

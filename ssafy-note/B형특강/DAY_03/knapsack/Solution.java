@@ -1,3 +1,4 @@
+package DAY_03.knapsack;
 import java.util.Scanner;
 
 public class Solution {
@@ -30,7 +31,7 @@ public class Solution {
                     dp[i][j] = dp[i - 1][j];
 
                     if (w[i] <= j) {  // 애초에 i 번 물건을 가방에 못 넣는 경우를 제외하자.
-                        dp[i][j] = max(dp[i][j], dp[i - 1][j - w[i]] + v[i]);
+                        dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - w[i]] + v[i]);
                     }
                 }
             }

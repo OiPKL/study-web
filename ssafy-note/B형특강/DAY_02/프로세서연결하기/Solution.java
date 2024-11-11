@@ -1,3 +1,4 @@
+package DAY_02.프로세서연결하기;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
