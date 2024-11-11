@@ -7,7 +7,9 @@ class Solution {
 	static char[] key = {'d', 'l', 'r', 'u'};
 	static int R, C, K, sr, sc, er, ec;
 	static String answer = "impossible";
+	static boolean isEnd = false;
 	
+//	public static String solution(int n, int m, int x, int y, int r, int c, int k) {
 	public String solution(int n, int m, int x, int y, int r, int c, int k) {
     	
 		R = n;
@@ -18,11 +20,13 @@ class Solution {
 		er = r - 1;
 		ec = c - 1;
 		
-    	btk(sr, sc, 0, new StringBuilder(), false);
+    	btk(sr, sc, 0, new StringBuilder());
     	return(answer);
     }
     
-    static void btk(int rNow, int cNow, int cnt, StringBuilder sb, boolean isEnd) {
+    static void btk(int rNow, int cNow, int cnt, StringBuilder sb) {
+    	
+//    	System.out.println(rNow + "|" + cNow + "|" + cnt + "\t|" + isEnd + "|" + sb.toString());
     	
     	if (cnt > K || isEnd) return;
     	
@@ -41,8 +45,15 @@ class Solution {
     			continue;
     		
     		sb.append(key[d]);
-    		btk(rNext, cNext, cnt + 1, sb, isEnd);
+    		btk(rNext, cNext, cnt + 1, sb);
     		sb.deleteCharAt(sb.length() - 1);
     	}
+    }
+    
+    static boolean continueBtk(int rNow, int cNow, int cnt) {
+    	
+    	int remains = Math.abs(R - rNow) + Math.abs(C - cNow);
+    	
+    	return (remains - K) % 2 == 0;
     }
 }
