@@ -1,59 +1,55 @@
 package programmers;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 class Solution {
-	
-	static int[] dr = {1, 0, 0, -1};
-	static int[] dc = {0, -1, 1, 0};
-	static char[] key = {'d', 'l', 'r', 'u'};
-	static int R, C, K, sr, sc, er, ec;
-	static String answer = "impossible";
-	static boolean isEnd = false;
-	
-//	public static String solution(int n, int m, int x, int y, int r, int c, int k) {
-	public String solution(int n, int m, int x, int y, int r, int c, int k) {
+    public int solution(int N, int[][] edges) {
     	
-		R = n;
-		C = m;
-		K = k;
-		sr = x - 1;
-		sc = y - 1;
-		er = r - 1;
-		ec = c - 1;
-		
-    	btk(sr, sc, 0, new StringBuilder());
-    	return(answer);
-    }
-    
-    static void btk(int rNow, int cNow, int cnt, StringBuilder sb) {
+    	List<Integer>[] adjList = new ArrayList[N + 1];
+    	for (int i = 1; i <= N; i++)
+    		adjList[i] = new ArrayList<>();
     	
-//    	System.out.println(rNow + "|" + cNow + "|" + cnt + "\t|" + isEnd + "|" + sb.toString());
-    	
-    	if (cnt > K || isEnd) return;
-    	
-    	if (rNow == er && cNow == ec && cnt == K) {
-    		answer = sb.toString();
-    		isEnd = true;
-    		return;
+    	for (int[] edge : edges) {
+    		int a = edge[0];
+    		int b = edge[1];
+    		adjList[a].add(b);
+    		adjList[b].add(a);
     	}
     	
-    	for (int d = 0; d < 4; d++) {
+    	int[] visited = new int[N + 1];
+    	for (int i = 1; i <= N; i++)
+    		visited[i] = -1;
+    	visited[1] = 0;
+    	
+    	Queue<Integer> bfs = new LinkedList<>();
+    	bfs.add(1);
+    	
+    	while (!bfs.isEmpty()) {
     		
-    		int rNext = rNow + dr[d];
-    		int cNext = cNow + dc[d];
+    		int now = bfs.poll();
     		
-    		if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext)
-    			continue;
-    		
-    		sb.append(key[d]);
-    		btk(rNext, cNext, cnt + 1, sb);
-    		sb.deleteCharAt(sb.length() - 1);
+    		for (int next : adjList[now]) {
+    			
+    			if (visited[next] == -1) {
+    				
+    				visited[next] = visited[now] + 1;
+    				bfs.add(next);
+    			}
+    		}
     	}
-    }
-    
-    static boolean continueBtk(int rNow, int cNow, int cnt) {
     	
-    	int remains = Math.abs(R - rNow) + Math.abs(C - cNow);
+        int maxDistance = 0;
+        for (int i = 1; i <= N; i++)
+            maxDistance = Math.max(maxDistance, visited[i]);
+
+        int cnt = 0;
+        for (int i = 1; i <= N; i++)
+            if (visited[i] == maxDistance)
+                cnt++;
     	
-    	return (remains - K) % 2 == 0;
+    	return cnt;
     }
 }
