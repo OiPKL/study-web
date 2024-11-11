@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>TodoList</h1>
+    <h1>Todo Practice</h1>
     <p>완료된 Todo: {{ store.doneTodoCount }}</p>
     <TodoForm/>
     <hr/>
