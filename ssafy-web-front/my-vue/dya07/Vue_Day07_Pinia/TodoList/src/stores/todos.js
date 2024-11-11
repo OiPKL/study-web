@@ -33,7 +33,6 @@ export const useTodosStore = defineStore('todos', () => {
       if (todo.id == id) {
         todo.isDone = !todo.isDone
       }
-
       return todo
     })
   }
@@ -43,13 +42,5 @@ export const useTodosStore = defineStore('todos', () => {
     return todos.value.filter((todo) => todo.isDone).length
   })
 
-  return {
-    todos, 
-    addTodo,
-    deleteTodo,
-    updateTodo,
-    doneTodoCount,
-   }, {
-    persist: true
-  }
-})
+  return { todos, addTodo, deleteTodo, updateTodo, doneTodoCount }
+}, {persist: true})

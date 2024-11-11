@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h4>TodoListItem</h4>
         <span
           class="click-cursor"
           :class="{'is-done': todo.isDone}"
