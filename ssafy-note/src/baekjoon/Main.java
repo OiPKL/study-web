@@ -47,7 +47,7 @@ public class Main {
 		for (int[] start : starts) {
 			
 			Queue<int[]> bfs = new LinkedList<>();
-			bfs.add({start[0], start[1], start[2]});
+//			bfs.add(new int[] {start[0], start[1], start[2]});
 			
 			while (!bfs.isEmpty()) {
 				
