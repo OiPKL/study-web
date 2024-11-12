@@ -3,72 +3,88 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int[] dn = {-1, 0, 1, 0, 0, 0};
-	static int[] dm = {0, -1, 0, 1, 0, 0};
-	static int[] dh = {0, 0, 0, 0, -1, 1};
+	static StringBuilder sb = new StringBuilder();
+	static boolean[][] garo, sero, nemo;
+	static int[][] map;
+	static boolean checked = false;
 	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int M = Integer.parseInt(st.nextToken());
-		int N = Integer.parseInt(st.nextToken());
-		int H = Integer.parseInt(st.nextToken());
 		
-		int total = 0;
-		Queue<int[]> bfs = new LinkedList<>();
+		garo = new boolean[9][10];	// r
+		sero = new boolean[9][10];	// c
+		nemo = new boolean[9][10];	// 3 * (r/3) + (c/3)
 
-		int[][][] map = new int[H][N][M];
-		for (int h = 0; h < H; h++) {
-			for (int n = 0; n < N; n++) {
+		map = new int[9][9];
+		for (int r = 0; r < 9; r++) {
+			
+			String line = br.readLine();
+			for (int c = 0; c < 9; c++) {
+				map[r][c] = line.charAt(c) - '0';
 				
-				st = new StringTokenizer(br.readLine());
-				for (int m = 0; m < M; m++) {
-					map[h][n][m] = Integer.parseInt(st.nextToken());
+				if (map[r][c] != 0) {
 					
-					if (map[h][n][m] == 1)
-						bfs.add(new int[] {h, n, m, 0});
-					else if (map[h][n][m] == 0)
-						total++;
+					garo[r][map[r][c]] = true;
+					sero[c][map[r][c]] = true;
+					nemo[3 * (r/3) + (c/3)][map[r][c]] = true;
 				}
 			}
 		}
 		
-		int cnt = 0;
-		int answer = 0;
-		while (!bfs.isEmpty()) {
-			
-			int[] now = bfs.poll();
-			int hNow = now[0];
-			int nNow = now[1];
-			int mNow = now[2];
-			int day = now[3];
-			
-			for (int d = 0; d < 6; d++) {
-				
-				int hNext = hNow + dh[d];
-				int nNext = nNow + dn[d];
-				int mNext = mNow + dm[d];
-				
-				if (hNext < 0 || H <= hNext || nNext < 0 || N <= nNext || mNext < 0 || M <= mNext ||
-						map[hNext][nNext][mNext] != 0) continue;
-				
-				cnt++;
-				answer = Math.max(answer, day + 1);
-				map[hNext][nNext][mNext] = 1;
-				bfs.add(new int[] {hNext, nNext, mNext, day + 1});
-			}
+		btk(0, 0);
+		
+		System.out.println(sb);
+	}
+	
+	static void btk(int r, int c) {
+		
+		if (checked)
+			return;
+		
+		if (c == 9) {
+			r++;
+			c = 0;
 		}
 		
-		if (cnt < total) answer = -1;
+		if (r == 9) {
+			
+			for (int rr = 0; rr < 9; rr++) {
+				for (int cc = 0; cc < 9; cc++)
+					sb.append(map[rr][cc]);
+				sb.append("\n");
+			}
+			
+			checked = true;
+			return;
+		}
 		
-		System.out.println(answer);
+		if (map[r][c] == 0) {
+			
+			for (int num = 1; num <= 9; num++) {
+				
+				if (garo[r][num] || sero[c][num] || nemo[3 * (r/3) + (c/3)][num])
+					continue;
+				
+				map[r][c] = num;
+				garo[r][num] = true;
+				sero[c][num] = true;
+				nemo[3 * (r/3) + (c/3)][num] = true;
+				
+//				System.out.println(r + " | " + c + " | " + num);
+				
+				btk(r, c + 1);
+				
+				map[r][c] = 0;
+				garo[r][num] = false;
+				sero[c][num] = false;
+				nemo[3 * (r/3) + (c/3)][num] = false;
+			}
+		} else {
+			btk(r, c + 1);
+		}
 	}
 }
