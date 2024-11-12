@@ -3,16 +3,15 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int[] dn = { -1, 0, 1, 0 };
-	static int[] dm = { 0, 1, 0, -1 };
+	static int[] dn = {-1, 0, 1, 0, 0, 0};
+	static int[] dm = {0, -1, 0, 1, 0, 0};
+	static int[] dh = {0, 0, 0, 0, -1, 1};
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -21,52 +20,55 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int M = Integer.parseInt(st.nextToken());
 		int N = Integer.parseInt(st.nextToken());
+		int H = Integer.parseInt(st.nextToken());
 		
 		int total = 0;
-		List<int[]> starts = new ArrayList<>();
-		
-		int[][] visited = new int[N][M];
-		for (int n = 0; n < N; n++)
-			for (int m = 0; m < M; m++)
-				visited[n][m] = Integer.MAX_VALUE;
-		
-		int[][] map = new int[N][M];
-		for (int n = 0; n < N; n++) {
-			
-			int m = 0;
-			st = new StringTokenizer(br.readLine());
-			int tomato = Integer.parseInt(st.nextToken());
-			
-			if (tomato == 0) total++;
-			else if (tomato == 1) starts.add(new int[] {n, m, 0});
-			
-			map[n][m] = tomato;
-			visited[n][m++] = 0;
-		}
-		
-		for (int[] start : starts) {
-			
-			Queue<int[]> bfs = new LinkedList<>();
-//			bfs.add(new int[] {start[0], start[1], start[2]});
-			
-			while (!bfs.isEmpty()) {
+		Queue<int[]> bfs = new LinkedList<>();
+
+		int[][][] map = new int[H][N][M];
+		for (int h = 0; h < H; h++) {
+			for (int n = 0; n < N; n++) {
 				
-				int[] now = bfs.poll();
-				int nNow = now[0];
-				int mNow = now[1];
-				int cnt = now[2];
-				
-				for (int d = 0; d < 4; d++) {
+				st = new StringTokenizer(br.readLine());
+				for (int m = 0; m < M; m++) {
+					map[h][n][m] = Integer.parseInt(st.nextToken());
 					
-					int nNext = nNow + dn[d];
-					int mNext = mNow + dm[d];
-					
-					if (nNext < 0 || N <= nNext || mNext < 0 || M <= mNext ||
-							) continue;
-					
+					if (map[h][n][m] == 1)
+						bfs.add(new int[] {h, n, m, 0});
+					else if (map[h][n][m] == 0)
+						total++;
 				}
 			}
-			
 		}
+		
+		int cnt = 0;
+		int answer = 0;
+		while (!bfs.isEmpty()) {
+			
+			int[] now = bfs.poll();
+			int hNow = now[0];
+			int nNow = now[1];
+			int mNow = now[2];
+			int day = now[3];
+			
+			for (int d = 0; d < 6; d++) {
+				
+				int hNext = hNow + dh[d];
+				int nNext = nNow + dn[d];
+				int mNext = mNow + dm[d];
+				
+				if (hNext < 0 || H <= hNext || nNext < 0 || N <= nNext || mNext < 0 || M <= mNext ||
+						map[hNext][nNext][mNext] != 0) continue;
+				
+				cnt++;
+				answer = Math.max(answer, day + 1);
+				map[hNext][nNext][mNext] = 1;
+				bfs.add(new int[] {hNext, nNext, mNext, day + 1});
+			}
+		}
+		
+		if (cnt < total) answer = -1;
+		
+		System.out.println(answer);
 	}
 }
