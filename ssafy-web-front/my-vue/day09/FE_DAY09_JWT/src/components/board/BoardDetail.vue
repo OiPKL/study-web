@@ -29,7 +29,11 @@ onMounted(() => {
 })
 
 const deleteBoard = function () {
-    axios.delete(`http://localhost:8080/api-board/board/${route.params.id}`)
+    axios.delete(`http://localhost:8080/api-board/board/${route.params.id}`, {
+              headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
         .then(() => {
             router.push({ name: 'boardList' })
         })

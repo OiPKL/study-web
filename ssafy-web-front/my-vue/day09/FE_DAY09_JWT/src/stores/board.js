@@ -8,7 +8,12 @@ const REST_API_URL = `http://localhost:8080/api-board/board`
 export const useBoardStore = defineStore('board', () => {
   const boardList = ref([]) //게시글 목록을 스토어에서 관리하겠다~
   const getBoardList = function () {
-    axios.get(REST_API_URL)
+    axios.get(REST_API_URL, {
+      // headers 에 전부 추가해 주어야 함!!
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
       .then((response) => {
         // console.log(response.data)
         boardList.value = response.data
@@ -22,7 +27,11 @@ export const useBoardStore = defineStore('board', () => {
       url: REST_API_URL,
       method: 'POST',
       //JSON 형태로 바꿔주지 않았지만 application/json 알아서 이게 적용이 되었다.
-      data: board
+      data: board,
+      // headers 에 전부 추가해 주어야 함!!
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
     })
       .then(() => {
         console.log("완료")
@@ -35,14 +44,24 @@ export const useBoardStore = defineStore('board', () => {
   const board = ref({})
 
   const getBoard = function (id) {
-    axios.get(`${REST_API_URL}/${id}`)
+    axios.get(`${REST_API_URL}/${id}`, {
+      // headers 에 전부 추가해 주어야 함!!
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
       .then((response) => {
         board.value = response.data
       })
   }
 
   const updateBoard = function () {
-    axios.put(REST_API_URL, board.value)
+    axios.put(REST_API_URL, board.value, {
+      // headers 에 전부 추가해 주어야 함!!
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
+    })
       .then(() => {
         router.push({ name: 'boardList' })
       })
@@ -50,7 +69,10 @@ export const useBoardStore = defineStore('board', () => {
 
   const searchBoardList = function (searchCondition) {
     axios.get(REST_API_URL, {
-      params: searchCondition
+      params: searchCondition,
+      headers: {
+        'access-token': sessionStorage.getItem('access-token')
+      }
     })
       .then((res) => {
         boardList.value = res.data

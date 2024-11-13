@@ -16,6 +16,9 @@ const store = useUserStore();
 const id = ref("")
 const password = ref("")
 
+const login = function () {
+  store.userLogin(id.value, password.value)
+}
 
 </script>
 
