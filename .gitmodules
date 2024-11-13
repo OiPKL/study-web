@@ -13,9 +13,3 @@
 [submodule "ssafy-web-front/live-vue"]
 	path = ssafy-web-front/live-vue
 	url = https://lab.ssafy.com/s12/javabi/live-vue.git
-[submodule "ssafy-project/semester1-final-project/practice-board-FE"]
-	path = ssafy-project/semester1-final-project/practice-board-FE
-	url = https://github.com/SSAFY-SEM1-FIN-WITH-WAN/practice-board-FE.git
-[submodule "ssafy-project/semester1-final-project/practice-board-BE"]
-	path = ssafy-project/semester1-final-project/practice-board-BE
-	url = https://github.com/SSAFY-SEM1-FIN-WITH-WAN/practice-board-BE.git
