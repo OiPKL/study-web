@@ -3,6 +3,7 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 	
@@ -22,9 +23,9 @@ public class Main {
 		map = new int[9][9];
 		for (int r = 0; r < 9; r++) {
 			
-			String line = br.readLine();
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			for (int c = 0; c < 9; c++) {
-				map[r][c] = line.charAt(c) - '0';
+				map[r][c] = Integer.parseInt(st.nextToken());
 				
 				if (map[r][c] != 0) {
 					
@@ -54,7 +55,7 @@ public class Main {
 			
 			for (int rr = 0; rr < 9; rr++) {
 				for (int cc = 0; cc < 9; cc++)
-					sb.append(map[rr][cc]);
+					sb.append(map[rr][cc]).append(" ");
 				sb.append("\n");
 			}
 			
