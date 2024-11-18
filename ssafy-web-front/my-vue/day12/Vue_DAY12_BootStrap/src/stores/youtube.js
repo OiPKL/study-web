@@ -6,7 +6,7 @@ import router from '@/router'
 
 export const useYoutubeStore = defineStore('youtube', () => {
 
-const videoList = ref([])
+const videoList = ref(null)
 
 const youtubeSearch = function(keyword){
   const url = `https://www.googleapis.com/youtube/v3/search`

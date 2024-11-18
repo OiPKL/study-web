@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>BoardView</h2>
+    <h2 class="text-center">BoardView</h2>
     <RouterView/>
   </div>
 </template>

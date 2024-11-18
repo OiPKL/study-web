@@ -1,8 +1,15 @@
 <template>
-  <div>
-    <h4>검색컴포넌트</h4>
-    <input type="text" v-model.trim="keyword" @keyup.enter="search" />
-    <button @click="search">검색</button>
+  <div class="container">
+    <div class="input-group mb-3">
+      <span class="input-group-text"><i class="bi bi-search"></i> </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="검색어 입력"
+        v-model.trim="keyword" @keyup.enter="search"
+      />
+    <button class="btn btn-outline-primary" @click="search">검색</button>
+    </div>
   </div>
 </template>
 

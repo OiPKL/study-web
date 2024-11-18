@@ -1,17 +1,44 @@
 <template>
-  <div>
-    <h2>TMDBView</h2>
-    <RouterLink :to="{name : 'tmdbPopular'}">인기순위</RouterLink> |
-    <RouterLink :to="{name : 'tmdbTopRated'}">역대순위</RouterLink>
-    <hr>
-    <RouterView/>
+  <div class="container">
+    <div class="text-center">
+      <h2 class="my-h2 my-underline">TMDBView</h2>
+    </div>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <RouterLink :class="popular" class="nav-link" :to="{ name: 'tmdbPopular' }">인기순위</RouterLink>
+      </li>
+      <li class="nav-item">
+        <RouterLink :class="topRated" class="nav-link" :to="{ name: 'tmdbTopRated' }">역대순위</RouterLink>
+      </li>
+    </ul>
+    <RouterView />
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const popular = computed(()=>{
+  if(route.name == 'tmdbPopular')
+    return { active : true}
+})
+const topRated = computed(()=>{
+  if(route.name == 'tmdbTopRated')
+    return { active : true}
+})
+
 
 </script>
 
 <style scoped>
+.my-h2 {
+  display: inline-block;
+}
 
+.my-underline {
+  background: linear-gradient(to top, yellow 20%, transparent 30%);
+}
 </style>

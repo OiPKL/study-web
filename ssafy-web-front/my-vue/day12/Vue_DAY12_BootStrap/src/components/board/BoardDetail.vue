@@ -1,44 +1,57 @@
 <template>
-    <div>
+    <div class="container">
         <h4>게시글 상세</h4>
-        <hr>
-        <div>{{ store.board.title }}</div>
-        <div>{{ store.board.writer }}</div>
-        <div>{{ store.board.regDate }}</div>
-        <div>{{ store.board.viewCnt }}</div>
-        <div>{{ store.board.content }}</div>
-
-        <button @click="deleteBoard">삭제</button>
-        <button @click="updateBoard">수정</button>
+        <hr />
+        <div class="d-flex justify-content-center">
+            <div class="card" style="width: 30rem">
+                <div class="card-body">
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">{{ store.board.title }} <span class="badge bg-danger">{{ store.board.viewCnt
+                        }}</span></h4>
+                        <div class="d-flex justify-content-end">
+                            <h6 class="card-subtitle mx-3 text-body-secondary">{{ store.board.writer }}</h6>
+                            <h6 class="card-subtitle text-body-secondary">{{ store.board.regDate }}</h6>
+                        </div>
+                    </div>
+                    <p class="card-text ">
+                        {{ store.board.content }}
+                    </p>
+                    <div class="d-flex justify-content-center">
+                        <button class="mx-3 btn btn-outline-success" @click="moveUpdate">수정</button>
+                        <button class="mx-3 btn btn-outline-danger" @click="deleteBoard">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-
+  
 <script setup>
-import { useBoardStore } from '@/stores/board';
-import { onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios'
-
-const store = useBoardStore()
-
+import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useBoardStore } from "@/stores/board";
+import axios from "axios";
 const route = useRoute();
 const router = useRouter();
+const store = useBoardStore();
+
 onMounted(() => {
-    //게시글 번호 어디에 있나
-    store.getBoard(route.params.id)
-})
+    store.getBoard(route.params.id);
+});
+
+const moveUpdate = function () {
+    router.push({ name: "boardUpdate" });
+};
 
 const deleteBoard = function () {
-    axios.delete(`http://localhost:8080/api-board/board/${route.params.id}`)
+    axios
+        .delete(`http://localhost:8080/api-board/board/${route.params.id}`)
         .then(() => {
-            router.push({ name: 'boardList' })
+            router.push({ name: "boardList" });
         })
-}
-
-const updateBoard = function () {
-    router.push({ name: 'boardUpdate' })
-}
-
+        .catch(() => { });
+};
 </script>
-
+  
 <style scoped></style>
+  
