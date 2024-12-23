@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>시멘틱 태그 레이아웃 예시</title>
+    <style>
+/* 1. 모든 요소에 대해 기본 여백과 패딩을 제거하고, 박스 크기 계산을 border-box로 설정합니다. */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+/* 2. body 요소에 대해 Arial 폰트와 기본 줄 간격을 설정합니다. */
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+/* 3. header 요소에 대해 배경색을 어두운 회색(#333)으로 설정하고, 텍스트 색상을 흰색으로 설정하며, 패딩을 추가합니다. */
+    CSS_SELECTOR_3 {
+      /* ... */
+    }
+
+/* 4. nav 요소에 대해 배경색을 조금 더 밝은 회색(#444)으로 설정하고, 패딩을 추가합니다. */
+    CSS_SELECTOR_4 {
+      /* ... */
+    }
+
+/* 5. nav 내의 ul 요소에 대해 리스트 스타일을 제거하고, flexbox를 사용하여 가로로 나열하며, 항목 간의 간격을 설정합니다. */
+    CSS_SELECTOR_5 {
+      /* ... */
+    }
+
+/* 6. nav 내의 a 요소에 대해 텍스트 색상을 흰색으로 설정하고, 밑줄을 제거합니다. */
+    CSS_SELECTOR_6 {
+      /* ... */
+    }
+
+/* 7. main 요소에 대해 flexbox를 사용하여 자식 요소들을 가로로 배치하고, 외부 여백과 항목 간의 간격을 설정합니다. */
+    CSS_SELECTOR_7 {
+      /* ... */
+    }
+
+/* 8. article 요소에 대해 flexbox 비율을 2로 설정하고, 배경색을 밝은 회색(#f4f4f4)으로 설정하며, 패딩을 추가합니다. */
+    CSS_SELECTOR_8 {
+      flex: 2;
+     /* ... */
+    }
+
+/* 9. section 요소에 대해 하단 여백과 패딩을 추가하고, 배경색을 흰색으로 설정합니다. */
+    CSS_SELECTOR_9 {
+      /* ... */
+    }
+
+/* 10. aside 요소에 대해 flexbox 비율을 1로 설정하고, 배경색을 밝은 회색(#f4f4f4)으로 설정하며, 패딩을 추가합니다. */
+    CSS_SELECTOR_10 {
+      flex: 1;
+      /* ... */
+    }
+
+/* 11. footer 요소에 대해 배경색을 어두운 회색(#333)으로 설정하고, 텍스트 색상을 흰색으로 설정하며, 패딩을 추가하고, 텍스트를 가운데 정렬합니다. */
+    CSS_SELECTOR_11 {
+      /* ... */
+    }
+    </style>
+  </head>
+  <body>
+    <!-- 헤더 영역 -->
+    <header>
+      <h1>웹사이트 제목</h1>
+    </header>
+
+    <!-- 네비게이션 -->
+    <nav>
+      <ul>
+        <li><a href="#home">홈</a></li>
+        <li><a href="#about">소개</a></li>
+        <li><a href="#services">서비스</a></li>
+        <li><a href="#contact">연락처</a></li>
+      </ul>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+      <!-- 주요 콘텐츠 영역 -->
+      <article>
+        <section>
+          <h2>주요 소식</h2>
+          <p>메인 콘텐츠 내용이 들어갑니다.</p>
+        </section>
+
+        <section>
+          <h2>최신 글</h2>
+          <figure>
+            <img src="/placeholder.jpg" alt="예시 이미지" />
+            <figcaption>이미지 설명</figcaption>
+          </figure>
+        </section>
+      </article>
+
+      <!-- 사이드바 -->
+      <aside>
+        <h3>관련 링크</h3>
+        <ul>
+          <li>추천 글</li>
+          <li>인기 글</li>
+          <li>태그 목록</li>
+        </ul>
+
+        <address>
+          <p>연락처: contact@ssafy.com</p>
+          <p>주소: 서울시 강남구</p>
+        </address>
+      </aside>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <footer>
+      <p>&copy; 2024 SSAFY. All rights reserved.</p>
+      <time datetime="2024-12-05">게시일: 2024년 12월 24일</time>
+    </footer>
+  </body>
+</html>

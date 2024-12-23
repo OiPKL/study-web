@@ -1,0 +1,97 @@
+/* Reset CSS */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Block */
+.container {
+  width: 1200px;
+  margin: 200px auto;
+}
+
+/* Card Block */
+.card {
+  margin: auto;
+  width: 700px;
+  border: 2px dashed black;
+}
+
+/* Navigation */
+.card__nav {
+  text-align: center;
+  background-color: lightgreen;
+}
+
+.card__title {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.card__header {
+  padding: 18px;
+}
+
+.card__image {
+  width: 100%;
+  height: 330px;
+}
+
+.card__description {
+  height: 70px;
+  text-align: center;
+  line-height: 35px;
+  background-color: green;
+  color: white;
+}
+
+.card__location,
+.card__name {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* Content */
+.card__content {
+  padding: 18px;
+}
+
+.card__meta {
+  position: relative;
+}
+
+.card__address {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+.card__date {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.card__text {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: linen;
+  font-family: Arial, sans-serif;
+}
+
+/* Footer */
+.card__footer {
+  text-align: end;
+  padding: 10px;
+  background-color: green;
+  color: white;
+}
+
+.card__copyright {
+  font-family: Arial, sans-serif;
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        overflow-x: auto;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .position-box {
+        min-width: 200px;
+        height: 200px;
+        border: 2px solid #333;
+        position: relative;
+        background: white;
+        flex-shrink: 0;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .square {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #666;
+        background: #eee;
+        margin: 5px;
+      }
+
+      /* Static Position */
+      .static .square {
+        position: static;
+      }
+
+      /* Relative Position */
+      .relative .square:nth-child(2) {
+        position: relative;
+        top: 20px;
+        left: 20px;
+        background: #a8d5ff;
+      }
+
+      /* Absolute Position */
+      .absolute .square:nth-child(2) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #c8b6ff;
+      }
+
+      /* Fixed Position */
+      .fixed .square:nth-child(2) {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ffb6b6;
+      }
+
+      /* Sticky Position */
+      .sticky-container {
+        height: 300px;
+        overflow-y: auto;
+        border: 2px solid #333;
+        flex-shrink: 0;
+        min-width: 200px;
+      }
+
+      .sticky .square:nth-child(2) {
+        position: sticky;
+        top: 0; /* 한계점 설정 */
+        background: #b6ffb6;
+      }
+
+      .sticky-content {
+        height: 600px;
+        background: linear-gradient(to bottom, #f0f0f0 0%, #ffffff 100%);
+        padding: 10px;
+      }
+
+      .parent {
+        font-size: 12px;
+        color: #666;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Static Position -->
+      <div>
+        <div class="title">STATIC</div>
+        <div class="position-box static">
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="square"></div>
+          <div class="parent">parent</div>
+        </div>
+      </div>
+
+      <!-- Relative Position -->
+      <div>
+        <div class="title">RELATIVE</div>
+        <div class="position-box relative">
+          <div class="square"></div>
+          <div class="square">relative</div>
+          <div class="square"></div>
+          <div class="parent">parent</div>
+        </div>
+      </div>
+
+      <!-- Absolute Position -->
+      <div>
+        <div class="title">ABSOLUTE</div>
+        <div class="position-box absolute">
+          <div class="square"></div>
+          <div class="square">absolute</div>
+          <div class="square"></div>
+          <div class="parent">parent</div>
+        </div>
+      </div>
+
+      <!-- Fixed Position -->
+      <div>
+        <div class="title">FIXED</div>
+        <div class="position-box fixed">
+          <div class="square"></div>
+          <div class="square">fixed</div>
+          <div class="square"></div>
+          <div class="parent">parent</div>
+        </div>
+      </div>
+
+      <!-- Sticky Position -->
+      <div>
+        <div class="title">STICKY</div>
+        <div class="sticky-container sticky">
+          <div class="square"></div>
+          <div class="square">Sticky</div>
+          <div class="square"></div>
+          <div class="sticky-content">스크롤해보세요!</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

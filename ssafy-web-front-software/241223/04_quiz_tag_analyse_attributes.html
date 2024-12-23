@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+  <!--
+    a 태그의 모든 속성
+      href: 링크의 URL을 지정합니다.
+      target: 링크를 열 때 사용할 창이나 프레임을 지정합니다.
+      download: 링크를 통해 파일을 다운로드할 수 있게 합니다.
+      rel: 링크와 현재 문서의 관계를 지정합니다.
+      type: 링크된 문서의 MIME 타입을 지정합니다.
+      referrerpolicy: 링크를 통해 전송될 참조자 정보를 제어합니다.
+  -->
+  <a 
+    href="https://example.com"   // 링크의 URL을 지정합니다. (필수)
+    target="_blank"              // blank: 새 창에서 열기, self: 현재 창에서 열기 
+    download="example.pdf"       // exmaple.pdf 파일을 다운로드할 수 있게 합니다.
+    rel="noopener"               // noopener: 새 창에서 열 때 참조자 정보를 제거
+    type="application/pdf"       // 링크된 문서의 MIME 타입을 지정합니다.
+    referrerpolicy="no-referrer" // 링크를 통해 전송될 참조자 정보를 제어합니다.
+  >
+    Example Link
+  </a>
+
+  <!--
+    img 태그의 모든 속성
+      src: 이미지 파일의 URL을 지정합니다.
+      alt: 이미지가 로드되지 않을 때 표시할 대체 텍스트를 지정합니다.
+      width: 이미지의 너비를 지정합니다.
+      height: 이미지의 높이를 지정합니다.
+      srcset: 다양한 해상도의 이미지 파일을 지정합니다.
+      sizes: srcset과 함께 사용하여 각 이미지의 크기를 지정합니다.
+      loading: 이미지 로딩 방식을 지정합니다.
+  -->
+
+    <img
+      src="https://example.com/image.jpg" // 이미지 파일의 URL을 지정합니다. (필수)
+      alt="Example Image"                 // 불러오기 실패 시 대체 텍스트를 지정합니다.
+      width="600"                         // 이미지의 너비를 지정합니다.
+      height="400"                        // 이미지의 높이를 지정합니다.
+      srcset="image-1x.jpg 1x, image-2x.jpg 2x" // 다양한 해상도의 이미지 파일을 지정합니다.
+      sizes="(max-width: 600px) 100vw, 600px"   // srcset과 함께 사용하여 각 이미지의 크기를 지정
+      loading="lazy"                      // 이미지 로딩 방식을 지정합니다. (lazy: 지연 로딩)
+    />
+  </body>
+</html>

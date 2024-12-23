@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 1. img 태그의 width와 height -->
+    <!-- CSS로 지정할 때와 다르게, 단위(px 등)를 붙이지 않습니다 -->
+    <img src="photo.jpg" width="300" height="200" alt="설명">
+    <!-- CSS를 통한 크기 지정 -->
+    <img src="photo.jpg" style="width: 300px; height: 200px;">
+
+    <!-- 2. input 태그의 disabled vs readonly -->
+    <input type="text" disabled>  <!-- 완전히 비활성화되어 선택도 불가능 -->
+    <input type="text" readonly>  <!-- 읽기만 가능하며 선택과 복사는 가능 -->
+
+    <!-- 3. a 태그의 target 속성 -->
+    <a href="https://example.com" target="_blank">새 탭에서 열기</a>
+    <a href="https://example.com" target="_self">현재 탭에서 열기</a>
+
+    <!-- 4. form의 method 속성 -->
+    <form method="get">  <!-- URL에 데이터가 노출됨 -->
+    <form method="post"> <!-- URL에 데이터가 노출되지 않음 -->
+
+    <!-- 5. input의 required vs autofocus -->
+    <input type="text" required>    <!-- 필수 입력 필드 -->
+    <input type="text" autofocus>   <!-- 페이지 로드 시 자동 포커스 -->
+
+
+    <!-- 5. select의 multiple vs size -->
+    <select multiple>  <!-- Ctrl/Cmd 키로 여러 항목 선택 가능 -->
+        <option>항목1</option>
+        <option>항목2</option>
+    </select>
+    <select size="3">  <!-- 한 번에 보여줄 옵션의 개수 -->
+        <option>항목1</option>
+        <option>항목2</option>
+        <option>항목3</option>
+    </select>
+
+    <!-- 6. input type="number"의 step vs min/max -->
+    <input type="number" step="0.5">     <!-- 0.5 단위로 증감 -->
+    <input type="number" min="0" max="100"> <!-- 입력 가능한 범위 제한 -->
+
+    <!-- 7. video/audio의 controls vs autoplay -->
+    <video src="video.mp4" controls>    <!-- 재생 컨트롤러 표시 -->
+    <video src="video.mp4" autoplay>    <!-- 자동 재생 (많은 브라우저에서 제한) -->
+
+    <!-- 8. div의 contenteditable vs draggable -->
+    <div contenteditable="true">편집 가능한 div</div>
+    <div draggable="true">드래그 가능한 div</div>
+  </body>
+</html>
