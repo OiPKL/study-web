@@ -8,11 +8,15 @@
       /* 이 안에 CSS 코드를 작성하세요. */
       /* menu 클래스를 가진 nav 요소 내부의 중첩된 ul의 직계 자식 li 요소들만 선택하는 CSS 선택자를 작성하세요. 
       (즉, "의류", "신발", "가방" 항목만 선택되어야 합니다) */
-      여기에_CSS선택자_작성 {
+      .menu > ul > li > ul > li {
         display: inline-block;
         margin-right: 10px;
       }
 
+      .menu li > ul > li {
+        display: inline-block;
+        margin-right: 10px;
+      }
     </style>
   </head>
   <body>
