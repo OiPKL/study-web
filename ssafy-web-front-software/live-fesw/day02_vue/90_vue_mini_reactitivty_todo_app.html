@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple TODO App</title>
+    <style>
+      .todo-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 8px 0;
+      }
+      .completed {
+        text-decoration: line-through;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <div>
+        <input type="text" id="newTodo" placeholder="할 일을 입력하세요" />
+        <button onclick="addTodo()">추가</button>
+      </div>
+      <div>{{ todoList }}</div>
+      <p>완료된 할 일: {{ completedCount }}</p>
+    </div>
+
+    <script>
+      let currentEffect = null
+
+      function effect(fn) {
+        currentEffect = fn
+        fn()
+        currentEffect = null
+      }
+
+      function ref(initialValue) {
+        let _value = initialValue
+        const subscribers = new Set()
+
+        return {
+          get value() {
+            if (currentEffect) {
+              subscribers.add(currentEffect)
+            }
+            return _value
+          },
+          set value(newValue) {
+            _value = newValue
+            subscribers.forEach((subscriber) => subscriber())
+          },
+        }
+      }
+
+      function computed(getter) {
+        let result = ref()
+        effect(() => {
+          result.value = getter()
+        })
+        return result
+      }
+
+      function unref(value) {
+        return value instanceof Object && value.hasOwnProperty("value") ? value.value : value
+      }
+
+      function createTemplate(selector = "#app") {
+        const app = document.querySelector(selector)
+        const template = app.innerHTML
+
+        // 먼저 기본 state 객체 생성
+        const state = {
+          title: ref("Todo 리스트"),
+          todos: ref([]),
+        }
+
+        // computed 속성들을 나중에 추가 (순환 참조 방지)
+        state.todoList = computed(() => {
+          return state.todos.value
+            .map(
+              (todo, index) => `
+                    <div class="todo-item">
+                        <input type="checkbox" 
+                            ${todo.completed ? "checked" : ""} 
+                            onchange="toggleTodo(${index})">
+                        <span class="${todo.completed ? "completed" : ""}">${todo.text}</span>
+                        <button onclick="removeTodo(${index})">삭제</button>
+                    </div>
+                `
+            )
+            .join("")
+        })
+
+        state.completedCount = computed(() => {
+          return state.todos.value.filter((todo) => todo.completed).length
+        })
+
+        function render() {
+          app.innerHTML = template.replace(/\{\{(.*?)\}\}/g, (_, key) => {
+            return unref(state[key.trim()]) ?? ""
+          })
+        }
+
+        effect(render)
+
+        return {
+          state,
+          render,
+        }
+      }
+
+      // 앱 초기화
+      const template = createTemplate("#app")
+
+      // Todo 관련 함수들
+      function addTodo() {
+        const input = document.querySelector("#newTodo")
+        const text = input.value.trim()
+
+        if (text) {
+          template.state.todos.value = [...template.state.todos.value, { text, completed: false }]
+          input.value = ""
+        }
+      }
+
+      function toggleTodo(index) {
+        const todos = [...template.state.todos.value]
+        todos[index].completed = !todos[index].completed
+        template.state.todos.value = todos
+      }
+
+      function removeTodo(index) {
+        template.state.todos.value = template.state.todos.value.filter((_, i) => i !== index)
+      }
+    </script>
+  </body>
+</html>

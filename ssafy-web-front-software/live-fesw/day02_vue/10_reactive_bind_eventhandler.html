@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue 3 Ref 데모</title>
+  </head>
+  <body>
+    <h1>Vue 3 Ref 데모</h1>
+
+    <div>
+      <h2>카운터</h2>
+      <div>
+        현재 카운트:
+        <span id="countDisplay">0</span>
+      </div>
+      <button id="incrementBtn">증가</button>
+      <button id="decrementBtn">감소</button>
+    </div>
+
+    <div>
+      <h2>메시지</h2>
+      <div>
+        현재 메시지:
+        <span id="messageDisplay"></span>
+      </div>
+      <input type="text" id="messageInput" />
+      <button id="updateMessageBtn">메시지 업데이트</button>
+    </div>
+
+    <script>
+      // 반응형 시스템 구현
+      let currentEffect = null;
+
+      function effect(fn) {
+        currentEffect = fn;
+        fn();
+        currentEffect = null;
+      }
+
+      function createDep() {
+        // 구독자 컨테이너 생성
+        const subscribers = new Set();
+        // Dep 매니저 객체 생성 후 반환
+        return {
+          // Dep의 의존성 수집 메서드 정의
+          depend() {
+            if (currentEffect) {
+              // 현재 수집 중인 Effect를 구독자로 등록
+              subscribers.add(currentEffect);
+            }
+          },
+          // Dep의 의존성 알림 메서드 정의
+          notify() {
+            // 구독 중인 Effect를 모두 실행
+            subscribers.forEach((sub) => sub());
+          },
+        };
+      }
+
+      function ref(initalValue) {
+        return {
+          // Dep 매니저 객체 생성
+          dep: createDep(),
+          _value: initalValue,
+          get value() {
+            this.dep.depend(); // 의존성 수집
+            return this._value;
+          },
+          set value(newValue) {
+            this._value = newValue;
+            this.dep.notify(); // 의존성 알림
+          },
+        };
+      }
+      
+      // ref를 사용한 반응형 상태 생성
+      const count = ref(0);
+      const message = ref("안녕하세요!");
+
+      // DOM 요소
+      const countDisplay = document.querySelector("#countDisplay");
+      const messageDisplay = document.querySelector("#messageDisplay");
+      const messageInput = document.querySelector("#messageInput");
+
+      // 효과 등록
+      effect(() => {
+        countDisplay.textContent = count.value;
+      });
+
+      effect(() => {
+        messageDisplay.textContent = message.value;
+      });
+
+      // 이벤트 리스너
+      document.querySelector("#incrementBtn").addEventListener("click", () => {
+        count.value++;
+      });
+
+      document.querySelector("#decrementBtn").addEventListener("click", () => {
+        count.value--;
+      });
+
+      document.querySelector("#updateMessageBtn").addEventListener("click", () => {
+        message.value = messageInput.value;
+        messageInput.value = "";
+      });
+
+      // 초기 메시지 입력창 값 설정
+      messageInput.value = message.value;
+    </script>
+  </body>
+</html>

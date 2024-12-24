@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /* fetch API - 비동기 처리 await - async */
+      async function logJSONData() {
+        const response = await fetch("https://dog.ceo/api/breeds/image/random")
+        const jsonData = await response.json()
+        console.log(jsonData)
+      }
+      logJSONData()
+
+      /* fetch API 비동기를 동기처럼 사용하였을 때... */
+      // function logJSONData() {
+      //     const response = fetch('https://dog.ceo/api/breeds/image/random')
+      //     const jsonData = response.json()
+      //     console.log(jsonData)
+      // }
+      // logJSONData()
+    </script>
+  </body>
+</html>

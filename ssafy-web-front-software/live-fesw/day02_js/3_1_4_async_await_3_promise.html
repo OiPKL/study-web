@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      // 실제 Promise 객체 생성
+      // 성공 시에는 resolve 콜백 함수 실행 -> .then() 메소드의 콜백 실행 과정 진행...
+      // 실패 시에는 reject 콜백 함수 실행 -> .catch() 메서드의 콜백 실행 과전 진행...
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(() => resolve("작업 완료!"), 2000)
+        //   setTimeout(() => reject("작업 실패"), 2000)
+      })
+      promise
+        .then((result) => console.log(result)) // 성공 처리
+        .catch((error) => console.error(error)) // 실패 처리
+    </script>
+  </body>
+</html>

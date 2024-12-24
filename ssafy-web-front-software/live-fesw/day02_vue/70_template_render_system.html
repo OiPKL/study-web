@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <p>{{ message }}</p>
+      <!-- <p>{{ description }}</p> -->
+    </div>
+    <script>
+      // 템플릿 렌더링 함수
+      function createTemplate(selector = "#app") {
+        const app = document.querySelector(selector)
+        const template = app.innerHTML
+        let state = {}
+
+        function render() {
+          app.innerHTML = template.replace(/\{\{(.*?)\}\}/g, (match, key) => {
+            return state[key.trim()] ?? ""
+            // return unref(state[key.trim()]) ?? "";
+          })
+        }
+
+        return {
+          setState(newState) {
+            state = { ...state, ...newState }
+            render()
+          },
+        }
+      }
+
+      // function ref(value) {
+      //   return {
+      //     value,
+      //   };
+      // }
+
+      // function unref(value) {
+      //   return value instanceof Object && value.hasOwnProperty("value") ? value.value : value;
+      // }
+
+      // 사용 예시
+      const template = createTemplate("#app")
+      template.setState({
+        title: "Vue mini project",
+        message: "Hello World",
+        // description: ref("welcome vue mini project"),
+      })
+    </script>
+  </body>
+</html>

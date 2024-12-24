@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function init() {
+        const student = { name: "kimssafy" } // student init 함수에서 생성된 지역 변수
+        function displayName() {
+          console.log(student.name) // 부모 함수(init) 에서 선언된 변수를 사용
+        }
+        return displayName
+      }
+      init()
+      console.log(student.name)
+
+      // function init() {
+      //     const student = { name : 'kimssafy'}
+      //     function displayName() {
+      //         console.log(student.name)
+      //     }
+      //     return displayName
+      // }
+      // const myFunc = init()
+      // myFunc()
+    </script>
+  </body>
+</html>

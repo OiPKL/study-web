@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //  fetch API를 사용한 then, catch 비동기 처리
+      fetch("https://dog.ceo/api/breeds/image/random")
+        .then((response) => response.json()) // 응답을 JSON으로 변환
+        .then((data) => console.log(data)) // 데이터 출력
+        .catch((error) => console.error("에러 발생:", error))
+    </script>
+  </body>
+</html>
