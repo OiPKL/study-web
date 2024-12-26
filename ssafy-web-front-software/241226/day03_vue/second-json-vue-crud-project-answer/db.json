@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "email": "ssafy@ssafy.com",
+      "password": "$2a$10$RRfMkDWRp43A34br4lr7VOe.Pcp/toSJ.ZGmoglfhVxq28Oy9T3BG",
+      "name": "admin",
+      "id": 1
+    }
+  ],
+  "posts": [
+    {
+      "title": "특강에 오신 것을 환영합니다 :)",
+      "content": "12기 여러분들 모두 환영합니다~!",
+      "userId": 1,
+      "id": 1
+    },
+    {
+      "title": "json-server와 함께 배우는 CRUD 특강",
+      "content": "json-server와 함께 작성하는 게시글",
+      "userId": 1,
+      "id": 2
+    }
+  ],
+  "comments": []
+}
