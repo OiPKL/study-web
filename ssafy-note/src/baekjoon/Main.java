@@ -9,11 +9,48 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
+	
+	static int N, M;
+	static List<Integer> arr;
+	static boolean[] visited;
+	static StringBuilder sb = new StringBuilder();
+	
 	public static void main(String[] args) throws IOException {
 		
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		System.out.println("TestTestTest");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		arr = new ArrayList<>();
+		visited = new boolean[N+1];
+		
+		btk();
+		
+		System.out.println(sb);
+	}
+	
+	static void btk() {
+		
+		if (arr.size() == M) {
+			
+			for (int num : arr)
+				sb.append(num).append(" ");
+			sb.append("\n");
+			return;
+		}
+		
+		for (int i = 1; i <= N; i++) {
+			
+			if (!visited[i]) {
+				
+				visited[i] = true;
+				arr.add(i);
+				btk();
+				arr.remove(arr.size() - 1);
+				visited[i] = false;
+			}
+		}
 	}
 }
