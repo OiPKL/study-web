@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
-	
+
 	static int N, M;
 	static List<Integer> arr;
 	static boolean[] visited;
