@@ -3,58 +3,48 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, K;
-	static boolean[] visited;
-	static int[] time;
+	static int H, W, total;
+	static int[] blocks, leftMax, rightMax;
 	
     public static void main(String[] args) throws IOException{
     	
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	StringTokenizer st = new StringTokenizer(br.readLine());
-    	
-    	N = Integer.parseInt(st.nextToken());
-    	K = Integer.parseInt(st.nextToken());
-    	
-    	visited = new boolean[100001];
-    	time = new int[100001];
-    	
-    	Deque<Integer> bfs = new LinkedList<>();
-    	bfs.add(N);
-    	visited[N] = true;
-    	time[N] = 0;
-    	
-        while (!bfs.isEmpty()) {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		H = Integer.parseInt(st.nextToken());
+		W = Integer.parseInt(st.nextToken());
+        blocks = new int[W];
+        leftMax = new int[W];
+        rightMax = new int[W];
+        total = 0;
+		
+        st = new StringTokenizer(br.readLine());
+        for (int w = 0; w < W; w++)
+            blocks[w] = Integer.parseInt(st.nextToken());
+		
+        leftMax[0] = blocks[0];
+        for (int i = 1; i < W; i++)
+            leftMax[i] = Math.max(leftMax[i-1], blocks[i]);
+        
+        rightMax[W-1] = blocks[W-1];
+        for (int i = W-2; i >= 0; i--)
+            rightMax[i] = Math.max(rightMax[i+1], blocks[i]);
+        
+        for (int i = 1; i < W-1; i++) {
+
+        	int minHeight = Math.min(leftMax[i], rightMax[i]);
         	
-        	int curr = bfs.pollFirst();
-        	
-        	if (curr * 2 <= 100000 && !visited[curr * 2]) {
-        		
-        		visited[curr * 2] = true;
-        		time[curr * 2] = time[curr];
-        		bfs.addFirst(curr * 2);
-        	}
-        	
-        	if (curr - 1 >= 0 && !visited[curr - 1]) {
-        		
-        		visited[curr - 1] = true;
-        		time[curr - 1] = time[curr] + 1;
-        		bfs.addLast(curr - 1);
-        	}
-        	
-        	if (curr + 1 <= 100000 && !visited[curr + 1]) {
-        		
-        		visited[curr + 1] = true;
-        		time[curr + 1] = time[curr] + 1;
-        		bfs.addLast(curr + 1);
-        	}
+            if (minHeight > blocks[i])
+                total += minHeight - blocks[i];
         }
-        	
-        System.out.println(time[K]);
-    }
+        
+        sb.append(total);
+		System.out.println(sb);
+	}
 }
