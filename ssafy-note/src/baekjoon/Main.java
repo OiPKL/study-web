@@ -3,48 +3,55 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int H, W, total;
-	static int[] blocks, leftMax, rightMax;
-	
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
     	
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		H = Integer.parseInt(st.nextToken());
-		W = Integer.parseInt(st.nextToken());
-        blocks = new int[W];
-        leftMax = new int[W];
-        rightMax = new int[W];
-        total = 0;
-		
-        st = new StringTokenizer(br.readLine());
-        for (int w = 0; w < W; w++)
-            blocks[w] = Integer.parseInt(st.nextToken());
-		
-        leftMax[0] = blocks[0];
-        for (int i = 1; i < W; i++)
-            leftMax[i] = Math.max(leftMax[i-1], blocks[i]);
-        
-        rightMax[W-1] = blocks[W-1];
-        for (int i = W-2; i >= 0; i--)
-            rightMax[i] = Math.max(rightMax[i+1], blocks[i]);
-        
-        for (int i = 1; i < W-1; i++) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
-        	int minHeight = Math.min(leftMax[i], rightMax[i]);
-        	
-            if (minHeight > blocks[i])
-                total += minHeight - blocks[i];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        
+        int[] arr = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
         
-        sb.append(total);
-		System.out.println(sb);
-	}
+        boolean[] visited = new boolean[N + 1];
+        
+        for (int i = 1; i <= N; i++) {
+            ArrayList<Integer> list = new ArrayList<>();
+            int current = i;
+            
+            while (!list.contains(current)) {
+                list.add(current);
+                current = arr[current];
+            }
+            
+            if (current == i) {
+                int idx = list.indexOf(current);
+                for (int j = idx; j < list.size(); j++) {
+                    visited[list.get(j)] = true;
+                }
+            }
+        }
+        
+        ArrayList<Integer> answer = new ArrayList<>();
+        for (int i = 1; i <= N; i++)
+            if (visited[i])
+                answer.add(i);
+        
+        Collections.sort(answer);
+        
+        sb.append(answer.size()).append("\n");
+        for (int num : answer)
+            sb.append(num).append("\n");
+
+        System.out.print(sb);
+    }
 }
