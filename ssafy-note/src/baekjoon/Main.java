@@ -3,79 +3,83 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static String[] led = {
-        "1111110",
-        "0110000",
-        "1101101",
-        "1111001",
-        "0110011",
-        "1011011",
-        "1011111",
-        "1110000",
-        "1111111",
-        "1111011" 
-    };
-    
     public static void main(String[] args) throws IOException {
     	
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        
         int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        int P = Integer.parseInt(st.nextToken());
-        int X = Integer.parseInt(st.nextToken());
         
-        int[][] diff = new int[10][10];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-            	
-                int cost = 0;
-                for (int k = 0; k < 7; k++)
-                    if (led[i].charAt(k) != led[j].charAt(k))
-                        cost++;
-                
-                diff[i][j] = cost;
-            }
-        }
+        long[] input = new long[N + 1];
         
-        String xStr = formatZero(X, K);
-        int cnt = 0;
+        for (int n = 1; n <= N; n++)
+        	input[n] = Long.parseLong(br.readLine());
         
-        for (int n = 1; n <= N; n++) {
+        SegmentTree sTree = new SegmentTree(N);
+        sTree.init(input, 1, 1, N);
+        
+        String line;
+        while (line = br.readLine()) != null) {
+        	st = new StringTokenizer(line);
+        	int cmd = Integer.parseInt(st.nextToken());
+        	int num1 = Integer.parseInt(st.nextToken());
+        	int num2 = Integer.parseInt(st.nextToken());
         	
-            if (n == X) continue;
-            
-            String checkStr = formatZero(n, K);
-            int totalCost = 0;
-            
-            for (int i = 0; i < K; i++) {
-                int xDigit = xStr.charAt(i) - '0';
-                int cDigit = checkStr.charAt(i) - '0';
-                totalCost += diff[xDigit][cDigit];
-            }
-            
-            if (totalCost >= 1 && totalCost <= P)
-                cnt++;
+        	if (cmd == 1) {
+        		long result = sTree.sum(1, 1, N, num1, num2);
+        		sb.append(result).append("\n");
+        	}
+        	else
+        		sTree.update(1, 1, N, num1, num2);
         }
         
-        System.out.println(cnt);
+        System.out.println(sb);
     }
     
-    static String formatZero(int x, int k) {
-        String str = Integer.toString(x);
-        char[] arr = new char[k];
-        int idx = 0;
-        int len = str.length();
-        
-        for (int i = 0; i < k - len; i++)
-            arr[idx++] = '0';
-
-        for (int i = 0; i < len; i++)
-            arr[idx++] = str.charAt(i);
-
-        return new String(arr);
+    static class SegmentTree {
+    	
+    	long[] tree;
+    	
+    	SegmentTree(int n) {
+    		tree = new long[4 * n];
+    	}
+    	
+    	long init(long[] arr, int node, int start, int end) {
+    		if (start == end)
+    			return tree[node] = arr[start];
+    		else
+    			return tree[node] = init(arr, node*2, start, (start+end)/2)
+    								+ init(arr, node*2+1, (start+end)/2+1, end);
+    	}
+    	
+    	long sum(int node, int nodeStart, int nodeEnd, int sumStart, int sumEnd) {
+    		
+    		if (nodeEnd < sumStart || sumEnd < nodeStart)
+    			return 0;
+    		else if (sumStart <= nodeStart && nodeEnd <= sumEnd)
+    			return tree[node];
+    		else
+    			return sum(node*2, nodeStart, (nodeStart+nodeEnd)/2, sumStart, sumEnd)
+    				   + sum(node*2+1, (nodeStart+nodeEnd)/2+1, nodeEnd, sumStart, sumEnd);
+    	}
+    	
+    	long update(int node, int start, int end, int index, long value) {
+    		
+    		if (index < start || end < index)
+    			return tree[node];
+    		else if (start == index && end == index)
+    			return tree[node] = value;
+    		else
+    			return tree[node] = update(node*2, start, (start+end)/2, index, value)
+    								+ update(node*2+1, (start+end)/2+1, end, index, value);
+    	}
     }
 }
