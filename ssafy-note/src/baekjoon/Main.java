@@ -3,85 +3,70 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 	
-	static int MOD = 1_000_000_007;
+	static StringBuilder sb = new StringBuilder();
+	static String str;
 	
     public static void main(String[] args) throws IOException {
     	
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        
-        long[] input = new long[N + 1];
-        
-        for (int n = 1; n <= N; n++)
-        	input[n] = Long.parseLong(br.readLine());
-        
-        SegmentTree sTree = new SegmentTree(N);
-        sTree.init(input, 1, 1, N);
-        
-        for (int i = N+2; i <= N+M+K+1; i++) {
 
-        	st = new StringTokenizer(br.readLine());
+        int TC = Integer.parseInt(br.readLine());
+        for (int tc = 0; tc < TC; tc++) {
         	
-        	int cmd = Integer.parseInt(st.nextToken());
-        	long num1 = Long.parseLong(st.nextToken());
-        	long num2 = Long.parseLong(st.nextToken());
+        	int N = Integer.parseInt(br.readLine());
+        	List<String> results = new ArrayList<>();
+        	btk(1, N, "1", results);
         	
-        	if (cmd == 1)
-        		sTree.update(1, 1, N, num1, num2);
-        	else {
-        		long result = sTree.mul(1, 1, N, num1, num2);
-        		sb.append(result).append("\n");
-        	}
+        	for (String s : results)
+        		sb.append(s).append("\n");
+        	
+        	if (tc != TC - 1)
+        		sb.append("\n");
         }
         
         System.out.println(sb);
     }
     
-    static class SegmentTree {
+    static void btk(int now, int N, String expr, List<String> results) {
     	
-    	long[] tree;
-    	
-    	SegmentTree(int n) {
-    		tree = new long[4 * n];
-    	}
-    	
-    	long init(long[] arr, int node, int start, int end) {
-    		if (start == end)
-    			return tree[node] = arr[start] % MOD;
-    		else
-    			return tree[node] = init(arr, node*2, start, (start+end)/2)
-    								* init(arr, node*2+1, (start+end)/2+1, end) % MOD;
-    	}
-    	
-    	long mul(int node, int nodeStart, int nodeEnd, long mulStart, long mulEnd) {
+    	if (now == N) {
     		
-    		if (nodeEnd < mulStart || mulEnd < nodeStart)
-    			return 1;
-    		else if (mulStart <= nodeStart && nodeEnd <= mulEnd)
-    			return tree[node];
-    		else
-    			return mul(node*2, nodeStart, (nodeStart+nodeEnd)/2, mulStart, mulEnd)
-    					* mul(node*2+1, (nodeStart+nodeEnd)/2+1, nodeEnd, mulStart, mulEnd) % MOD;
+    		if (cal(expr) == 0)
+    			results.add(expr);
+    		
+    		return;
     	}
     	
-    	long update(int node, int start, int end, long index, long value) {
+    	int next = now + 1;
+    	btk(next, N, expr + " " + next, results);
+    	btk(next, N, expr + "+" + next, results);
+    	btk(next, N, expr + "-" + next, results);
+    }
+    
+    static int cal(String expr) {
+    	
+    	String s = expr.replace(" ", "");
+    	int sum = 0;
+    	int num = 0;
+    	int sign = 1;
+    	
+    	for (int i = 0; i < s.length(); i++) {
     		
-    		if (index < start || end < index)
-    			return tree[node];
-    		else if (start == index && end == index)
-    			return tree[node] = value;
-    		else
-    			return tree[node] = update(node*2, start, (start+end)/2, index, value)
-    								* update(node*2+1, (start+end)/2+1, end, index, value) % MOD;
+    		char c = s.charAt(i);
+    		if (c == '+' || c == '-') {
+    			sum += sign * num;
+    			num = 0;
+    			sign = (c == '+') ? 1 : -1;
+    		} else
+    			num = num * 10 + (c - '0');
     	}
+    	
+    	sum += sign * num;
+    	return sum;
     }
 }
