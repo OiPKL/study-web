@@ -10,26 +10,27 @@ public class Main {
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
 	
+	static int R, C, rNow, cNow, dNow, rNext, cNext, visitCnt = 0, cleanCnt = 0, emptyCnt = 0, totalCnt = 0;
+	static boolean[][] cleaned;
+	static int[][][] visited;
+	static int[][] ruleA, ruleB;
+	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	StringTokenizer st = new StringTokenizer(br.readLine());
-        int R = Integer.parseInt(st.nextToken());
-        int C = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
         
         st = new StringTokenizer(br.readLine());
-        int rNow = Integer.parseInt(st.nextToken());
-        int cNow = Integer.parseInt(st.nextToken());
-        int dNow = Integer.parseInt(st.nextToken());
+        rNow = Integer.parseInt(st.nextToken());
+        cNow = Integer.parseInt(st.nextToken());
+        dNow = Integer.parseInt(st.nextToken());
         
-        boolean[][] map = new boolean[R][C];
-        int[][] ruleA = new int[R][C];
-        int[][] ruleB = new int[R][C];
-		
-        int cnt = 0, totalCnt = 0;
-        int rNext = -1, cNext = -1, dNext = -1;
-        int rNNext = -1, cNNext = -1, dNNext = -1;
-        boolean innerCleaned = false, outerCleaned = false;
+        cleaned = new boolean[R][C];
+        visited = new int[R][C][4];
+        ruleA = new int[R][C];
+        ruleB = new int[R][C];
         
         for (int r = 0; r < R; r++) {
         	String line = br.readLine();
@@ -43,51 +44,36 @@ public class Main {
         		ruleB[r][c] = line.charAt(c) - '0';
         }
         
-        outer:
         while (true) {
         	
-        	cnt = 0;
-        	rNext = rNow;
-        	cNext = cNow;
-        	dNext = dNow;
-        	outerCleaned = false;
-        	
-        	inner:
-        	while (true) {
+        	if (!cleaned[rNow][cNow]) {
+        		cleaned[rNow][cNow] = true;
+        		visitCnt++;
+        		emptyCnt = 0;
+        		dNow = (dNow + ruleA[rNow][cNow]) % 4;
+        	} else {
         		
-        		innerCleaned = false;
-        		
-        		if (!map[rNext][cNext]) {
-        			innerCleaned = true;
-        			outerCleaned = true;
-        			map[rNext][cNext] = true;
-        		}
-        		
-        		if (innerCleaned)
-        			dNNext = (dNext + ruleA[rNext][cNext]) % 4;
-        		else
-        			dNNext = (dNext + ruleB[rNext][cNext]) % 4;
-        		
-        		rNNext = rNext + dr[dNNext];
-        		cNNext = cNext + dc[dNNext];
-        		
-        		if (rNNext < 0 || R <= rNNext || cNNext < 0 || C <= cNNext) {
-        			if (outerCleaned)
-        				totalCnt += cnt;
-        			break outer;
-        		}
-        		
-        		cnt++;
-        		rNext = rNNext;
-        		cNext = cNNext;
-        		dNext = dNNext;
-        		
-        		if (rNNext == rNow && cNNext == cNow && dNNext == dNow) {
-        			if (outerCleaned)
-        				totalCnt += cnt;
-        			break outer;
-        		}
+                if (visited[rNow][cNow][dNow] == visitCnt) {
+                	totalCnt += cleanCnt - emptyCnt;
+                	break;
+                }
+                
+                visited[rNow][cNow][dNow] = visitCnt;
+        		emptyCnt++;
+        		dNow = (dNow + ruleB[rNow][cNow]) % 4;
         	}
+        	
+        	rNext = rNow + dr[dNow];
+        	cNext = cNow + dc[dNow];
+        	cleanCnt++;
+        	
+            if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext) {
+            	totalCnt += cleanCnt - emptyCnt;
+            	break;
+            }
+            
+            rNow = rNext;
+            cNow = cNext;
         }
         
         System.out.println(totalCnt);
