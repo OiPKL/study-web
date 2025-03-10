@@ -9,36 +9,27 @@ public class Main {
 	
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
-	static int R, C, rNow, cNow, dNow, rNext, cNext, dNext, cnt = 0, tmp = 0;
-	static int[][] ruleA, ruleB;
-	static boolean[][] map;
-	static boolean cleaned = false;
 	
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
-	
-    public static void main(String[] args) throws IOException {
-    	
-    	// 현재 칸 먼지 제거
-    	// 규칙표 : 현재 좌표에 적힌 만큼 시계방향 회전
-    	// 먼지 제거 O (A) : 
-    	// 먼지 제거 X (B) : 
-    	// 바라보는 방향으로 한 칸 전진
-    	// 작동 중지	- 이동 후 영역 밖 벗어나면
-    	// 			- 반복해도 더 이상 먼지 제거 불가
-
-        st = new StringTokenizer(br.readLine());
-        R = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	StringTokenizer st = new StringTokenizer(br.readLine());
+        int R = Integer.parseInt(st.nextToken());
+        int C = Integer.parseInt(st.nextToken());
         
         st = new StringTokenizer(br.readLine());
-        rNow = Integer.parseInt(st.nextToken());
-        cNow = Integer.parseInt(st.nextToken());
-        dNow = Integer.parseInt(st.nextToken());
+        int rNow = Integer.parseInt(st.nextToken());
+        int cNow = Integer.parseInt(st.nextToken());
+        int dNow = Integer.parseInt(st.nextToken());
         
-        map = new boolean[R][C];
-        ruleA = new int[R][C];
-        ruleB = new int[R][C];
+        boolean[][] map = new boolean[R][C];
+        int[][] ruleA = new int[R][C];
+        int[][] ruleB = new int[R][C];
+		
+        int cnt = 0, totalCnt = 0;
+        int rNext = -1, cNext = -1, dNext = -1;
+        int rNNext = -1, cNNext = -1, dNNext = -1;
+        boolean innerCleaned = false, outerCleaned = false;
         
         for (int r = 0; r < R; r++) {
         	String line = br.readLine();
@@ -52,31 +43,53 @@ public class Main {
         		ruleB[r][c] = line.charAt(c) - '0';
         }
         
-        move:
+        outer:
         while (true) {
         	
-        	tmp = 0;
+        	cnt = 0;
         	rNext = rNow;
         	cNext = cNow;
         	dNext = dNow;
+        	outerCleaned = false;
         	
-        	clean:
+        	inner:
         	while (true) {
         		
-        		if (cleaned) {	// ruleA
-        			
-        			if (!map[rNext][cNext])
-        				map[rNext][cNext] = true;
-
-        			
-        		} else {		// ruleB
-        			
-        			if (!map[rNext][cNext])
-        				map[rNext][cNext] = true;
-        			
-        			
+        		innerCleaned = false;
+        		
+        		if (!map[rNext][cNext]) {
+        			innerCleaned = true;
+        			outerCleaned = true;
+        			map[rNext][cNext] = true;
+        		}
+        		
+        		if (innerCleaned)
+        			dNNext = (dNext + ruleA[rNext][cNext]) % 4;
+        		else
+        			dNNext = (dNext + ruleB[rNext][cNext]) % 4;
+        		
+        		rNNext = rNext + dr[dNNext];
+        		cNNext = cNext + dc[dNNext];
+        		
+        		if (rNNext < 0 || R <= rNNext || cNNext < 0 || C <= cNNext) {
+        			if (outerCleaned)
+        				totalCnt += cnt;
+        			break outer;
+        		}
+        		
+        		cnt++;
+        		rNext = rNNext;
+        		cNext = cNNext;
+        		dNext = dNNext;
+        		
+        		if (rNNext == rNow && cNNext == cNow && dNNext == dNow) {
+        			if (outerCleaned)
+        				totalCnt += cnt;
+        			break outer;
         		}
         	}
         }
-    }
+        
+        System.out.println(totalCnt);
+	}
 }
