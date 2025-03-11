@@ -3,79 +3,51 @@ package baekjoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-	
-	static int R, C, rNow, cNow, dNow, rNext, cNext, visitCnt = 0, cleanCnt = 0, emptyCnt = 0, totalCnt = 0;
-	static boolean[][] cleaned;
-	static int[][][] visited;
-	static int[][] ruleA, ruleB;
-	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	StringTokenizer st = new StringTokenizer(br.readLine());
-        R = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        
-        st = new StringTokenizer(br.readLine());
-        rNow = Integer.parseInt(st.nextToken());
-        cNow = Integer.parseInt(st.nextToken());
-        dNow = Integer.parseInt(st.nextToken());
-        
-        cleaned = new boolean[R][C];
-        visited = new int[R][C][4];
-        ruleA = new int[R][C];
-        ruleB = new int[R][C];
-        
-        for (int r = 0; r < R; r++) {
-        	String line = br.readLine();
-        	for (int c = 0; c < C; c++)
-        		ruleA[r][c] = line.charAt(c) - '0';
-        }
-        
-        for (int r = 0; r < R; r++) {
-        	String line = br.readLine();
-        	for (int c = 0; c < C; c++)
-        		ruleB[r][c] = line.charAt(c) - '0';
-        }
-        
-        while (true) {
-        	
-        	if (!cleaned[rNow][cNow]) {
-        		cleaned[rNow][cNow] = true;
-        		visitCnt++;
-        		emptyCnt = 0;
-        		dNow = (dNow + ruleA[rNow][cNow]) % 4;
-        	} else {
-        		
-                if (visited[rNow][cNow][dNow] == visitCnt) {
-                	totalCnt += cleanCnt - emptyCnt;
-                	break;
-                }
-                
-                visited[rNow][cNow][dNow] = visitCnt;
-        		emptyCnt++;
-        		dNow = (dNow + ruleB[rNow][cNow]) % 4;
-        	}
-        	
-        	rNext = rNow + dr[dNow];
-        	cNext = cNow + dc[dNow];
-        	cleanCnt++;
-        	
-            if (rNext < 0 || R <= rNext || cNext < 0 || C <= cNext) {
-            	totalCnt += cleanCnt - emptyCnt;
-            	break;
-            }
-            
-            rNow = rNext;
-            cNow = cNext;
-        }
-        
-        System.out.println(totalCnt);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int M = Integer.parseInt(st.nextToken()) - 1;
+		int N = Integer.parseInt(st.nextToken()) - 1;
+		int K = Integer.parseInt(st.nextToken());
+		
+		int[][] visited = new int[N][M];
+		
+		HashMap<Integer, Integer> hashmapN = new HashMap<>();
+		HashMap<Integer, Integer> hashmapM = new HashMap<>();
+		
+		for (int k = 0; k < K; k++) {
+			st = new StringTokenizer(br.readLine());
+			int btnN = Integer.parseInt(st.nextToken()) - 1;
+			int btnM = Integer.parseInt(st.nextToken()) - 1;
+			
+			hashmapN.put(btnN, btnM);
+			hashmapM.put(btnM, btnN);
+		}
+		
+		int time = 0;
+		int nNow = 0;
+		int mNow = 0;
+		boolean garo = false;	// true = btnN, false = btnM
+		
+		Queue<int[]> bfs = new LinkedList<>();
+		bfs.add(new int[] {0, 0});
+		
+		while (!bfs.isEmpty()) {
+			
+			
+		}
+		
+		if (nNow == N - 1 && mNow == M - 1)
+			System.out.println(visited[nNow][mNow]);
+		else
+			System.out.println(-1);
 	}
 }
