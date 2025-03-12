@@ -81,7 +81,8 @@ public class Main {
 					if (!visited[nNext][mNow][1]) {
 						
 						int tmp = time + Math.abs(nNext - nNow);
-						bfs.add(new int[] {nNext, mNow, tmp + 1, 1});
+						if (bfs.size() < 100)
+							bfs.add(new int[] {nNext, mNow, tmp + 1, 1});
 					}
 				}
 			} else {
@@ -91,7 +92,8 @@ public class Main {
 					if (!visited[nNow][mNext][1]) {
 						
 						int tmp = time + Math.abs(mNext - mNow);
-						bfs.add(new int[] {nNow, mNext, tmp + 1, 0});
+						if (bfs.size() < 100)
+							bfs.add(new int[] {nNow, mNext, tmp + 1, 0});
 					}
 				}
 			}
